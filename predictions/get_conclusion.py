@@ -33,7 +33,7 @@ def get_points(past_results, winner_odds, winner_picks_ration, **kwargs):
 
 
 # def get_conclusion(player1_data: dict, player2_data: dict):
-def get_conclusion(*args, **kwargs)
+def get_conclusion(*args, **kwargs):
     conclusion = None
     return conclusion
 
