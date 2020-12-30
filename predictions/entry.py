@@ -34,17 +34,17 @@ async def main():
 
         players = prediction['Players']
         full_names = p.get_full_names(players)
-
-        to = prediction['BetsTendency']['TotalOver']
-        tu = prediction['BetsTendency']['TotalUnder']
-        preds = prediction['Predictions'] 
-        # odds = [pred['Odds'] for pred in prediction['Predictions']]
-        # outcomes = [pred['Outcome'] for pred in prediction['Predictions']]
+        
+        total_over = prediction['BetsTendency']['TotalOver']
+        total_under = prediction['BetsTendency']['TotalUnder']
+        experts_preds = prediction['Predictions'] 
 
         for i , player in enumerate(players):  
             os.mkdir(player)
             past_results = prediction['PastResults'][player]
             winner_picks = prediction['BetsTendency'][player]
+            winner_odds = prediction['Odds'][plyaer]
+            
 
             player_stats = p.get_stats(player)
             real_names.append(player_stats['Name'])

@@ -45,7 +45,7 @@ class UltimateStats(Webdriver):
         Extract full names from tennislive for given `list` of partial names
 
         :param names: `list` of partial names, where each name's type is `str`
-        :return: returns a `list` of full names as `str` or `None` if nothing found 
+        :return: returns a `dict` of full names and partial names as key-value pairs or `None` if nothing found 
         '''
         if not '_page' in self.__dict__:
             raise ValueError('Initialize the browser before searching by `await .init_broswser()`')
@@ -60,13 +60,13 @@ class UltimateStats(Webdriver):
         sleep(2.5)
         print('Successful navigation\n')
 
-        full_names = []
+        full_names = {}
         for name in names:
             await self._search_name(name)
             html = await self._page.content()
             soup = BeautifulSoup(html, 'html.parser')
             full_name = soup.find('h3').text.strip() 
-            full_names.append(full_name)
+            full_names[name] = full_name
 
         return full_names
 

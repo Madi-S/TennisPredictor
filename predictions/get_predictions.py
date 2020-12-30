@@ -38,7 +38,7 @@ def get_predictions(html):
 
     predictions = {
         'Players': players,
-        'Odds': {'W1': w1_odds, 'W2': w2_odds},
+        'Odds': {players[0]: w1_odds, players[1]: w2_odds},
         'BetsTendency': {players[0]: w1, players[1]: w2, 'TotalOver': to, 'TotalUnder': tu},
         'PastResults': {},
         'Predictions': []
