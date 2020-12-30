@@ -23,13 +23,16 @@ def get_predictions(html):
 
     preds = soup.find_all(class_='news')
 
-    players = [translate(tag.text.strip().replace('.', ''))
-               for tag in soup.find_all(class_='event__info_player__name')]
-    bets_tendency = [rect.get('height') for rect in soup.find(
-        class_='highcharts-tracker').find_all('rect')][:5]
+    players = [translate(tag.text.strip().replace('.', '')) for tag in soup.find_all(class_='event__info_player__name')]
+
+    bets_tendency = [rect.get('height') for rect in soup.find(class_='highcharts-tracker').find_all('rect')][:5]
     w1, _, w2, to, tu = bets_tendency
-    w1_odds, w2_odds = soup.select_one('.modeltable.top-forecast__table.top-forecast__table_border.top-forecast__table_top tbody tr').text.strip().split('\n\n\n'), 100
-    print(w1_odds)
+
+    try:
+        w1_odds, w2_odds = soup.select_one('.modeltable.top-forecast__table.top-forecast__table_border.top-forecast__table_top tbody tr').text.strip().split('\n\n\n'), 100
+    except:
+        w1_odds, w2_odds = None, None
+
     with open('test.txt','w') as f:
         f.write(str(w1_odds))
     #print(f'{len(preds)} Betting tips for {players[0]} vs {players[1]}\n')
@@ -53,10 +56,9 @@ def get_predictions(html):
             info = pred.find_all(class_='info_match')[:2]
 
             # if 'П1' in info or 'П2' in info or 'Точный' in info[0].text:
-            outcome = format_(info[0].text.strip())
+            outcome = translate(format_(info[0].text.strip()))
             odds = info[1].text.strip()
-            explanation = translate(pred.find_all(
-                class_='clr')[-2].text.strip())
+            explanation = translate(pred.find_all(class_='clr')[-2].text.strip())
             expert_stats = pred.find(class_='stats').text.strip()
 
             predictions['Predictions'].append(
@@ -68,13 +70,15 @@ def get_predictions(html):
         except Exception as e:
             print(f'Got invalid prediction {e}\n')
 
+    with open('data.txt','w', encoding='utf-8') as f:
+        f.write(str(predictions))
     return predictions
 
 
 async def main():
     from get_matches import VprognozeHTML
 
-    v = VprognozeHTML(limit=5)
+    v = VprognozeHTML(limit=1)
     await v.init_browser()
     htmls = await v.get_matches()
     await v.shut_browser()

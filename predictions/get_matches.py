@@ -13,7 +13,7 @@ URL = 'https://vprognoze.ru/topforecast/?utm_referrer='
 BUTTON_SELECTOR = '.button_default'
 MATCH_SELECTOR = '.event__info_player__name'
 DROP_DOWN_SELECTOR = '#sport'
-TENNIS_VALUE = '2'
+TENNIS_VALUE = '1'
 MATCH_CLS = 'top-forecast__match-name'
 
 
@@ -45,10 +45,13 @@ class VprognozeHTML(Webdriver):
         # sleep(4)
         # await self._page.waitForSelector(BUTTON_SELECTOR)
 
-        await asyncio.gather(
-            self._page.waitForNavigation(),
-            self._page.click(BUTTON_SELECTOR),
-        )
+        try:
+            await asyncio.gather(
+                self._page.waitForNavigation(),
+                self._page.click(BUTTON_SELECTOR),
+            )
+        except:
+            self.get_matches()
 
         await self._page.select(DROP_DOWN_SELECTOR, TENNIS_VALUE)
 

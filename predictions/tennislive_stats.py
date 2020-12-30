@@ -128,10 +128,11 @@ class TennisLiveStats(Webdriver):
         print(data)
 
         # os.chdir(player_name)
+        # table = await self._page.xpath(TABLE_XPATH)
+        # await table[1].screenshot({'path': f'{player_name}_tennislive_stats.png'})
+        # print('Screenshot created\n')
 
-        table = await self._page.xpath(TABLE_XPATH)
-        await table[1].screenshot({'path': f'{player_name}_tennislive_stats.png'})
-        print('Screenshot created\n')
+        return data
 
 
 

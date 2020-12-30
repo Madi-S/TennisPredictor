@@ -22,6 +22,15 @@ import matplotlib
 import numpy as np
 
 
+
+def get_points(past_results, winner_odds, winner_picks_ration, **kwargs):
+    points = int()
+    # name, past_results, winner_odss, winner_picks, rank, rank_peak, atp_points, age, money_won, total_mathces, winrate
+
+    return points
+
+
+
 def get_conclusion(player1_data: dict, player2_data: dict):
     conclusion = None
     return conclusion
