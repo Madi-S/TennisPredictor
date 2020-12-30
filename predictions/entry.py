@@ -35,12 +35,17 @@ async def main():
         players = prediction['Players']
         full_names = p.get_full_names(players)
 
+        # Get head-to-head matches
+        h2h = get_h2h(player)
+
         # Overall expert's picks
         total_over = prediction['BetsTendency']['TotalOver']
         total_under = prediction['BetsTendency']['TotalUnder']
         overall_picks = prediction['BetsTendency'][players[0]
                                                    ] + prediction['BetsTendency'][players[1]]
         experts_preds = prediction['Predictions']
+
+        points
 
         # Collect tennis stats for each player and count his/her overall points based on extracted stats
         for i, player in enumerate(players):
@@ -55,11 +60,10 @@ async def main():
             player_stats = p.get_stats(full_name)
             detailed_stats = p.get_detailed_stats(full_name)
 
-            points = get_points(past_results, winner_odds,
-                                winner_pick_ratio, **player_stats)
+            points[player] = get_points(past_results, winner_odds, winner_pick_ratio, **player_stats)
 
         # counted_prediction = p.get_counted_outcome(full_names)
-        conclusion = get_conclusion(total_over, total_under, experts_preds)
+        conclusion = get_conclusion(points, total_over, total_under, h2h, experts_preds)
 
     await p.shut_browser()
 

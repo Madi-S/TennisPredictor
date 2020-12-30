@@ -20,13 +20,11 @@ def get_h2h(players: list):
     soup = BeautifulSoup(r.text, 'html.parser')
 
     for player in players:
-        match = soup.find(text=re.compile(fr'{player}'))
-
-        if match:
+        try:
+            match = soup.find(text=re.compile(fr'{player}'))
+        
             link = URL + match.parent.parent.parent.find_all('td')[-1].find('a')['href']
-            
-            print(link)
-            
+
             r = requests.get(link)
 
             soup = BeautifulSoup(r.text, 'html.parser')
@@ -45,8 +43,11 @@ def get_h2h(players: list):
                     1].replace(' ', '').split('-')]
                 return h2h, home_player
 
+        except:
+            pass
+
     return None
 
 
 if __name__ == '__main__':
-    print(get_h2h(['Yashina E', 'Oliynykova O']))
+    print(get_h2h(['Koussenkova', 'Ganz']))
