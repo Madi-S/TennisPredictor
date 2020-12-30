@@ -1,14 +1,15 @@
 # Collect all matches' HTMLs and matches themselves                                 !!! DONE
 # Collect all expert's predictions for collected matches from vrpognoze for today   !!! DONE
-# Collect all stats from ultimate_stats and tennislive_stats                        
-# Format all given text                                     
+# Collect all stats from ultimate_stats and tennislive_stats
+# Format all given text
 # Export everything to .docx
 
 import os
 import asyncio
 
-from get_predictions import get_predictions
 from get_conclusion import get_conclusion, get_points
+from get_predictions import get_predictions
+from get_h2h import get_h2h
 from logger_config import get_logger
 from tennis_parser import Parser
 # from docx_writer.writer import Writer
@@ -37,9 +38,9 @@ async def main():
         # Overall expert's picks
         total_over = prediction['BetsTendency']['TotalOver']
         total_under = prediction['BetsTendency']['TotalUnder']
-        overall_picks = prediction['BetsTendency'][players[0]] + prediction['BetsTendency'][players[1]]
+        overall_picks = prediction['BetsTendency'][players[0]
+                                                   ] + prediction['BetsTendency'][players[1]]
         experts_preds = prediction['Predictions']
-
 
         # Collect tennis stats for each player and count his/her overall points based on extracted stats
         for i, player in enumerate(players):
@@ -54,7 +55,8 @@ async def main():
             player_stats = p.get_stats(full_name)
             detailed_stats = p.get_detailed_stats(full_name)
 
-            points = get_points(past_results, winner_odds, winner_pick_ratio, **player_stats)
+            points = get_points(past_results, winner_odds,
+                                winner_pick_ratio, **player_stats)
 
         # counted_prediction = p.get_counted_outcome(full_names)
         conclusion = get_conclusion(total_over, total_under, experts_preds)
