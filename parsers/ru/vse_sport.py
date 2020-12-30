@@ -1,0 +1,1 @@
+url = 'https://www.vseprosport.kz/news/tennis'

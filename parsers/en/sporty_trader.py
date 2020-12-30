@@ -1,0 +1,1 @@
+url = 'https://www.sportytrader.com/en/betting-tips/tennis/'

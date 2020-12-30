@@ -1,0 +1,135 @@
+if (!Object.keys) {
+  Object.keys = (function() {
+    'use strict';
+    var hasOwnProperty = Object.prototype.hasOwnProperty,
+        hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
+        dontEnums = [
+          'toString',
+          'toLocaleString',
+          'valueOf',
+          'hasOwnProperty',
+          'isPrototypeOf',
+          'propertyIsEnumerable',
+          'constructor'
+        ],
+        dontEnumsLength = dontEnums.length;
+
+    return function(obj) {
+      if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
+        throw new TypeError('Object.keys called on non-object');
+      }
+
+      var result = [], prop, i;
+
+      for (prop in obj) {
+        if (hasOwnProperty.call(obj, prop)) {
+          result.push(prop);
+        }
+      }
+
+      if (hasDontEnumBug) {
+        for (i = 0; i < dontEnumsLength; i++) {
+          if (hasOwnProperty.call(obj, dontEnums[i])) {
+            result.push(dontEnums[i]);
+          }
+        }
+      }
+      return result;
+    };
+  }());
+}
+
+var socket_server=null,socket_server_open=0,socket_url='wss://www.tenislive.net/websocket/';
+
+var FancyWebSocket=function(url)
+{
+	var callbacks={};
+	var ws_url=url;
+	var conn;
+
+	this.bind=function(event_name,callback)
+	{
+		callbacks[event_name]=callbacks[event_name] || [];
+		callbacks[event_name].push(callback);
+		return this;// chainable
+	};
+
+	this.send=function(event_name,event_data)
+	{
+		this.conn.send(event_data);
+		return this;
+	};
+
+	this.connect=function()
+	{
+		if (typeof(MozWebSocket)=='function') this.conn=new MozWebSocket(url);
+		else this.conn=new WebSocket(url);
+		// dispatch to the right handlers
+		this.conn.onmessage=function(evt)
+		{
+			dispatch('message', evt.data);
+		};
+
+		this.conn.onclose=function(){dispatch('close',null)}
+		this.conn.onopen=function(){dispatch('open',null)}
+	};
+
+	this.disconnect=function()
+	{
+		this.conn.close();
+	};
+
+	var dispatch=function(event_name,message)
+	{
+		var chain=callbacks[event_name];
+		if(typeof chain=='undefined') return; // no callbacks for this event
+		for(var i=0;i<chain.length;i++)
+		{
+			chain[i](message);
+		}
+	}
+};
+
+function setCookie(cname,cvalue,exdays)
+{
+  var d=new Date(),expires;
+  if (typeof exdays==='undefined') exdays=365*100;
+	if (exdays<=0) expires="expires=Thu, 01 Jan 1970 00:00:00 UTC";
+  else
+  {
+		d.setTime(d.getTime()+(exdays*24*60*60*1000));
+  	expires="expires="+d.toUTCString();
+  }
+  document.cookie=cname+"="+cvalue+";"+expires+";path=/";
+}
+
+function getCookie(cname)
+{
+  var name=cname+"=";
+  var ca=document.cookie.split(';');
+  for(var i=0;i<ca.length;i++)
+	{
+    var c=ca[i];
+    while (c.charAt(0)==' ') c=c.substring(1);
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+
+function deleteCookie(cname)
+{
+	setCookie(cname,'',-1);
+}
+
+function checkCookie(cname)
+{
+  return getCookie(cname)!="";
+} 
+
+function get_favorites(c)
+{
+	if (typeof c==='undefined') c=getCookie('star');
+	if (!c) return 0;
+	var s=c.split(/a_/);
+	return s.length-1;
+}

@@ -1,0 +1,100 @@
+$(document).ready(function(){
+  /*<![CDATA[*/
+  $( "#finder" ).on("click", function() {
+    $( "#f_results" ).toggle( "slow", function() {
+    // Animation complete.
+    });
+});
+
+  $( "#s_menu" ).on("click", function() {
+    $( "#left_column" ).css({ "position": "absolute", "z-index": "150", "width": "99%", "margin": "0", "padding": "0", "top": "75px", "max-width": "900px" });
+    $( "#body" ).css({ "width": "99.9%", "margin": "0", "padding": "0" });
+    $( "#left_column" ).toggle( "slow", function() {
+    //alert('dddd');
+
+    });
+});
+  /*]]>*/
+  })
+
+      var http_request = false;
+   function load_sug(url, parameters) {
+      http_request = false;
+      if (window.XMLHttpRequest) { // Mozilla, Safari,...
+         http_request = new XMLHttpRequest();
+         if (http_request.overrideMimeType) {
+
+            http_request.overrideMimeType('text/html');
+         }
+      } else if (window.ActiveXObject) { // IE
+         try {
+            http_request = new ActiveXObject("Msxml2.XMLHTTP");
+         } catch (e) {
+            try {
+               http_request = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (e) {}
+         }
+      }
+      if (!http_request) {
+         alert('Cannot create XMLHTTP instance');
+         return false;
+      }
+      http_request.onreadystatechange = alertNames;
+      http_request.open('GET', url, true);
+      http_request.send(null);
+
+
+   }
+
+   function alertNames() {
+      if (http_request.readyState == 4) {
+         if (http_request.status == 200) {
+            //alert(http_request.responseText);
+            result = http_request.responseText;
+            document.getElementById('show_players').innerHTML = result;
+         } else {
+            alert('There was a problem with the request.');
+         }
+      }
+   }
+
+   function load_sug1(url, parameters) {
+      http_request = false;
+      if (window.XMLHttpRequest) { // Mozilla, Safari,...
+         http_request = new XMLHttpRequest();
+         if (http_request.overrideMimeType) {
+
+            http_request.overrideMimeType('text/html');
+         }
+      } else if (window.ActiveXObject) { // IE
+         try {
+            http_request = new ActiveXObject("Msxml2.XMLHTTP");
+         } catch (e) {
+            try {
+               http_request = new ActiveXObject("Microsoft.XMLHTTP");
+            } catch (e) {}
+         }
+      }
+      if (!http_request) {
+         alert('Cannot create XMLHTTP instance');
+         return false;
+      }
+      http_request.onreadystatechange = alertNames1;
+      http_request.open('GET', url, true);
+      http_request.send(null);
+
+
+   }
+
+   function alertNames1() {
+      if (http_request.readyState == 4) {
+         if (http_request.status == 200) {
+            //alert(http_request.responseText);
+            result = http_request.responseText;
+            document.getElementById('show_players1').innerHTML = result;
+         } else {
+            alert('There was a problem with the request.');
+         }
+      }
+   }
+
