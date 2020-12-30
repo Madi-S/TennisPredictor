@@ -1,9 +1,7 @@
 # Collect all matches' HTMLs and matches themselves                                 !!! DONE
 # Collect all expert's predictions for collected matches from vrpognoze for today   !!! DONE
-# Collect all stats from ultimate_stats and tennislive_stats
-# Create folders for each player to save imgs, stats there
-# Colect last tweets and IG posts of players
-# Format all given text
+# Collect all stats from ultimate_stats and tennislive_stats                        
+# Format all given text                                     
 # Export everything to .docx
 
 import os
@@ -59,7 +57,7 @@ async def main():
             points = get_points(past_results, winner_odds, winner_pick_ratio, **player_stats)
 
         # counted_prediction = p.get_counted_outcome(full_names)
-        conclusion = get_conclusion(total_over, total_under, )
+        conclusion = get_conclusion(total_over, total_under, experts_preds)
 
     await p.shut_browser()
 

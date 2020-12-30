@@ -31,24 +31,22 @@ def get_predictions(html):
     try:
         w1_odds, w2_odds = soup.select_one('.modeltable.top-forecast__table.top-forecast__table_border.top-forecast__table_top tbody tr').text.strip().split('\n\n\n'), 100
     except:
-        w1_odds, w2_odds = None, None
+        try:
+            odds = soup.select('.top-forecast__model tbody tr td a')[:2]
+            w1_odds, w2_odds = odds[0]['title'], odds[1]['title']
+        except:
+            w1_odds, w2_odds = 0, 0
 
-    with open('test.txt','w') as f:
-        f.write(str(w1_odds))
-    #print(f'{len(preds)} Betting tips for {players[0]} vs {players[1]}\n')
-    #print(
-    #    f'Overall betting tendency: W1 - {w1} and W2 - {w2} and TO - {to} and TU - {tu}\n')
 
     predictions = {
         'Players': players,
-        'Odds': {players[0]: w1_odds, players[1]: w2_odds},
-        'BetsTendency': {players[0]: w1, players[1]: w2, 'TotalOver': to, 'TotalUnder': tu},
+        'Odds': {players[0]: float(w1_odds), players[1]: float(w2_odds)},
+        'BetsTendency': {players[0]: float(w1), players[1]: float(w2), 'TotalOver': float(to), 'TotalUnder': float(tu)},
         'PastResults': {},
         'Predictions': []
     }
 
     for i, player in enumerate(players):
-        print(f'Past results for {player}: {get_past_results(i)}\n')
         predictions['PastResults'][player] = get_past_results(i)
 
     for pred in preds:
@@ -57,16 +55,11 @@ def get_predictions(html):
 
             # if 'П1' in info or 'П2' in info or 'Точный' in info[0].text:
             outcome = translate(format_(info[0].text.strip()))
-            odds = info[1].text.strip()
+            odds = float(info[1].text.strip())
             explanation = translate(pred.find_all(class_='clr')[-2].text.strip())
             expert_stats = pred.find(class_='stats').text.strip()
 
-            predictions['Predictions'].append(
-                {'Outcome': outcome, 'Odds': odds, 'Explanation': explanation, 'ExpertStats': expert_stats})
-
-            print(
-                f'Expert stats (this month profit): {expert_stats}\nOutcome: {outcome}\nOdds: {odds}\nExplanation: {explanation}')
-            print('\n\n')
+            predictions['Predictions'].append({'Outcome': outcome, 'Odds': odds, 'Explanation': explanation, 'ExpertStats': expert_stats})
         except Exception as e:
             print(f'Got invalid prediction {e}\n')
 
