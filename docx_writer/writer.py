@@ -8,9 +8,15 @@ class Writer:
             raise TypeError('Filename should consists of `.` or `?` and must be a string')
         self._filename = filename
         chdir('..')
-        # TODO: Write `filename`.docx
+        # TODO: Create `filename`.docx
 
     def write(self, data: dict):
+        # What to write:
+        # 1) Real names list (players names)
+        # 2) Some stats form tennislive to show
+        # 3) Winner1 odds and Winner2 odds
+        # 4) Predictions from vprognoze and info to them
+        # 5) Conclusion
         pass
 
 if __name__ == '__main__':
