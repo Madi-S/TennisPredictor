@@ -31,6 +31,7 @@ async def main():
     # Loop through each prediction -> player -> get stats for him/her
     for prediction in predictions:
         players_data = []
+        real_names = []
 
         players = prediction['Players']
 
@@ -46,9 +47,15 @@ async def main():
             winner_picks = prediction['BetsTendency'][player]
 
             player_stats = p.get_stats(player)
+            real_names.append(player_stats['Name'])
+
+            detailed_stats = p.get_detailed_stats(player)
+
 
             data = None
             players_data.append(data)
+        
+        counted_prediction = p.get_counted_outcome(real_names)
 
         conclusion = get_conclusion(*players_data)
 

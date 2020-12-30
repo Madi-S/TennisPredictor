@@ -41,34 +41,42 @@ class TennisLiveStats(Webdriver):
             stats = soup.find(class_='player_stats')
             
             name = stats.find(text=re.compile(r'name', flags=re.I)).next_sibling.text.strip()
+            
             try:
                 age = int(stats.find(text=re.compile(r'Birthdate')).next_sibling.text.split(',')[-1].replace(' ','').replace('years',''))
             except:
                 age = None
+
             try:
                 rank = int(stats.find(text=re.compile(r'ATP')).next_element.next_element.text.strip())
             except:
                 rank = 0
+
             try:
                 rank_peak = int(stats.find(text=re.compile(r'TOP')).next_sibling.text.strip())
             except:
-                rank = 0
+                rank_peak = 0
+
             try:
                 points = int(stats.find(text=re.compile(r'Points')).next_sibling.text.strip())
             except:
-                points = 0    
+                points = 0 
+
             try:
                 prize_money = int(stats.find(text=re.compile(r'Prize')).next_sibling.text.replace(' ','').replace('$','').replace('.',''))
             except:
-                prize_money = 0    
+                prize_money = 0  
+
             try:
                 matches = int(stats.find(text=re.compile(r'Matches total')).next_sibling.text.replace(' ',''))
             except:
                 matches = 0
+
             try:
                 winrate = float(stats.find(text=re.compile(r'%')).next_sibling.text.replace(' ','').replace('%',''))
             except:
                 winrate = 0
+
             return {
                 'Name': name,
                 'Age': age,
@@ -119,7 +127,7 @@ class TennisLiveStats(Webdriver):
         data = _get_json(html)
         print(data)
 
-        os.chdir(player_name)
+        # os.chdir(player_name)
 
         table = await self._page.xpath(TABLE_XPATH)
         await table[1].screenshot({'path': f'{player_name}_tennislive_stats.png'})
@@ -128,8 +136,8 @@ class TennisLiveStats(Webdriver):
 
 
 async def main():
-    players = ['Uchida K', 'Mansuri S', 'Echargui M', 'Novak Djokovic',
-               'Raonic Mil', 'Rafel N', 'Medvedev D', 'Rublev A']
+    players = ['Uchida K', 'Mansuri S', 'Echargui M', 'Djokovic N',
+               'Raonic M', 'Rafel N', 'Medvedev D', 'Rublev A']
 
     t = TennisLiveStats()
     await t.init_browser()
