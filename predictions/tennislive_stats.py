@@ -41,7 +41,7 @@ class TennisLiveStats(Webdriver):
             stats = soup.find(class_='player_stats')
             
             name = stats.find(text=re.compile(r'name', flags=re.I)).next_sibling.text.strip()
-            
+
             try:
                 age = int(stats.find(text=re.compile(r'Birthdate')).next_sibling.text.split(',')[-1].replace(' ','').replace('years',''))
             except:

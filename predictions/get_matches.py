@@ -50,7 +50,7 @@ class VprognozeHTML(Webdriver):
             self._page.click(BUTTON_SELECTOR),
         )
 
-        await self._page.select(DROP_DOWN_SELECTOR, '1')
+        await self._page.select(DROP_DOWN_SELECTOR, TENNIS_VALUE)
 
         await asyncio.gather(
             self._page.waitForNavigation(),

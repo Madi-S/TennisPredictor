@@ -31,9 +31,9 @@ async def main():
     # Loop through each prediction -> player -> get stats for him/her
     for prediction in predictions:
         players_data = []
-        real_names = []
 
         players = prediction['Players']
+        full_names = p.get_full_names(players)
 
         to = prediction['BetsTendency']['TotalOver']
         tu = prediction['BetsTendency']['TotalUnder']
