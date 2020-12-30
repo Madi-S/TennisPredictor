@@ -30,27 +30,33 @@ class TennisLiveStats(Webdriver):
         Scrape tennislive.net for given `player_name` statistics
 
         :param player_name: Player name
-        :return: returns screenshot with stats and `player_name` statistics ot `False` if no statistics for `player_name` were found
+        :return: returns `dict` with stats and `player_name` statistics or `False` if no statistics for `player_name` were found
         '''
 
         def _get_json_data(html):
             soup = BeautifulSoup(html, 'html.parser')
             stats = soup.find(class_=STATS_CLS).text.strip()
 
-            name = stats.find('a').text.strip()
+            stats = soup.find(class_='player_stats')
+            name = stats.find(text=re.compile(r'name', flags=re.I)).next_sibling.text.strip()
+            age = int(stats.find(text=re.compile(r'Birthdate')).next_sibling.text.split(',')[-1].replace(' ','').replace('years',''))
+            rank = int(stats.find(text=re.compile(r'ATP')).next_element.next_element.text.strip())
+            rank_peak = int(stats.find(text=re.compile(r'TOP')).next_sibling.text.strip())
+            points = int(stats.find(text=re.compile(r'Points')).next_sibling.text.strip())
+            prize_money = int(stats.find(text=re.compile(r'Prize')).next_sibling.text.replace(' ','').replace('$','').replace('.',''))
+            matches = int(stats.find(text=re.compile(r'Matches total')).next_sibling.text.replace(' ',''))
+            winrate = float(stats.find(text=re.compile(r'%')).next_sibling.text.replace(' ','').replace('%',''))
 
-
-            #return {
-            #    'Name': name,
-            #    'Age': age,
-            #    'Ranking': rank,
-            #    'RankingPeak': rank_peak,
-            #    'Points': points,
-            #    'PrizeMoney': prize_money,
-            #    'TotalMatches': matches,
-            #    'Wins': wins,
-            #    'Winrate%': winrate,
-            #}
+            return {
+                'Name': name,
+                'Age': age,
+                'Ranking': rank,
+                'RankingPeak': rank_peak,
+                'Points': points,
+                'PrizeMoney': prize_money,
+                'TotalMatches': matches,
+                'Winrate%': winrate,
+            }
 
         print(f'Gathering stats for {player_name}\n')
         try:
