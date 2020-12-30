@@ -41,6 +41,7 @@ async def main():
         # outcomes = [pred['Outcome'] for pred in prediction['Predictions']]
 
         for i , player in enumerate(players):  
+            os.mkdir(player)
             past_results = prediction['PastResults'][player]
             winner_picks = prediction['BetsTendency'][player]
 
@@ -53,9 +54,6 @@ async def main():
 
 
 
-    # for player in players:
-    #     for plr in player:
-    #         os.mkdir(plr)
 
 
     await p.shut_browser()

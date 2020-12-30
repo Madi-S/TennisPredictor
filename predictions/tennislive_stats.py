@@ -1,5 +1,6 @@
 import asyncio
 import re
+import os
 
 from fake_useragent import UserAgent
 from screeninfo import get_monitors
@@ -27,26 +28,47 @@ class TennisLiveStats(Webdriver):
 
     async def get_stats(self, player_name: str):
         '''
-        Scrape tennislive.net for given `player_name` statistics
+        Scrape tennislive.net for given `player_name` stats
 
-        :param player_name: Player name
-        :return: returns `dict` with stats and `player_name` statistics or `False` if no statistics for `player_name` were found
+        :param player_name: Player name -`str` to search for
+        :return: returns `dict` with stats and `player_name` stats or `None` if no stats for `player_name` were found
         '''
 
-        def _get_json_data(html):
+        def _get_json(html):
             soup = BeautifulSoup(html, 'html.parser')
             stats = soup.find(class_=STATS_CLS).text.strip()
 
             stats = soup.find(class_='player_stats')
+            
             name = stats.find(text=re.compile(r'name', flags=re.I)).next_sibling.text.strip()
-            age = int(stats.find(text=re.compile(r'Birthdate')).next_sibling.text.split(',')[-1].replace(' ','').replace('years',''))
-            rank = int(stats.find(text=re.compile(r'ATP')).next_element.next_element.text.strip())
-            rank_peak = int(stats.find(text=re.compile(r'TOP')).next_sibling.text.strip())
-            points = int(stats.find(text=re.compile(r'Points')).next_sibling.text.strip())
-            prize_money = int(stats.find(text=re.compile(r'Prize')).next_sibling.text.replace(' ','').replace('$','').replace('.',''))
-            matches = int(stats.find(text=re.compile(r'Matches total')).next_sibling.text.replace(' ',''))
-            winrate = float(stats.find(text=re.compile(r'%')).next_sibling.text.replace(' ','').replace('%',''))
-
+            try:
+                age = int(stats.find(text=re.compile(r'Birthdate')).next_sibling.text.split(',')[-1].replace(' ','').replace('years',''))
+            except:
+                age = None
+            try:
+                rank = int(stats.find(text=re.compile(r'ATP')).next_element.next_element.text.strip())
+            except:
+                rank = 0
+            try:
+                rank_peak = int(stats.find(text=re.compile(r'TOP')).next_sibling.text.strip())
+            except:
+                rank = 0
+            try:
+                points = int(stats.find(text=re.compile(r'Points')).next_sibling.text.strip())
+            except:
+                points = 0    
+            try:
+                prize_money = int(stats.find(text=re.compile(r'Prize')).next_sibling.text.replace(' ','').replace('$','').replace('.',''))
+            except:
+                prize_money = 0    
+            try:
+                matches = int(stats.find(text=re.compile(r'Matches total')).next_sibling.text.replace(' ',''))
+            except:
+                matches = 0
+            try:
+                winrate = float(stats.find(text=re.compile(r'%')).next_sibling.text.replace(' ','').replace('%',''))
+            except:
+                winrate = 0
             return {
                 'Name': name,
                 'Age': age,
@@ -88,24 +110,21 @@ class TennisLiveStats(Webdriver):
             print('Clicked on first match\n')
         except:
             print(f'No info for player {player_name}\n')
-            return False
+            return None
 
         sleep(4)
         print('Done with waiting\n')
 
         html = await self._page.content()
-        self._parse(html)
+        data = _get_json(html)
+        print(data)
+
+        os.chdir(player_name)
 
         table = await self._page.xpath(TABLE_XPATH)
         await table[1].screenshot({'path': f'{player_name}_tennislive_stats.png'})
         print('Screenshot created\n')
 
-    def _parse(self, html):
-        soup = BeautifulSoup(html, 'html.parser')
-        stats = soup.find(class_=STATS_CLS).text.strip().replace(SPACE, '\n')
-        with open('stats.txt','w') as f:
-            f.write(stats)
-        print('\n', stats, '\n')
 
 
 async def main():
