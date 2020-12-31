@@ -1,4 +1,4 @@
-
+# Function to parse predicitons from vprognoze and enhance players points
 
 
 
