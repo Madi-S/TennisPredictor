@@ -59,20 +59,15 @@ def get_predictions(html):
             info = pred.find_all(class_='info_match')[:2]
 
             # if 'П1' in info or 'П2' in info or 'Точный' in info[0].text:
-            outcome = formatter.translate(
-                formatter.format_(info[0].text.strip()))
+            outcome = formatter.translate(formatter.format_(info[0].text.strip()))
             odds = float(info[1].text.strip())
-            explanation = formatter.translate(
-                pred.find_all(class_='clr')[-2].text.strip())
-            expert_stats = pred.find(class_='stats').text.strip()
+            explanation = formatter.translate(pred.find_all(class_='clr')[-2].text.strip())
+            expert_profit = float(pred.find(class_='stats').text.strip().split('(')[-1].replace('+','').replace('-','').replace(')','').replace('%','').replace(' ',''))
 
-            predictions['Predictions'].append(
-                {'Outcome': outcome, 'Odds': odds, 'Explanation': explanation, 'ExpertStats': expert_stats})
+            predictions['Predictions'].append({'Outcome': outcome, 'Odds': odds, 'Explanation': explanation, 'ExpertProfit': expert_profit})
         except Exception as e:
             print(f'Got invalid prediction {e}\n')
 
-    with open('data.txt', 'w', encoding='utf-8') as f:
-        f.write(str(predictions))
     return predictions
 
 

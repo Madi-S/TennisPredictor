@@ -78,6 +78,15 @@ async def test():
     p = Parser()
     await p.init_browser()
     
+    matches_html = await p.get_matches()
+    predictions = []
+
+    for html in matches_html:
+        predictions.append(get_predictions(html))
+
+    print(predictions)
+    with open('test.json','w', encoding='utf-8') as f:
+        f.write(str(predictions))
 
 
     await p.shut_browser()

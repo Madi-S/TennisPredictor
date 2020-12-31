@@ -31,6 +31,3 @@ def get_h2h_time(players: list):
         return h2h, time
         
     return None, None
-
-
-print(get_h2h_time(['Pichleer', 'Kotzen']))
