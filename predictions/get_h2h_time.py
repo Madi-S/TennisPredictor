@@ -10,15 +10,10 @@ UA = UserAgent()
 
 
 def get_h2h_time(players: list):
-    # today = datetime.today()
-    # r = requests.get(URL.format(today.year, today.month, today.day), headers={
-    #                  'user-agent': UA.random, 'accept-language': 'en-gb'})
-    # with open('test.html', 'w', encoding='utf-8') as f:
-    #     f.write(r.text)
-    with open('test.html', encoding='utf-8') as f:
-        html = f.read()
+    today = datetime.today()
+    r = requests.get(URL.format(today.year, today.month, today.day), headers={'user-agent': UA.random, 'accept-language': 'en-gb'})
 
-    soup = BeautifulSoup(html, 'html.parser')
+    soup = BeautifulSoup(r.text, 'html.parser')
     h2h = {}
     time = None
 
