@@ -9,18 +9,23 @@ import asyncio
 
 from get_conclusion import get_conclusion, get_points
 from get_predictions import get_predictions
-from get_h2h import get_h2h
+from get_h2h_time import get_h2h_time
 from logger_config import get_logger
 from tennis_parser import Parser
 # from docx_writer.writer import Writer
 
 
+logger = get_logger()
+
+
 async def main():
     p = Parser()
     await p.init_browser()
+    logger.debug('Browser initialized')
 
     # Extract HTMLs of present for today tennis matches
     htmls = await p.get_matches()
+    logger.debug('%s HTMLs collected', len(htmls))
 
     # For each match get predictions from vprognoze
     predictions = []
@@ -34,8 +39,8 @@ async def main():
         players = prediction['Players']
         full_names = p.get_full_names(players)
 
-        # Get head-to-head matches
-        h2h = get_h2h(player)
+        # Get head-to-head matches and GMT time
+        h2h, time = get_h2h_time
 
         # Overall expert's picks
         total_over = prediction['BetsTendency']['TotalOver']
