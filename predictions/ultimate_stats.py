@@ -18,12 +18,11 @@ class UltimateStats(Webdriver):
 
     async def _search_name(self, player_name: str):
         await self._page.click('#player')
-        print('Cliked on search bar\n')
 
         for letter in player_name:
             await self._page.keyboard.type(letter)
             sleep(0.11)
-        print('Done typing\n')
+
         sleep(3)
 
         await asyncio.gather(
@@ -31,7 +30,6 @@ class UltimateStats(Webdriver):
             self._page.click('.ui-menu-item'),
         )
         # await self._page.click('.ui-menu-item')
-        print('Clicked on first match\n')
         sleep(2.5)
 
     async def get_full_names(self, names: list):
@@ -45,7 +43,7 @@ class UltimateStats(Webdriver):
             raise ValueError(
                 'Initialize the browser before searching by `await .init_broswser()`')
 
-        print(f'Gathering full names for: {" ".join(names)}\n')
+        print(f'Gathering full names for: {" ".join(names)}')
 
         try:
             await self._page.goto(URL)
@@ -53,7 +51,6 @@ class UltimateStats(Webdriver):
             await self._page.goto(URL)
 
         sleep(2.5)
-        print('Successful navigation\n')
 
         full_names = {}
         for name in names:
@@ -76,7 +73,7 @@ class UltimateStats(Webdriver):
             raise ValueError(
                 'Initialize the browser before searching by `await .init_broswser()`')
 
-        print(f'Gathering stats for {player_name}\n')
+        print(f'Gathering stats for {player_name}')
 
         try:
             await self._page.goto(URL)
@@ -84,7 +81,6 @@ class UltimateStats(Webdriver):
             await self._page.goto(URL)
 
         sleep(2.5)
-        print('Successful navigation\n')
 
         await self._search_name(player_name)
 
@@ -112,10 +108,10 @@ class UltimateStats(Webdriver):
         for stat in INGAME_STATS:
             try:
                 data[stat] = float(stats.find(text=re.compile(fr'{stat}')).parent.next_sibling.next_sibling.text.replace('%', ''))
-            except Exception as e:
-                print(e)
+            except:
                 data[stat] = None  # or 0
 
+        print(data)
         return data
 
         # await profile.screenshot({'path': f'{player_name}_ultimatetennis_profile.png'})

@@ -34,14 +34,13 @@ def get_predictions(html):
     w1, _, w2, to, tu = bets_tendency
 
     try:
-        w1_odds, w2_odds = soup.select_one(
-            '.modeltable.top-forecast__table.top-forecast__table_border.top-forecast__table_top tbody tr').text.strip().split('\n\n\n'), 100
+        w1_odds, w2_odds = soup.select_one('.modeltable.top-forecast__table.top-forecast__table_border.top-forecast__table_top tbody tr').text.strip().split('\n\n\n')
     except:
         try:
             odds = soup.select('.top-forecast__model tbody tr td a')[:2]
             w1_odds, w2_odds = odds[0]['title'], odds[1]['title']
         except:
-            w1_odds, w2_odds = 0, 0
+            w1_odds, w2_odds = None, None
 
     predictions = {
         'Players': players,
@@ -64,7 +63,7 @@ def get_predictions(html):
             explanation = formatter.translate(pred.find_all(class_='clr')[-2].text.strip())
             expert_profit = float(pred.find(class_='stats').text.strip().split('(')[-1].replace('+','').replace('-','').replace(')','').replace('%','').replace(' ',''))
 
-            predictions['Predictions'].append({'Outcome': outcome, 'Odds': odds, 'Explanation': explanation, 'ExpertProfit': expert_profit})
+            predictions['Predictions'].append({'Outcome': outcome, 'Odds': odds, 'Explanation': explanation, 'ExpertProfit%': expert_profit})
         except Exception as e:
             print(f'Got invalid prediction {e}\n')
 

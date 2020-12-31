@@ -50,32 +50,32 @@ class TennisLiveStats(Webdriver):
             try:
                 rank = int(stats.find(text=re.compile(r'ATP')).next_element.next_element.text.strip())
             except:
-                rank = 0
+                rank = None
 
             try:
                 rank_peak = int(stats.find(text=re.compile(r'TOP')).next_sibling.text.strip())
             except:
-                rank_peak = 0
+                rank_peak = None
 
             try:
                 points = int(stats.find(text=re.compile(r'Points')).next_sibling.text.strip())
             except:
-                points = 0 
+                points = None
 
             try:
                 prize_money = int(stats.find(text=re.compile(r'Prize')).next_sibling.text.replace(' ','').replace('$','').replace('.',''))
             except:
-                prize_money = 0  
+                prize_money = None  
 
             try:
                 matches = int(stats.find(text=re.compile(r'Matches total')).next_sibling.text.replace(' ',''))
             except:
-                matches = 0
+                matches = None
 
             try:
                 winrate = float(stats.find(text=re.compile(r'%')).next_sibling.text.replace(' ','').replace('%',''))
             except:
-                winrate = 0
+                winrate = None
 
             return {
                 'Name': name,
@@ -95,44 +95,37 @@ class TennisLiveStats(Webdriver):
             await self._page.goto(URL)
         sleep(4)
         await self._page.waitForXPath(SEARCH_XPATH)
-        print('On the main page\n')
 
         await (await self._page.xpath(SEARCH_XPATH))[0].click()
         sleep(0.5)
-        print('Clicked on search button\n')
 
         await (await self._page.xpath(TYPE_XPATH))[0].click()
         sleep(0.5)
-        print('Clicked on search bar\n')
 
         for letter in player_name:
             await self._page.keyboard.type(letter)
             sleep(0.11)
 
         sleep(2.5)
-        print('Entered player\'s name\n')
 
         try:
             player = await self._page.querySelector(PLAYER_SELECTOR)
             await self._do_retry(player.click, STATS_XPATH)
-            print('Clicked on first match\n')
         except:
             print(f'No info for player {player_name}\n')
             return None
 
         sleep(4)
-        print('Done with waiting\n')
 
         html = await self._page.content()
         data = _get_json(html)
         print(data)
+        return data
 
         # os.chdir(player_name)
         # table = await self._page.xpath(TABLE_XPATH)
         # await table[1].screenshot({'path': f'{player_name}_tennislive_stats.png'})
         # print('Screenshot created\n')
-
-        return data
 
 
 

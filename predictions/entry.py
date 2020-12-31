@@ -79,16 +79,33 @@ async def test():
     await p.init_browser()
     
     matches_html = await p.get_matches()
-    predictions = []
+    matches = []
 
     for html in matches_html:
-        predictions.append(get_predictions(html))
+        matches.append(get_predictions(html))
 
-    print(predictions)
-    with open('test.json','w', encoding='utf-8') as f:
-        f.write(str(predictions))
+    logger.debug(matches)
+    
+    for match in matches:
+        stats = {}
 
+        players = match['Players']
+        full_names = await p.get_full_names(players)    # Dictionary
+        logger.debug('Full names are: %s', full_names)
 
+        for player in players:
+            full_name = full_names[player]
+            stats[player] = {}
+
+            data = await p.get_stats(full_name)
+            if data:
+                stats.update()
+
+            data = await p.get_detailed_stats(full_name) 
+            if data:
+                stats.update(await p.get_detailed_stats(full_name))
+        
+        logger.debug(stats)
     await p.shut_browser()
 
 if __name__ == '__main__':
