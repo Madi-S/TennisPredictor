@@ -11,10 +11,7 @@ URL = 'https://www.ultimatetennisstatistics.com/'
 STATS = ['profile', 'season', 'events', 'matches', 'timeline',
          'rivalries', 'ranking', 'tournaments', 'goatPoints', 'records']
 
-# Locators:
-SEARCH_SELECTOR = '#player'
-STATS_SELECTOR = '.tab-content'
-RESULT_SELECTOR = '.ui-menu-item'
+
 
 
 class UltimateStats(Webdriver):
@@ -22,7 +19,7 @@ class UltimateStats(Webdriver):
         pass
 
     async def _search_name(self, player_name: str):
-        await self._page.click(SEARCH_SELECTOR)
+        await self._page.click('#player')
         print('Cliked on search bar\n')
 
         for letter in player_name:
@@ -33,9 +30,9 @@ class UltimateStats(Webdriver):
 
         await asyncio.gather(
             self._page.waitForNavigation(),
-            self._page.click(RESULT_SELECTOR),
+            self._page.click('.ui-menu-item'),
         )
-        # await self._page.click(RESULT_SELECTOR)
+        # await self._page.click('.ui-menu-item')
         print('Clicked on first match\n')
         sleep(2.5)
 
@@ -93,15 +90,15 @@ class UltimateStats(Webdriver):
 
         await self._search_name(player_name)
 
-        profile = await self._page.querySelector(STATS_SELECTOR)
+        profile = await self._page.querySelector('.tab-content')
         await profile.screenshot({'path': f'{player_name}_ultimatetennis_profile.png'})
 
-        for stat in STATS:
-            await self._page.click(f'#{stat}Pill')
-            sleep(2.5)
-            stats = await self._page.querySelector(STATS_SELECTOR)
-            await stats.screenshot({'path': f'{player_name}_ultimatetennis_{stat}.png'})
-            print(f'Screenshot for {stat} created\n')
+        # for stat in STATS:
+        #     await self._page.click(f'#{stat}Pill')
+        #     sleep(2.5)
+        #     stats = await self._page.querySelector('.tab-content')
+        #     await stats.screenshot({'path': f'{player_name}_ultimatetennis_{stat}.png'})
+        #     print(f'Screenshot for {stat} created\n')
 
 
 

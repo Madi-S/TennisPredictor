@@ -1,7 +1,10 @@
 import requests
 
 from bs4 import BeautifulSoup
-from translator import translate, format_
+from formatter import Formatter
+
+
+formatter = Formatter()
 
 
 def get_predictions(html):
@@ -23,20 +26,22 @@ def get_predictions(html):
 
     preds = soup.find_all(class_='news')
 
-    players = [translate(tag.text.strip().replace('.', '')) for tag in soup.find_all(class_='event__info_player__name')]
+    players = [formatter.translate(tag.text.strip().replace('.', ''))
+               for tag in soup.find_all(class_='event__info_player__name')]
 
-    bets_tendency = [rect.get('height') for rect in soup.find(class_='highcharts-tracker').find_all('rect')][:5]
+    bets_tendency = [rect.get('height') for rect in soup.find(
+        class_='highcharts-tracker').find_all('rect')][:5]
     w1, _, w2, to, tu = bets_tendency
 
     try:
-        w1_odds, w2_odds = soup.select_one('.modeltable.top-forecast__table.top-forecast__table_border.top-forecast__table_top tbody tr').text.strip().split('\n\n\n'), 100
+        w1_odds, w2_odds = soup.select_one(
+            '.modeltable.top-forecast__table.top-forecast__table_border.top-forecast__table_top tbody tr').text.strip().split('\n\n\n'), 100
     except:
         try:
             odds = soup.select('.top-forecast__model tbody tr td a')[:2]
             w1_odds, w2_odds = odds[0]['title'], odds[1]['title']
         except:
             w1_odds, w2_odds = 0, 0
-
 
     predictions = {
         'Players': players,
@@ -54,16 +59,19 @@ def get_predictions(html):
             info = pred.find_all(class_='info_match')[:2]
 
             # if 'П1' in info or 'П2' in info or 'Точный' in info[0].text:
-            outcome = translate(format_(info[0].text.strip()))
+            outcome = formatter.translate(
+                formatter.format_(info[0].text.strip()))
             odds = float(info[1].text.strip())
-            explanation = translate(pred.find_all(class_='clr')[-2].text.strip())
+            explanation = formatter.translate(
+                pred.find_all(class_='clr')[-2].text.strip())
             expert_stats = pred.find(class_='stats').text.strip()
 
-            predictions['Predictions'].append({'Outcome': outcome, 'Odds': odds, 'Explanation': explanation, 'ExpertStats': expert_stats})
+            predictions['Predictions'].append(
+                {'Outcome': outcome, 'Odds': odds, 'Explanation': explanation, 'ExpertStats': expert_stats})
         except Exception as e:
             print(f'Got invalid prediction {e}\n')
 
-    with open('data.txt','w', encoding='utf-8') as f:
+    with open('data.txt', 'w', encoding='utf-8') as f:
         f.write(str(predictions))
     return predictions
 

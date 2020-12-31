@@ -4,17 +4,10 @@ from time import sleep
 from bs4 import BeautifulSoup
 
 from webdriver import Webdriver
-from translator import translate
 
 
 URL = 'https://vprognoze.ru/topforecast/?utm_referrer='
-
-# Locators:
-BUTTON_SELECTOR = '.button_default'
-MATCH_SELECTOR = '.event__info_player__name'
-DROP_DOWN_SELECTOR = '#sport'
-TENNIS_VALUE = '1'
-MATCH_CLS = 'top-forecast__match-name'
+TENNIS_VALUE = '2'
 
 
 class VprognozeHTML(Webdriver):
@@ -40,24 +33,24 @@ class VprognozeHTML(Webdriver):
             raise ValueError(
                 'Initialize the browser before searching by `await .init_broswser()`')
 
-        await self._goto_retry(URL, selector=BUTTON_SELECTOR)
+        await self._goto_retry(URL, selector='.button_default')
         # await self._page.goto(URL)
         # sleep(4)
-        # await self._page.waitForSelector(BUTTON_SELECTOR)
+        # await self._page.waitForSelector('.button_default')
 
         try:
             await asyncio.gather(
                 self._page.waitForNavigation(),
-                self._page.click(BUTTON_SELECTOR),
+                self._page.click('.button_default'),
             )
         except:
             self.get_matches()
 
-        await self._page.select(DROP_DOWN_SELECTOR, TENNIS_VALUE)
+        await self._page.select('#sport', TENNIS_VALUE)
 
         await asyncio.gather(
             self._page.waitForNavigation(),
-            self._page.click(BUTTON_SELECTOR),
+            self._page.click('.button_default'),
         )
         print('Final button clicked\n')
 
@@ -67,14 +60,14 @@ class VprognozeHTML(Webdriver):
         html = await self._page.content()
         soup = BeautifulSoup(html, 'lxml')
 
-        matches = soup.find_all(class_=MATCH_CLS)[:self._limit]
+        matches = soup.find_all(class_='top-forecast__match-name')[:self._limit]
         urls = [match.find('a').get('href') for match in matches]
 
         print(f'{len(urls)} Extracted URLs: {urls}\n')
         htmls = []
 
         for url in urls:
-            await self._goto_retry(url, selector=MATCH_SELECTOR)
+            await self._goto_retry(url, selector='.event__info_player__name')
             sleep(3)
 
             htmls.append(await self._page.content())
