@@ -111,6 +111,7 @@ async def test():
             if data:
                 print(f'Data {data} updated for {player}')
                 stats[player].update(data)
+                
         
         logger.debug(stats)
 

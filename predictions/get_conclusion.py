@@ -55,9 +55,18 @@ gameSTATS = {'Ace %': 'Ace'*10, 'Double Fault %': 'Fault'*-10,
 PREVIOUS_MATCH = 20
 ODDS = -100
 OLD = -30
-YOUNG = -20
+YOUNG = -15
 PEAK_AGE = 20
-RANK_PTS
+RANK_PTS = 0.01
+PRIZE = 0.000001
+MATCHES = 0.1
+HIGH_WINRATE = 300
+MID_WINRATE = (-100, 100)   # random integer
+LOW_WINRATE = -300
+ACE = 50
+FAULT = -40
+FIRST_SERVE  =
+
 
 
 def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
@@ -93,6 +102,9 @@ def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
             # Peak age -> plus
             elif age <= 26 and age >= 22:
                 pts += PEAK_AGE
+            # Other ages do not affect
+            else:
+                pass
         
         rank = stats.get('Ranking')
         if rank:
@@ -104,13 +116,40 @@ def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
             # Almost the same here but plus is slightly less
             pts += 1 / rank_peak * 250
 
-        rank_pts = stats.get('Points')
-        if rank_pts:
-            # More ATP/WTA points -> plus
-            pts +=  
+        # rank_pts = stats.get('Points')
+        # if rank_pts:
+        #     # More ATP/WTA points -> plus
+        #     pts += rank_pts * RANK_PTS
 
+        prize = stats.get('PrizeMoney')
+        if prize:
+            # More prize money -> plus
+            pts += prize * PRIZE
+
+        matches = stats.get('TotalMatches')
+        if matches:
+            pts += matches * MATCHES
+
+        winrate = stats.get('Winrate')
+        if winrate:
+            if winrate >= 62:
+                winrate += HIGH_WINRATE
+            elif winrate <= 45:
+                winrate -= LOW_WINRATE
+            else:
+                winrate += random.randint(*MID_WINRATE)
         
+        ace = stats.get('Ace %')
+        if ace:
+            pts += ace * ACE 
 
+        fault = stats.get('Fault %')
+        if fault:
+            pts += fault * FAULT
+                
+        first_serve = stats.get('1st Serve %')
+        if first_serve:
+            pts += first_server * FIRST_SERVE
 
         # In the end reduce points considering odds ratio
         if odds:

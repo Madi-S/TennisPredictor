@@ -33,15 +33,15 @@ Japanese were once very strong.He has great experience
 and should not feel such rivals.", "ExpertStats": 148.4}]}]
 
 
-betSTATS = {'Odds': -100, 'BetsTendency': 0.1,
-    'PastResults': 20, 'Predictions': None, }
-ovarallSTATS = {'Age': {'>33': -20, '<20': -15},
-        'Ranking': 'Reversed * 1000',
-        'RankingPeak': 'Reversed * 500', 'Points': 0.1,
-        'PrizeMoney': 'Who has more +',
-        'TotalMathces': 0.1, 'Winrate%': 'Who has more +'}
-gameSTATS = {'Ace %': 'Ace'*10, 'Double Fault %': 'Fault'*-10,
-     '1st Serve %': {'>55': 100, '<50': -100},
-     '1st Serve Won %': {'>67': 100, '<50': -100},
-     '2nd Serve Won %': {'>50': 100, '<43': -100},
-     'Titles': 'Title'*10, 'GOAT Rank': 'Reversed'*500}
+betSTATS = {"Odds": -100, "BetsTendency": 0.1,
+    "PastResults": 20, "Predictions": None, }
+ovarallSTATS = {"Age": {">33": -20, "<20": -15},
+        "Ranking": "Reversed * 1000",
+        "RankingPeak": "Reversed * 500", "Points": 0.1,
+        "PrizeMoney": "Who has more +",
+        "TotalMathces": 0.1, "Winrate%": "Who has more +"}
+gameSTATS = {"Ace %": "Ace"*10, "Double Fault %": "Fault"*-10,
+     "1st Serve %": {">55": 100, "<50": -100},
+     "1st Serve Won %": {">67": 100, "<50": -100},
+     "2nd Serve Won %": {">50": 100, "<43": -100},
+     "Titles": "Title"*10, "GOAT Rank": "Reversed"*500}
