@@ -43,11 +43,16 @@ ODDS = -100
 
 betSTATS = {'Odds': -100, 'BetsTendency': 0.1,
             'PastResults': 20, 'Predictions': None, }
-ovarallSTATS = {'Age': { '>33': -20, '<20': -15}, 'Ranking': 'Reversed * 1000',
+ovarallSTATS = {'Age': {'>33': -20, '<20': -15},
+                'Ranking': 'Reversed * 1000',
                 'RankingPeak': 'Reverded * 500', 'Points': 0.1,
-                'PrizeMoney': None, 'TotalMathces': None, 'Winrate%': None}
-gameSTATS = {'Ace %', 'Double Fault %', '1st Serve %',
-             '1st Serve Won %', '2nd Serve Won %', 'Titles', 'GOAT Rank'}
+                'PrizeMoney': 'Who has more +',
+                'TotalMathces': 0.1, 'Winrate%': 'Who has more +'}
+gameSTATS = {'Ace %': 'Ace'*10, 'Double Fault %': 'Fault'*-10,
+             '1st Serve %': {'>55': 100, '<50': -100},
+             '1st Serve Won %': {'>67': 100, '<50': -100},
+             '2nd Serve Won %': {'>50': 100, '<43': -100},
+             'Titles': 'Title'*10, 'GOAT Rank': 'Reversed'*500}
 
 
 def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
