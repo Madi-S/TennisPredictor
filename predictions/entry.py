@@ -115,7 +115,8 @@ async def test():
         
         logger.debug(stats)
 
-        # outcome = get_outcome(stats, match_info, h2h) 
+        # outcome, points = get_outcome(stats, match_info, h2h)
+        # logger.debug('Outcome:%s\nPoints:%s', outcome, points) 
         # conclusion = get_conclusion(stat)
 
         writer.write(data)

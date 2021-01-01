@@ -57,6 +57,8 @@ ODDS = -100
 OLD = -30
 YOUNG = -15
 PEAK_AGE = 20
+RANK = 500
+RANK_PEAK = 250
 RANK_PTS = 0.01
 PRIZE = 0.000001
 MATCHES = 0.1
@@ -65,12 +67,18 @@ MID_WINRATE = (-100, 100)   # random integer
 LOW_WINRATE = -300
 ACE = 50
 FAULT = -40
-FIRST_SERVE  =
-
+HIGH_FIRST_SERVE  = 50
+MID_FIRST_SERVE = (-25, 25)
+LOW_FIRST_SERVE = -50
+FIRST_SERVE_WON = 100
+SECOND_SERVE_WON = 150
+TITLES = 10
+GOAT = 650
 
 
 def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
-    points = {}
+    points = dict()
+    outcome = str()
 
     for player, stats in players_stats.items():
         pts = int()
@@ -93,37 +101,30 @@ def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
 
         age = stats.get('Age')
         if age:
-            # Too old -> minus
             if age >= 33:
                 pts += OLD
-            # Too young -> minus
             elif age <= 19:
                 pts += YOUNG
-            # Peak age -> plus
             elif age <= 26 and age >= 22:
                 pts += PEAK_AGE
-            # Other ages do not affect
             else:
                 pass
         
         rank = stats.get('Ranking')
         if rank:
-            # Higher (gravitating -> 1) the plus is bigger (inverse proportion)
-            pts += 1 / rank * 500
+            pts += 1 / rank * RANK
 
         rank_peak = stats.get('RankingPeak')
         if rank_peak:
-            # Almost the same here but plus is slightly less
-            pts += 1 / rank_peak * 250
+            pts += 1 / rank_peak * RANK_PEAK
 
-        # rank_pts = stats.get('Points')
-        # if rank_pts:
-        #     # More ATP/WTA points -> plus
-        #     pts += rank_pts * RANK_PTS
+        rank_pts = stats.get('Points')
+        if rank_pts:
+            # More ATP/WTA points -> plus
+            pts += rank_pts * RANK_PTS
 
         prize = stats.get('PrizeMoney')
         if prize:
-            # More prize money -> plus
             pts += prize * PRIZE
 
         matches = stats.get('TotalMatches')
@@ -135,7 +136,7 @@ def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
             if winrate >= 62:
                 winrate += HIGH_WINRATE
             elif winrate <= 45:
-                winrate -= LOW_WINRATE
+                winrate += LOW_WINRATE
             else:
                 winrate += random.randint(*MID_WINRATE)
         
@@ -149,17 +150,48 @@ def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
                 
         first_serve = stats.get('1st Serve %')
         if first_serve:
-            pts += first_server * FIRST_SERVE
+            if first_serve >= 63:
+                ratio = HIGH_FIRST_SERVE 
+            elif first_serve <= 43:
+                ratio = LOW_FIRST_SERVE
+            else:
+                ratio = random.randint(*MID_FIRST_SERVE)
 
-        # In the end reduce points considering odds ratio
+            pts += ratio * first_serve / 100
+
+        first_serve_won = stats.get('1nd Serve Won %')
+        if first_serve_won:
+            if first_serve_won >= 63:
+                pts += FIRST_SERVE_WON * first_serve_won / 100
+            elif first_serve_won <= 50:
+                pts += -FIRST_SERVE_WON
+            else:
+                pass
+                    
+        second_serve_won = stats.get('2nd Serve Won %')
+        if second_serve_won:
+            if second_serve_won >= 50:
+                pts += SECOND_SERVE_WON * second_serve_won / 100
+            elif second_serve_won <= 40:
+                pts -= SECOND_SERVE_WON * second_serve_won / 100
+            else:
+                pass
+        
+        titles = stats.get('Titles')
+        if titles:
+            pts += titles * TITLES
+
+        goat = stats.get('GOAT Rank')
+        if goat:
+            pts += 1 / goat * GOAT
+
         if odds:
             pts += ODDS * odds
 
-
         points[player] = pts
-
-    outcome = str()
-    return outcome
+        outcome += f'{player} got {pts} points\n'
+    
+    return outcome, points
 
 
 if __name__ == '__main__':
