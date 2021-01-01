@@ -22,34 +22,12 @@ import matplotlib
 import numpy as np
 
 
-def get_points(past_results, winner_odds, winner_picks_ration, **kwargs):
-    points = int()
-    # name, past_results, winner_odss, winner_picks, rank, rank_peak, atp_points, age, money_won, total_mathces, winrate
-    # TODO: CHECK IF ALL SOME KWARGS ARE NOT `None`
 
-    return points
-
-
-# def get_conclusion(player1_data: dict, player2_data: dict):
-def get_conclusion(*args, **kwargs):
+def get_conclusion(players: list, points: dict):
     # Based on points
     conclusion = None
     return conclusion
 
-
-# Constant rates
-betSTATS = {'Odds': -100, 'BetsTendency': 0.1,
-            'PastResults': 20, 'Predictions': None, }
-ovarallSTATS = {'Age': {'>33': -20, '<20': -15},
-                'Ranking': 'Reversed * 1000',
-                'RankingPeak': 'Reverded * 500', 'Points': 0.1,
-                'PrizeMoney': 'Who has more +',
-                'TotalMathces': 0.1, 'Winrate%': 'Who has more +'}
-gameSTATS = {'Ace %': 'Ace'*10, 'Double Fault %': 'Fault'*-10,
-             '1st Serve %': {'>55': 100, '<50': -100},
-             '1st Serve Won %': {'>67': 100, '<50': -100},
-             '2nd Serve Won %': {'>50': 100, '<43': -100},
-             'Titles': 'Title'*10, 'GOAT Rank': 'Reversed'*500}
 
 
 PREVIOUS_MATCH = 20
@@ -76,9 +54,10 @@ TITLES = 10
 GOAT = 650
 
 
-def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
+def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: dict):
     points = dict()
     outcome = str()
+
 
     for player, stats in players_stats.items():
         pts = int()
@@ -97,7 +76,7 @@ def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
                     pts += 1 / i * (-PREVIOUS_MATCH)
 
         if n_times_picked:
-            pts += n_times_picked * 0.1
+            pts += n_times_picked * 0.1      
 
         age = stats.get('Age')
         if age:
@@ -189,8 +168,22 @@ def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
             pts += ODDS * odds
 
         points[player] = pts
-        outcome += f'{player} got {pts} points\n'
     
+    p1, p2 = players
+
+    if h2h:
+        h2h_won_1 = h2h.get(p1)
+        h2h_won_2 = h2h.get(p2)
+
+        if h2h_won_1 > h2h_won_2:
+            points[p1] += points[p2] / 2
+        elif h2h_won_2 > h2h_won_1:
+            points[p2] += points[p1] / 2
+        else:
+            pass
+
+    outcome = f'{p1} got {points[p1]} and {p2} got {points[p2]}'
+
     return outcome, points
 
 
