@@ -77,6 +77,11 @@ def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
         if odds:
             points[player] += ODDS * odds
 
+    p1, p2 = stats[0], stats[1]
+
+    if all(p1['PastResults'], p2['PastResults']):
+        pass
+
     outcome = str()
     return outcome
 

@@ -111,7 +111,6 @@ class UltimateStats(Webdriver):
             except:
                 data[stat] = None  # or 0
 
-        print(data)
         return data
 
         # await profile.screenshot({'path': f'{player_name}_ultimatetennis_profile.png'})

@@ -104,11 +104,13 @@ async def test():
 
             data = await p.get_stats(full_name)
             if data:
-                stats.update(data)
+                print(f'Data {data} updated for {player}')
+                stats[player].update(data)
 
             data = await p.get_detailed_stats(full_name) 
             if data:
-                stats.update(data)
+                print(f'Data {data} updated for {player}')
+                stats[player].update(data)
         
         logger.debug(stats)
 
