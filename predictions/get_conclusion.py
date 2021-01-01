@@ -22,53 +22,59 @@ import matplotlib
 import numpy as np
 
 
-
 def get_points(past_results, winner_odds, winner_picks_ration, **kwargs):
     points = int()
     # name, past_results, winner_odss, winner_picks, rank, rank_peak, atp_points, age, money_won, total_mathces, winrate
-    #TODO: CHECK IF ALL SOME KWARGS ARE NOT `None`
+    # TODO: CHECK IF ALL SOME KWARGS ARE NOT `None`
 
     return points
 
 
-
 # def get_conclusion(player1_data: dict, player2_data: dict):
 def get_conclusion(*args, **kwargs):
+    # Based on points
     conclusion = None
     return conclusion
 
 
 # Constant rates
 PREVIOUS_MATCH = 20
-ODDS = 100
+ODDS = -100
+
+betSTATS = {'Odds': -100, 'BetsTendency': 0.1,
+            'PastResults': 20, 'Predictions': None, }
+ovarallSTATS = {'Age': { '>33': -20, '<20': -15}, 'Ranking': 'Reversed * 1000',
+                'RankingPeak': 'Reverded * 500', 'Points': 0.1,
+                'PrizeMoney': None, 'TotalMathces': None, 'Winrate%': None}
+gameSTATS = {'Ace %', 'Double Fault %', '1st Serve %',
+             '1st Serve Won %', '2nd Serve Won %', 'Titles', 'GOAT Rank'}
 
 
-def get_outcome(players_stats: dict, betting_stats: dict):
+def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
     points = {}
+
     for player, stats in players_stats.items():
         points[player] = 0
 
         odds = betting_stats['Odds'][player]
-        n_times_picked = betting_stats['BetsTendency'][player] 
+        n_times_picked = betting_stats['BetsTendency'][player]
         past_matches = betting_stats['PastResults'][player]
 
         # +- 20 * `i` for each won or lost past match amongst 5 last matches
         # Where `i` is a relevancy factor, e.g., a win 3 days ago will be weightier that a win 10 days ago
         for i, match in enumerate(past_matches):
             if match == '+':
-                points[player] += 1 / i *  PREVIOUS_MATCH
+                points[player] += 1 / i * PREVIOUS_MATCH
             else:
-                points[player] += 1 / i *  (-PREVIOUS_MATCH)
+                points[player] += 1 / i * (-PREVIOUS_MATCH)
 
         # In the end reduce points considering odds ratio
         if odds:
-            points[player] -= ODDS * odds
-        
-            
-
+            points[player] += ODDS * odds
 
     outcome = str()
     return outcome
+
 
 if __name__ == '__main__':
     pass

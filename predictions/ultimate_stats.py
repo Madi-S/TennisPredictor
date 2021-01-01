@@ -73,7 +73,7 @@ class UltimateStats(Webdriver):
             raise ValueError(
                 'Initialize the browser before searching by `await .init_broswser()`')
 
-        print(f'Gathering stats for {player_name}')
+        print(f'Gathering in-game stats for {player_name}')
 
         try:
             await self._page.goto(URL)
@@ -111,6 +111,7 @@ class UltimateStats(Webdriver):
             except:
                 data[stat] = None  # or 0
 
+        print(data)
         return data
 
         # await profile.screenshot({'path': f'{player_name}_ultimatetennis_profile.png'})

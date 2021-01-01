@@ -12,7 +12,7 @@ from get_predictions import get_predictions
 from get_h2h_time import get_h2h_time
 from logger_config import get_logger
 from tennis_parser import Parser
-# from docx_writer.writer import Writer
+from docx_writer import DOCXWriter
 
 
 logger = get_logger()
@@ -75,6 +75,8 @@ async def main():
 
 
 async def test():
+    writer = DOCXWriter()
+
     p = Parser()
     await p.init_browser()
     
@@ -88,9 +90,11 @@ async def test():
     
     for match_info in matches:
         stats = {}
+        data = dict()
 
         players = match_info['Players']
         h2h, time = get_h2h_time(players)
+        print(h2h, time)
         full_names = await p.get_full_names(players)    # Dictionary
         logger.debug('Full names are: %s', full_names)
 
@@ -100,16 +104,20 @@ async def test():
 
             data = await p.get_stats(full_name)
             if data:
-                stats.update()
+                stats.update(data)
 
             data = await p.get_detailed_stats(full_name) 
             if data:
-                stats.update(await p.get_detailed_stats(full_name))
+                stats.update(data)
         
         logger.debug(stats)
 
-        # outcome = get_outcome(stats, match_info) 
+        # outcome = get_outcome(stats, match_info, h2h) 
         # conclusion = get_conclusion(stat)
+
+        writer.write(data)
+
+
     await p.shut_browser()
 
 if __name__ == '__main__':

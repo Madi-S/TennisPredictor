@@ -2,32 +2,32 @@
 
 
 
-    [{"Players": ["Takeuchi K", "Alcotop M"],
-    "Odds": {"Takeuchi K": 1.18, "Alcotop M": 4.5}, 
-    "BetsTendency": 
-    {"Takeuchi K": 231.0, "Alcotop M": 0.0, 
-    "TotalOver": 0.0, "TotalUnder": 0.0},
-    "PastResults": 
-    {"Takeuchi K": ["+", "-", "-", "-", "+", "-"], 
-    "Alcotop M": ["+", "-", "+", "-", "-", "-"]}, 
-    "Predictions": 
-    [{"Outcome": "Handicap1 by games (-4.5)", "Odds": 1.8, 
-    "Explanation": "Too little head start is offered.Even -5.5 
-    would look doubtful, where you need to give -6.5, so this 
-    should be taken away.The level of the players is too different.
-    Alcotope zero.During the year, he won 2 matches out of 9 over 
-    the uttermost dumps.The very same plus or minus for adequate 
-    players flies away stably to zero and takes no more than 
-    4-5 games.There is no reception or delivery.The Japanese was 
-    once a strong player.Now he is practically an old man, but 
-    with great experience.So weak", "ExpertStats": 148.4}, 
-    {"Outcome": "Correct score 2: 0", "Odds": 1.57, 
-        "Explanation": 
-    "1.6 at 2-0 is also a lot here.I would give no more than 1.3.I
-    don't know what needs to happen for the Japanese to give the
-    set.Even in the first round, he closed the talented Russian
-    Polukhin 2-0.Alcotop, who does not know how to play tennis
-    at all, should all the more fly away to zero.As I said, 
-    the level of the players is too different, where the 
-    Japanese were once very strong.He has great experience
-    and should not feel such rivals.", "ExpertStats": 148.4}]}]
+[{"Players": ["Takeuchi K", "Alcotop M"],
+"Odds": {"Takeuchi K": 1.18, "Alcotop M": 4.5}, 
+"BetsTendency": 
+{"Takeuchi K": 231.0, "Alcotop M": 0.0, 
+"TotalOver": 0.0, "TotalUnder": 0.0},
+"PastResults": 
+{"Takeuchi K": ["+", "-", "-", "-", "+", "-"], 
+"Alcotop M": ["+", "-", "+", "-", "-", "-"]}, 
+"Predictions": 
+[{"Outcome": "Handicap1 by games (-4.5)", "Odds": 1.8, 
+"Explanation": "Too little head start is offered.Even -5.5 
+would look doubtful, where you need to give -6.5, so this 
+should be taken away.The level of the players is too different.
+Alcotope zero.During the year, he won 2 matches out of 9 over 
+the uttermost dumps.The very same plus or minus for adequate 
+players flies away stably to zero and takes no more than 
+4-5 games.There is no reception or delivery.The Japanese was 
+once a strong player.Now he is practically an old man, but 
+with great experience.So weak", "ExpertStats": 148.4}, 
+{"Outcome": "Correct score 2: 0", "Odds": 1.57, 
+    "Explanation": 
+"1.6 at 2-0 is also a lot here.I would give no more than 1.3.I
+don't know what needs to happen for the Japanese to give the
+set.Even in the first round, he closed the talented Russian
+Polukhin 2-0.Alcotop, who does not know how to play tennis
+at all, should all the more fly away to zero.As I said, 
+the level of the players is too different, where the 
+Japanese were once very strong.He has great experience
+and should not feel such rivals.", "ExpertStats": 148.4}]}]

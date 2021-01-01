@@ -18,8 +18,7 @@ def get_predictions(html):
         table = soup.find_all(class_='nohover')[index]
         imgs = table.find_all('img', attrs={'style': 'padding:2px'})[:6]
 
-        results = list(
-            map(lambda tag: '+' if 'analytics_wincell' in str(tag) else '-', imgs))
+        results = list(map(lambda tag: '+' if 'analytics_wincell' in str(tag) else '-', imgs))
         return results
 
     soup = BeautifulSoup(html, 'html.parser')
