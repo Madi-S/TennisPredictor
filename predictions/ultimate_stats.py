@@ -25,6 +25,7 @@ class UltimateStats(Webdriver):
 
         sleep(3)
 
+
         await asyncio.gather(
             self._page.waitForNavigation(),
             self._page.click('.ui-menu-item'),
@@ -54,11 +55,14 @@ class UltimateStats(Webdriver):
 
         full_names = {}
         for name in names:
-            await self._search_name(name)
-            html = await self._page.content()
-            soup = BeautifulSoup(html, 'html.parser')
-            full_name = soup.find('h3').text.strip()
-            full_names[name] = full_name
+            try:
+                await self._search_name(name)
+                html = await self._page.content()
+                soup = BeautifulSoup(html, 'html.parser')
+                full_name = soup.find('h3').text.strip()
+                full_names[name] = full_name
+            except: 
+                return None
 
         return full_names
 
@@ -82,7 +86,10 @@ class UltimateStats(Webdriver):
 
         sleep(2.5)
 
-        await self._search_name(player_name)
+        try:
+            await self._search_name(player_name)
+        except:
+            return None
 
         sleep(3.5)
 
@@ -93,8 +100,6 @@ class UltimateStats(Webdriver):
         sleep(3.5)
 
         html = await self._page.content()
-        with open('test.html','w', encoding='utf-8') as f:
-            f.write(html)
         soup = BeautifulSoup(html, 'html.parser')
         stats = soup.find(class_='tab-content')
         data = {}
