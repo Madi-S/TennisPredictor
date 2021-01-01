@@ -38,5 +38,37 @@ def get_conclusion(*args, **kwargs):
     return conclusion
 
 
+# Constant rates
+PREVIOUS_MATCH = 20
+ODDS = 100
+
+
+def get_outcome(players_stats: dict, betting_stats: dict):
+    points = {}
+    for player, stats in players_stats.items():
+        points[player] = 0
+
+        odds = betting_stats['Odds'][player]
+        n_times_picked = betting_stats['BetsTendency'][player] 
+        past_matches = betting_stats['PastResults'][player]
+
+        # +- 20 * `i` for each won or lost past match amongst 5 last matches
+        # Where `i` is a relevancy factor, e.g., a win 3 days ago will be weightier that a win 10 days ago
+        for i, match in enumerate(past_matches):
+            if match == '+':
+                points[player] += 1 / i *  PREVIOUS_MATCH
+            else:
+                points[player] += 1 / i *  (-PREVIOUS_MATCH)
+
+        # In the end reduce points considering odds ratio
+        if odds:
+            points[player] -= ODDS * odds
+        
+            
+
+
+    outcome = str()
+    return outcome
+
 if __name__ == '__main__':
     pass

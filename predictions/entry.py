@@ -7,7 +7,7 @@
 import os
 import asyncio
 
-from get_conclusion import get_conclusion, get_points
+from get_conclusion import get_conclusion, get_points, get_outcome
 from get_predictions import get_predictions
 from get_h2h_time import get_h2h_time
 from logger_config import get_logger
@@ -86,10 +86,11 @@ async def test():
 
     logger.debug(matches)
     
-    for match in matches:
+    for match_info in matches:
         stats = {}
 
-        players = match['Players']
+        players = match_info['Players']
+        h2h, time = get_h2h_time(players)
         full_names = await p.get_full_names(players)    # Dictionary
         logger.debug('Full names are: %s', full_names)
 
@@ -106,6 +107,9 @@ async def test():
                 stats.update(await p.get_detailed_stats(full_name))
         
         logger.debug(stats)
+
+        # outcome = get_outcome(stats, match_info) 
+        # conclusion = get_conclusion(stat)
     await p.shut_browser()
 
 if __name__ == '__main__':

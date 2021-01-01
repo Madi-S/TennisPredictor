@@ -119,7 +119,6 @@ class TennisLiveStats(Webdriver):
 
         html = await self._page.content()
         data = _get_json(html)
-        print(data)
         return data
 
         # os.chdir(player_name)
