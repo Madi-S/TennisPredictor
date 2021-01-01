@@ -9,7 +9,7 @@ URL = 'https://www.tennisexplorer.com/matches/?type=all&year={}&month={}&day={}'
 UA = UserAgent()
 
 
-def get_h2h_time(players: list):
+def get_h2h_time(players: list, surnames: list):
     today = datetime.today()
     r = requests.get(URL.format(today.year, today.month, today.day), headers={
                      'user-agent': UA.random, 'accept-language': 'en-gb'})
@@ -18,32 +18,28 @@ def get_h2h_time(players: list):
     h2h = {}
     time = None
 
-    for player in players:
+    for i in range(2):
         try:
-            match = soup.find(text=re.compile(
-                fr'{player}')).parent.parent.parent
+            match = soup.find(text=re.compile(fr'{surnames[i]}')).parent.parent.parent
         except AttributeError:
-            print(soup.find(text=re.compile(fr'{player}')))
             continue
 
         if not time:
             try:
                 time = match.parent.select_one('.first.time').text.strip()
-            except Exception as e:
-                print(e)
+            except:
+                pass
 
         try:
             result = int(match.find(class_='h2hnbg').text.strip())
 
         except AttributeError:
-            print(match.find(class_='h2h').text.strip())
             result = int(match.find(class_='h2h').text.strip())
 
         except ValueError:
-            print('val')
             result = 0
 
-        h2h[player] = result
+        h2h[players[i]] = result
 
     if time:
         return h2h, time

@@ -44,7 +44,8 @@ async def test():
         if full_names:
             logger.debug('Full names are: %s', full_names)
 
-            h2h, time = get_h2h_time([name.split(' ')[-1] for name in full_names])
+            h2h, time = get_h2h_time(players,  [name.split(' ')[-1] for name in full_names.values()])
+            
             logger.debug('Head-to-head matches: %s', h2h)
             logger.debug('Matchin will start at %s', time)
 

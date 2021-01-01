@@ -22,12 +22,10 @@ import matplotlib
 import numpy as np
 
 
-
 def get_conclusion(players: list, points: dict):
     # Based on points
     conclusion = None
     return conclusion
-
 
 
 PREVIOUS_MATCH = 20
@@ -45,7 +43,7 @@ MID_WINRATE = (-100, 100)   # random integer
 LOW_WINRATE = -300
 ACE = 50
 FAULT = -40
-HIGH_FIRST_SERVE  = 50
+HIGH_FIRST_SERVE = 50
 MID_FIRST_SERVE = (-25, 25)
 LOW_FIRST_SERVE = -50
 FIRST_SERVE_WON = 100
@@ -57,7 +55,6 @@ GOAT = 650
 def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: dict):
     points = dict()
     outcome = str()
-
 
     for player, stats in players_stats.items():
         pts = int()
@@ -71,12 +68,12 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
         if past_matches:
             for i, match in enumerate(past_matches):
                 if match == '+':
-                    pts += 1 / i * PREVIOUS_MATCH
+                    pts += 1 / (i + 1) * PREVIOUS_MATCH
                 else:
-                    pts += 1 / i * (-PREVIOUS_MATCH)
+                    pts += 1 / (i + 1) * (-PREVIOUS_MATCH)
 
         if n_times_picked:
-            pts += n_times_picked * 0.1      
+            pts += n_times_picked * 0.1
 
         age = stats.get('Age')
         if age:
@@ -88,7 +85,7 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
                 pts += PEAK_AGE
             else:
                 pass
-        
+
         rank = stats.get('Ranking')
         if rank:
             pts += 1 / rank * RANK
@@ -118,19 +115,19 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
                 winrate += LOW_WINRATE
             else:
                 winrate += random.randint(*MID_WINRATE)
-        
+
         ace = stats.get('Ace %')
         if ace:
-            pts += ace * ACE 
+            pts += ace * ACE
 
         fault = stats.get('Fault %')
         if fault:
             pts += fault * FAULT
-                
+
         first_serve = stats.get('1st Serve %')
         if first_serve:
             if first_serve >= 63:
-                ratio = HIGH_FIRST_SERVE 
+                ratio = HIGH_FIRST_SERVE
             elif first_serve <= 43:
                 ratio = LOW_FIRST_SERVE
             else:
@@ -146,7 +143,7 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
                 pts += -FIRST_SERVE_WON
             else:
                 pass
-                    
+
         second_serve_won = stats.get('2nd Serve Won %')
         if second_serve_won:
             if second_serve_won >= 50:
@@ -155,7 +152,7 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
                 pts -= SECOND_SERVE_WON * second_serve_won / 100
             else:
                 pass
-        
+
         titles = stats.get('Titles')
         if titles:
             pts += titles * TITLES
@@ -168,10 +165,11 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
             pts += ODDS * odds
 
         points[player] = pts
-    
+
     p1, p2 = players
 
     if h2h:
+        print(h2h, p1, p2)
         h2h_won_1 = h2h.get(p1)
         h2h_won_2 = h2h.get(p2)
 
@@ -188,4 +186,10 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
 
 
 if __name__ == '__main__':
-    pass
+    players = ['Mansuri S', 'Takeuchi K']
+    players_stats = {'Mansuri S': {'Name': 'Skander Mansouri', 'Age': 25, 'Ranking': 385, 'RankingPeak': 303, 'Points': 105, 'PrizeMoney': 79759, 'TotalMatches': 267, 'Winrate%': 61.8, 'Titles': None, 'GOAT Rank': None, 'Ace %': None, 'Double Fault %': None, '1st Serve %': None, '1st Serve Won %': None, '2nd Serve Won %': None},
+                     'Takeuchi K': {'Name': 'Kento Takeuchi', 'Age': 33, 'Ranking': 711, 'RankingPeak': 378, 'Points': 29, 'PrizeMoney': 167515, 'TotalMatches': 813, 'Winrate%': 52.89, 'Titles': None, 'GOAT Rank': None, 'Ace %': 0.0, 'Double Fault %': 4.7, '1st Serve %': 41.9, '1st Serve Won %': 38.9, '2nd Serve Won %': 32.0}}
+    betting_stats = {'Players': ['Mansuri S', 'Takeuchi K'], 'Odds': {'Mansuri S': 1.1, 'Takeuchi K': 6.2}, 'BetsTendency': {'Mansuri S': 72.0, 'Takeuchi K': 217.0, 'TotalOver': 0.0, 'TotalUnder': 0.0}, 'PastResults': {'Mansuri S': ['+', '+', '+', '+', '+', '+'], 'Takeuchi K': ['+', '+', '-', '-', '-', '+']}, 'Predictions': [{'Outcome': 'WINNER 2', 'Odds': 6.7, 'Explanation': "The coefficient drops, because they gave 7.5 at all, but even 6.7 is incredibly high, value a huge one.I would not give more than 2.5-3 for the Japanese here and Mansuri's victory is in principle dangerous to take in the tournament.In the first round he could fly away to young Kumar in two sets, but he did not apply for the match, gave a set and fell apart in the third.Today, the weaker Gregg drank blood.Had a set chance, but didn't finish 3-0.In general, Mansuri has noticeably played enough lately, especially", 'ExpertProfit%': 0.0}, {
+        'Outcome': 'Handicap2 by sets (1.5)', 'Odds': 2.66, 'Explanation': 'One set is given a coefficient that should go for the whole match.As I said, Mansuri has played enough over the past weeks and looks weak on this Monastir.In the first round I had to fly off in two sets and today there were many problems against a far from strong opponent.The Japanese, in turn, recently started his season, but is already showing a good game.For two laps I have not experienced any problems.In general, he is a strong player, therefore', 'ExpertProfit%': 0.0}, {'Outcome': 'Handicap2 by games (7)', 'Odds': 1.71, 'Explanation': 'Well, the handicap is also incredibly wild.The level of the players at the peak is approximately equal.But the Japanese beeches are apparently underestimated due to the fact that he recently started the season.There were injuries, but I seem to have returned in good shape.Two laps confidently passed, although the rivals were not the strongest.But at the same time, Mansuri almost flew out of the similar.As for me, I recently won the futures and played enough.Here you need a desire to fight for victory against the Japanese, and even less such a head start', 'ExpertProfit%': 0.0}]}
+    h2h = {'Mansuri S': 0, 'Takeuchi K': 0}
+    print(get_outcome(players, players_stats, betting_stats, h2h))
