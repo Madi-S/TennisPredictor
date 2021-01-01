@@ -38,9 +38,6 @@ def get_conclusion(*args, **kwargs):
 
 
 # Constant rates
-PREVIOUS_MATCH = 20
-ODDS = -100
-
 betSTATS = {'Odds': -100, 'BetsTendency': 0.1,
             'PastResults': 20, 'Predictions': None, }
 ovarallSTATS = {'Age': {'>33': -20, '<20': -15},
@@ -55,11 +52,19 @@ gameSTATS = {'Ace %': 'Ace'*10, 'Double Fault %': 'Fault'*-10,
              'Titles': 'Title'*10, 'GOAT Rank': 'Reversed'*500}
 
 
+PREVIOUS_MATCH = 20
+ODDS = -100
+OLD = -30
+YOUNG = -20
+PEAK_AGE = 20
+RANK_PTS
+
+
 def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
     points = {}
 
     for player, stats in players_stats.items():
-        points[player] = 0
+        pts = int()
 
         odds = betting_stats['Odds'][player]
         n_times_picked = betting_stats['BetsTendency'][player]
@@ -67,20 +72,52 @@ def get_outcome(players_stats: dict, betting_stats: dict, h2h: dict):
 
         # +- 20 * `i` for each won or lost past match amongst 5 last matches
         # Where `i` is a relevancy factor, e.g., a win 3 days ago will be weightier that a win 10 days ago
-        for i, match in enumerate(past_matches):
-            if match == '+':
-                points[player] += 1 / i * PREVIOUS_MATCH
-            else:
-                points[player] += 1 / i * (-PREVIOUS_MATCH)
+        if past_matches:
+            for i, match in enumerate(past_matches):
+                if match == '+':
+                    pts += 1 / i * PREVIOUS_MATCH
+                else:
+                    pts += 1 / i * (-PREVIOUS_MATCH)
+
+        if n_times_picked:
+            pts += n_times_picked * 0.1
+
+        age = stats.get('Age')
+        if age:
+            # Too old -> minus
+            if age >= 33:
+                pts += OLD
+            # Too young -> minus
+            elif age <= 19:
+                pts += YOUNG
+            # Peak age -> plus
+            elif age <= 26 and age >= 22:
+                pts += PEAK_AGE
+        
+        rank = stats.get('Ranking')
+        if rank:
+            # Higher (gravitating -> 1) the plus is bigger (inverse proportion)
+            pts += 1 / rank * 500
+
+        rank_peak = stats.get('RankingPeak')
+        if rank_peak:
+            # Almost the same here but plus is slightly less
+            pts += 1 / rank_peak * 250
+
+        rank_pts = stats.get('Points')
+        if rank_pts:
+            # More ATP/WTA points -> plus
+            pts +=  
+
+        
+
 
         # In the end reduce points considering odds ratio
         if odds:
-            points[player] += ODDS * odds
+            pts += ODDS * odds
 
-    p1, p2 = stats[0], stats[1]
 
-    if all(p1['PastResults'], p2['PastResults']):
-        pass
+        points[player] = pts
 
     outcome = str()
     return outcome

@@ -23,7 +23,7 @@ def get_h2h_time(players: list):
             match = soup.find(string=re.compile(
                 fr'{player}')).parent.parent.parent
             h2h[player] = int(match.find(class_='h2h').text)
-            time = match.select_one('.first.time').text.strip()
+            time = match.select_one('.first.time').text.strip() + ' GMT'
         except AttributeError:
             pass
 
