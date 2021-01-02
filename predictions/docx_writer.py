@@ -3,11 +3,11 @@
 
 class DOCXWriter:
 
-    def __init__(self, filename='TennisPredictions'):
+    def __init__(self, filename: str):
         '''
         Initialize DOCX Writer by creating DOCX with given filename
 
-        :param filename: `str` for the DOCX file name, 'TennisPredictions' by default
+        :param filename: `str` for the DOCX file name
         :return: returns nothing
         '''
         with open(filename + '.docx', 'w') as _:

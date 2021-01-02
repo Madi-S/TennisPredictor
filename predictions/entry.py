@@ -1,10 +1,12 @@
 # Collect all matches' HTMLs and matches themselves                                 !!! DONE
 # Collect all expert's predictions for collected matches from vrpognoze for today   !!! DONE
 # Collect all stats from ultimate_stats and tennislive_stats                        !!! DONE
+# Produce outcome and points                                                        !!! DONE
 # Format all given text
 # Export everything to .docx
 
 import os
+import argparse
 import asyncio
 
 from get_conclusion import get_conclusion, get_outcome
@@ -17,15 +19,23 @@ from docx_writer import DOCXWriter
 
 logger = get_logger()
 
+args_parser = argparse.ArgumentParser(prog='Tennis Predictor by Madi S',
+                                     usage='Specify the `limit` value for maximum amount of tennis predictions for today (5 by default)\nSpecify the `filename` for the .docx file with predictions (TennisPredictions.docx by default)',
+                                     description='Tennis Predictor based on tennis players\'s stats and form. Produces a .docx file with detailed and formatted predictions')
+
+args_parser.add_argument('-l','--limit', choices=[i for i in range(1, 11)], help='Maximum number of tennis predictions to produce, choose between [1; 10]', default=5)
+args_parser.add_argument('-f','--filename', type=str, help='Filename for the .docx file with predictions (specify without file format)', default='TennisPredictions')
+
+args = args_parser.parse_args()
 
 
 
-async def test():
-    writer = DOCXWriter()
+async def main():
+    writer = DOCXWriter(args.filename)
 
-    p = Parser(limit=1)
+    p = Parser(limit=args.limit)
     await p.init_browser()
-    
+
     matches_html = await p.get_matches()
     matches = []
 
@@ -33,7 +43,7 @@ async def test():
         matches.append(get_predictions(html))
 
     logger.debug(matches)
-    
+
     for match_info in matches:
         stats = {}
 
@@ -44,8 +54,9 @@ async def test():
         if full_names:
             logger.debug('Full names are: %s', full_names)
 
-            h2h, time = get_h2h_time(players,  [name.split(' ')[-1] for name in full_names.values()])
-            
+            h2h, time = get_h2h_time(players,  [name.split(
+                ' ')[-1] for name in full_names.values()])
+
             logger.debug('Head-to-head matches: %s', h2h)
             logger.debug('Matchin will start at %s', time)
 
@@ -58,31 +69,28 @@ async def test():
                     print(f'Data {data} updated for {player}')
                     stats[player].update(data)
 
-                data = await p.get_detailed_stats(full_name) 
+                data = await p.get_detailed_stats(full_name)
                 if data:
                     print(f'Data {data} updated for {player}')
                     stats[player].update(data)
 
-            with open('data.txt','w') as f:
+            with open('data.txt', 'w') as f:
                 f.write(str(players) + '\n')
                 f.write(str(stats) + '\n')
-                f.write(str(match_info) +'\n')
+                f.write(str(match_info) + '\n')
                 f.write(str(h2h) + '\n')
 
-            # outcome, points = get_outcome(players, stats, match_info, h2h)
-            # logger.debug(outcome, points)
-            # logger.debug('Outcome:%s\nPoints:%s', outcome, points) 
+            outcome, points = get_outcome(players, stats, match_info, h2h)
+            logger.debug('Outcome:%s\nPoints:%s', outcome, points)
             # conclusion = get_conclusion(stat)
 
             # writer.write(data)
-
 
             logger.debug(stats)
         else:
             logger.debug('No stats and full names found for %s', players)
 
-
     await p.shut_browser()
 
 if __name__ == '__main__':
-    asyncio.run(test())
+    asyncio.run(main())

@@ -179,8 +179,20 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
             points[p2] += points[p1] / 2
         else:
             pass
+    
+    diff = points[p1] - points[p2]
+    if diff > 30:
+        outcome = f'{p1} should win without any hindrances'
 
-    outcome = f'{p1} got {points[p1]} and {p2} got {points[p2]}'
+    elif diff < -30:
+        outcome = f'{p2} should win readily'
+
+    else:
+        if diff > 0:
+            outcome = f'This will be a tight fight. Both players have approximately the same form. {p1} got {points[p1]} and {p2} got {points[p2]}.\nAt any rate, there is a slight vantage from {p1}'
+
+        elif diff < 0:
+            outcome = f'Both players seem to be at the same level right now. Hence, it difficult to predict a winner. However, {p2} scored {points[p2]} and {p1} scored slightly less {points[p1]}. The choice is {p2} with a small lead in the points'
 
     return outcome, points
 
@@ -193,3 +205,5 @@ if __name__ == '__main__':
         'Outcome': 'Handicap2 by sets (1.5)', 'Odds': 2.66, 'Explanation': 'One set is given a coefficient that should go for the whole match.As I said, Mansuri has played enough over the past weeks and looks weak on this Monastir.In the first round I had to fly off in two sets and today there were many problems against a far from strong opponent.The Japanese, in turn, recently started his season, but is already showing a good game.For two laps I have not experienced any problems.In general, he is a strong player, therefore', 'ExpertProfit%': 0.0}, {'Outcome': 'Handicap2 by games (7)', 'Odds': 1.71, 'Explanation': 'Well, the handicap is also incredibly wild.The level of the players at the peak is approximately equal.But the Japanese beeches are apparently underestimated due to the fact that he recently started the season.There were injuries, but I seem to have returned in good shape.Two laps confidently passed, although the rivals were not the strongest.But at the same time, Mansuri almost flew out of the similar.As for me, I recently won the futures and played enough.Here you need a desire to fight for victory against the Japanese, and even less such a head start', 'ExpertProfit%': 0.0}]}
     h2h = {'Mansuri S': 0, 'Takeuchi K': 0}
     print(get_outcome(players, players_stats, betting_stats, h2h))
+
+

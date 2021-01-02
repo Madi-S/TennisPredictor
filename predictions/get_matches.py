@@ -12,15 +12,14 @@ TENNIS_VALUE = '2'
 
 class VprognozeHTML(Webdriver):
 
-    def __init__(self, limit: int = 5):
+    def __init__(self, limit: int):
         '''
 
-        :param limit=5: Get at maximum 5 HTML of matches' pages
+        :param limit: Get at maximum given `int` number of HTML of matches' pages from vprognoze/topforecasts
         :return: returns nothing
         '''
         if not (limit > 0 and limit < 11 and isinstance(limit, int)):
-            raise TypeError(
-                '`Limit` value must be an integer between 1 and 10')
+            raise TypeError('`Limit` value must be an integer between 1 and 10')
         self._limit = limit
 
     async def get_matches(self):
@@ -30,8 +29,7 @@ class VprognozeHTML(Webdriver):
         :return: returns a `list` of HTMLs, which does not exceed specified limit, if no matches are present for today returns `False`
         '''
         if not '_page' in self.__dict__:
-            raise ValueError(
-                'Initialize the browser before searching by `await .init_broswser()`')
+            raise ValueError('Initialize the browser before searching by `await .init_broswser()`')
 
         await self._goto_retry(URL, selector='.button_default')
         # await self._page.goto(URL)
