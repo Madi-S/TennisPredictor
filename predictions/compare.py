@@ -8,10 +8,6 @@ def compare_players(p1: str, p2: str, p1_stats: dict, p2_stats: dict, other_stat
 
     pts_1 = 0
     pts_2 = 0
-
-    odds_1 = other_stats['Odds'][p1]
-    odds_2 = other_stats['Odds'][p2]
-
     stats = 0
 
     s1 = other_stats['BetsTendency'][p1]
@@ -192,11 +188,17 @@ def compare_players(p1: str, p2: str, p1_stats: dict, p2_stats: dict, other_stat
         else:
             pts_2 += 1
         stats += 1
-        
-
+    
+    odds = other_stats['Odds']
 
     winner = max([pts_1, pts_2])
-    calculated_probability = winner / stats
+    
+    if winner == pts_1:
+        odds = odds.get(p1)
+    else:
+        odds = odds.get(p2)
+
+    calculated_probability = winner / stats * 100
 
 
-    return calculated_probability
+    return calculated_probability, winner

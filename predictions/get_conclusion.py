@@ -30,7 +30,7 @@ def get_conclusion(players: list, points: dict):
 
 # Constant raitos:
 PREVIOUS_MATCH = 26
-N_TIMES_PICKED = 0.1
+N_TIMES_PICKED = 0.2
 OLD = -30
 YOUNG = -15
 PEAK_AGE = 20
@@ -193,10 +193,10 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
             pts += 1 / goat * GOAT
             print(f'{pts-before} for GOAT rank {goat} for {player}\n')
 
-        if odds:
-            before = pts
-            pts /= odds
-            print(f'{pts-before} for odds {odds} for {player}\n')
+        # if odds:
+        #     before = pts
+        #     pts /= odds
+        #     print(f'{pts-before} for odds {odds} for {player}\n')
 
         points[player] = pts
 

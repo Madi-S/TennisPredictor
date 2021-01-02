@@ -9,6 +9,7 @@ import os
 import argparse
 import asyncio
 
+from compare import compare_players
 from get_conclusion import get_conclusion, get_outcome
 from get_predictions import get_predictions
 from get_h2h_time import get_h2h_time
@@ -45,9 +46,9 @@ async def main():
     for html in matches_html:
         matches.append(get_predictions(html))
 
-    logger.debug(matches)
-
     for match_info in matches:
+        logger.debug(match_info)
+        
         stats = {}
 
         players = match_info['Players']
@@ -69,12 +70,12 @@ async def main():
 
                 data = await p.get_stats(full_name)
                 if data:
-                    print(f'Data {data} updated for {player}')
+                    logger.debug('Data %s updated for %s',data, player)
                     stats[player].update(data)
 
                 data = await p.get_detailed_stats(full_name)
                 if data:
-                    print(f'Data {data} updated for {player}')
+                    logger.debug('Data %s updated for %s', data, player)
                     stats[player].update(data)
 
             with open('data.txt', 'w') as f:
@@ -88,8 +89,6 @@ async def main():
             # conclusion = get_conclusion(stat)
 
             # writer.write(data)
-
-            logger.debug(stats)
         else:
             logger.debug('No stats and full names found for %s', players)
 
