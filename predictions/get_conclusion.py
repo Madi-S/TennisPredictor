@@ -28,13 +28,14 @@ def get_conclusion(players: list, points: dict):
     return conclusion
 
 
-PREVIOUS_MATCH = 20
-ODDS = -100
+# Constant raitos:
+PREVIOUS_MATCH = 26
+N_TIMES_PICKED = 0.1
 OLD = -30
 YOUNG = -15
 PEAK_AGE = 20
-RANK = 500
-RANK_PEAK = 250
+RANK = 1000
+RANK_PEAK = 500
 RANK_PTS = 0.01
 PRIZE = 0.000001
 MATCHES = 0.1
@@ -66,17 +67,22 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
         # +- 20 * `i` for each won or lost past match amongst 5 last matches
         # Where `i` is a relevancy factor, e.g., a win 3 days ago will be weightier that a win 10 days ago
         if past_matches:
+            before = pts
             for i, match in enumerate(past_matches):
                 if match == '+':
                     pts += 1 / (i + 1) * PREVIOUS_MATCH
                 else:
                     pts += 1 / (i + 1) * (-PREVIOUS_MATCH)
+            print(f'{pts-before} for past matches {past_matches} for {player}\n')
 
         if n_times_picked:
-            pts += n_times_picked * 0.1
+            before = pts
+            pts += n_times_picked * N_TIMES_PICKED
+            print(f'{pts-before} for bets tendency {n_times_picked} for {player}\n')
 
         age = stats.get('Age')
         if age:
+            before = pts
             if age >= 33:
                 pts += OLD
             elif age <= 19:
@@ -85,47 +91,64 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
                 pts += PEAK_AGE
             else:
                 pass
+            print(f'{pts-before} for age {age} for {player}\n')
 
         rank = stats.get('Ranking')
         if rank:
+            before = pts
             pts += 1 / rank * RANK
+            print(f'{pts-before} for rank {rank} for {player}\n')
 
         rank_peak = stats.get('RankingPeak')
         if rank_peak:
+            before = pts
             pts += 1 / rank_peak * RANK_PEAK
+            print(f'{pts-before} for rank peak {rank_peak} for {player}\n')
 
         rank_pts = stats.get('Points')
         if rank_pts:
-            # More ATP/WTA points -> plus
+            before = pts
             pts += rank_pts * RANK_PTS
+            print(f'{pts-before} for ranking points {rank_pts} for {player}\n')
 
         prize = stats.get('PrizeMoney')
         if prize:
+            before = pts
             pts += prize * PRIZE
+            print(f'{pts-before} for prize money {prize} for {player}\n')
 
         matches = stats.get('TotalMatches')
         if matches:
+            before = pts
             pts += matches * MATCHES
+            print(f'{pts-before} for total matches {matches} for {player}\n')
 
         winrate = stats.get('Winrate')
         if winrate:
+            before = pts
             if winrate >= 62:
                 winrate += HIGH_WINRATE
             elif winrate <= 45:
                 winrate += LOW_WINRATE
             else:
                 winrate += random.randint(*MID_WINRATE)
+            print(f'{pts-before} for winrate% {winrate} for {player}\n')
 
         ace = stats.get('Ace %')
         if ace:
+            before = pts
             pts += ace * ACE
+            print(f'{pts-before} for ace % {ace} for {player}\n')
 
         fault = stats.get('Fault %')
         if fault:
+            before = pts
             pts += fault * FAULT
+            print(f'{pts-before} for double faults % {fault} for {player}\n')
 
         first_serve = stats.get('1st Serve %')
         if first_serve:
+            before = pts
             if first_serve >= 63:
                 ratio = HIGH_FIRST_SERVE
             elif first_serve <= 43:
@@ -134,42 +157,55 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
                 ratio = random.randint(*MID_FIRST_SERVE)
 
             pts += ratio * first_serve / 100
+            print(f'{pts-before} for first_serve % {first_serve} for {player}\n')
 
         first_serve_won = stats.get('1nd Serve Won %')
         if first_serve_won:
+            before = pts
             if first_serve_won >= 63:
                 pts += FIRST_SERVE_WON * first_serve_won / 100
             elif first_serve_won <= 50:
                 pts += -FIRST_SERVE_WON
             else:
                 pass
+            print(f'{pts-before} for 1nd Serve Won % {first_serve_won} for {player}\n')
 
         second_serve_won = stats.get('2nd Serve Won %')
         if second_serve_won:
+            before = pts
             if second_serve_won >= 50:
                 pts += SECOND_SERVE_WON * second_serve_won / 100
             elif second_serve_won <= 40:
                 pts -= SECOND_SERVE_WON * second_serve_won / 100
             else:
                 pass
+            print(f'{pts-before} for 2nd Serve Won % {second_serve_won} for {player}\n')
 
         titles = stats.get('Titles')
         if titles:
+            before = pts
             pts += titles * TITLES
+            print(f'{pts-before} for Titles {titles} for {player}\n')
 
         goat = stats.get('GOAT Rank')
         if goat:
+            before = pts
             pts += 1 / goat * GOAT
+            print(f'{pts-before} for GOAT rank {goat} for {player}\n')
 
         if odds:
-            pts += ODDS * odds
+            before = pts
+            pts /= odds
+            print(f'{pts-before} for odds {odds} for {player}\n')
 
         points[player] = pts
 
     p1, p2 = players
 
     if h2h:
-        print(h2h, p1, p2)
+        before1 = points[p1]
+        before2 = points[p2]
+
         h2h_won_1 = h2h.get(p1)
         h2h_won_2 = h2h.get(p2)
 
@@ -179,7 +215,8 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
             points[p2] += points[p1] / 2
         else:
             pass
-    
+        print(f'{p1} got {points[p1]-before1} and {p2} got {points[p2]-before2} for h2h {h2h}\n')
+
     diff = points[p1] - points[p2]
     if diff > 30:
         outcome = f'{p1} should win without any hindrances'

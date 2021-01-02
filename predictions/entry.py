@@ -20,7 +20,7 @@ from docx_writer import DOCXWriter
 logger = get_logger()
 
 args_parser = argparse.ArgumentParser(prog='Tennis Predictor by Madi S',
-                                     usage='Specify the `limit` value for maximum amount of tennis predictions for today (5 by default)\nSpecify the `filename` for the .docx file with predictions (TennisPredictions.docx by default)',
+                                     usage='Specify the `limit` value for maximum amount of tennis predictions for today (5 by default).Specify the `filename` for the .docx file with predictions (TennisPredictions.docx by default)',
                                      description='Tennis Predictor based on tennis players\'s stats and form. Produces a .docx file with detailed and formatted predictions')
 
 args_parser.add_argument('-l','--limit', choices=[i for i in range(1, 11)], help='Maximum number of tennis predictions to produce, choose between [1; 10]', default=5)
@@ -31,6 +31,9 @@ args = args_parser.parse_args()
 
 
 async def main():
+    logger.debug('Got args: %s', args)
+
+
     writer = DOCXWriter(args.filename)
 
     p = Parser(limit=args.limit)
