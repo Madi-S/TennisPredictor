@@ -30,9 +30,13 @@ def get_tournament_info(tournament_link):
 	except:
 		prize = None
 	try:
-		surface = info[1].replace(' ','').split(',')[1]
+		surface = info[1].replace(' ','').split(',')[1].lower()
 	except:
 		surface = None
+	
+	if surface == 'indoor':
+		print('Indoor transformed to Hard')
+		surface = 'hard'
 
 	return {'prize_pool':prize, 'surface':surface, 'link':link}
 

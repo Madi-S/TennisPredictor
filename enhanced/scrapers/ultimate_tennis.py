@@ -1,8 +1,7 @@
 import requests
+import re
 
-from time import sleep
 from datetime import datetime
-from random import shuffle
 from bs4 import BeautifulSoup
 
 
@@ -27,13 +26,67 @@ def get_player_id(name):
     return found[0]['id']
 
 
-def get_stats(id_):
-    url = 'https://www.ultimatetennisstatistics.com/playerProfile?playerId={}'
-    r = requests.get(url.format(id_), headers=headers)
+def parse_profiles(html, players, surface):
+    soup = BeautifulSoup(html, 'lxml')
+    table = soup.select_one('.table.table-condensed.text-nowrap')
 
+    data = {}
+    order = [
+        'H2H','Adjusted H2H', 'Age', 'Country', 'Seasons', 'Prize Money'
+        'Titles', 'Current Rank', 'Best Rank', 'GOAT Rank', 'Best Season',
+        'Last Appearance'
+    ]
+    winrate = surface
+
+    for i in range(2):
+        p = players[i]
+        if i == 1:
+            base = lambda o: table.find(text=re.compile(fr'{o}')).parent
+            find_h2h = lambda o : base(o).next_sibling.next_sibling.a.text.strip()
+            find_season = lambda o : base(o).parent.next_sibling.next_sibling.text.strip()
+        else:
+            base = lambda o: table.find(text=re.compile(fr'{o}')).parent
+            find_h2h = lambda o : base(o).previous_sibling.previous_sibling.a.text.strip()
+            find_season = lambda o : base(o).parent.previous_sibling.previous_sibling.text.strip()
+            
+        for o in order:
+        	if 'H2H' in o:
+                info = find_h2h(o) 
+        	elif o == 'Best Season':
+        		info = find_season(o)
+        	else:
+        		info = table.find(text=re.compile(fr'{o}')).parent.next_sibling.next_sibling.text.strip()
+
+            data[o] = info
+
+
+
+    return data
+
+
+def parse_stats(html):
+    soup = BeautifulSoup(html, 'lxml')
+    data = {}
+
+    return data
+
+
+    
+def compare_players(p1, p2):
+    id1 = get_player_id(p1)
+    id2 = get_player_id(p2)
+
+    if not (id1 and id2):
+        return None
+
+    url = 'https://www.ultimatetennisstatistics.com/headToHead?playerId1={id1}&playerId2={id2}'
+    r = requests.get(url.format(id1, id2), headers=headers)
+    
     if not r.ok:
         raise AttributeError(f'Bad response from UltimateTennis: {r}. Fix the issue')
 
+    html = r.text
+    profiles = parse_profiles(html)
 
 
 '''
