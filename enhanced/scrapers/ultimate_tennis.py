@@ -36,43 +36,46 @@ def parse_profiles(html, players, surface):
         'Titles', 'Current Rank', 'Best Rank', 'GOAT Rank', 'Best Season',
         'Last Appearance'
     ]
-    winrate = surface
+    if surface:
+        order.append(surface)
 
     for i in range(2):
-        p = players[i]
         if i == 1:
             base = lambda o: table.find(text=re.compile(fr'{o}')).parent
             find_h2h = lambda o : base(o).next_sibling.next_sibling.a.text.strip()
-            find_season = lambda o : base(o).parent.next_sibling.next_sibling.text.strip()
+            find_surface = lambda o: table.find(text=re.compile(fr'{o}'), class_='text-center').next_sibling.next_sibling.text.strip()
+            find_some = lambda o : base(o).parent.next_sibling.next_sibling.text.strip()
+            find_any = lambda o: base(o).next_sibling.next_sibling.text.strip()
         else:
             base = lambda o: table.find(text=re.compile(fr'{o}')).parent
             find_h2h = lambda o : base(o).previous_sibling.previous_sibling.a.text.strip()
-            find_season = lambda o : base(o).parent.previous_sibling.previous_sibling.text.strip()
+            find_surface = lambda o: table.find(text=re.compile(fr'{o}'), class_='text-center').previous_sibling.previous_sibling.text.strip()
+            find_some = lambda o : base(o).parent.previous_sibling.previous_sibling.text.strip()
+            find_any = lambda o: base(o).previous_sibling.previous_sibling.text.strip()
             
         for o in order:
-        	if 'H2H' in o:
+            if 'H2H' in o:
                 info = find_h2h(o) 
-        	elif o == 'Best Season':
-        		info = find_season(o)
-        	else:
-        		info = table.find(text=re.compile(fr'{o}')).parent.next_sibling.next_sibling.text.strip()
-
-            data[o] = info
-
-
+            elif o == 'Best Season' or o == 'Overall':
+                info = find_some(o)
+            elif o in ['Hard','Grass','Clay']:
+                info = find_surface(o)
+            else:
+                info = find_any(o)
+            data[players[i]][o] = info
 
     return data
 
 
 def parse_stats(html):
     soup = BeautifulSoup(html, 'lxml')
-    data = {}
+    data = []
 
     return data
 
 
     
-def compare_players(p1, p2):
+def compare_players(p1, p2, tournament):
     id1 = get_player_id(p1)
     id2 = get_player_id(p2)
 
@@ -82,28 +85,69 @@ def compare_players(p1, p2):
     url = 'https://www.ultimatetennisstatistics.com/headToHead?playerId1={id1}&playerId2={id2}'
     r = requests.get(url.format(id1, id2), headers=headers)
     
+
     if not r.ok:
         raise AttributeError(f'Bad response from UltimateTennis: {r}. Fix the issue')
 
     html = r.text
-    profiles = parse_profiles(html)
+    profiles = parse_profiles(html, [p1, p2], surface)
+    profiles[p1]['past_matches'] = get_past_matches(id1) 
+    profiles[p2]['past_matches'] = get_past_matches(id2) 
+
+def get_past_matches(id_):
+    pass
 
 
 '''
-Request headers:
-Accept: application/json, text/javascript, */*; q=0.01
+Request URL: https://www.ultimatetennisstatistics.com/matchesTable?playerId=5324&current=1&rowCount=15&sort%5Bdate%5D=desc&searchPhrase=&season=&fromDate=&toDate=&level=&bestOf=&surface=&indoor=&speed=&round=&result=&opponent=&tournamentId=&tournamentEventId=&outcome=&score=&countryId=&bigWin=false&_=1609678509654
+Request Method: GET
+Status Code: 200 
+Remote Address: 46.101.166.59:443
+Referrer Policy: strict-origin-when-cross-origin
+Cache-Control: private
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Type: application/json
+Date: Sun, 03 Jan 2021 12:55:14 GMT
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+vary: accept-encoding
+Accept: */*
 Accept-Encoding: gzip, deflate, br
 Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7
 Connection: keep-alive
-Cookie: _ga=GA1.2.659216525.1609145839; _gid=GA1.2.1340506244.1609145839; __gads=ID=a110e92986bf849e-225e69d973b9003b:T=1609145842:RT=1609145842:S=ALNI_Ma4Yl3UW1qQ2GVAeX1FXzaLBttlhg
+Cookie: _ga=GA1.2.659216525.1609145839; _gid=GA1.2.1340506244.1609145839; __gads=ID=a110e92986bf849e-225e69d973b9003b:T=1609145842:RT=1609145842:S=ALNI_Ma4Yl3UW1qQ2GVAeX1FXzaLBttlhg; _gat=1
 Host: www.ultimatetennisstatistics.com
-Referer: https://www.ultimatetennisstatistics.com/playerProfile?playerId=5663
+Referer: https://www.ultimatetennisstatistics.com/playerProfile?playerId=5324
 Sec-Fetch-Dest: empty
 Sec-Fetch-Mode: cors
 Sec-Fetch-Site: same-origin
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36
 X-Requested-With: XMLHttpRequest
-term: Da
+playerId: 5324
+current: 1
+rowCount: 15
+sort[date]: desc
+searchPhrase: 
+season: 
+fromDate: 
+toDate: 
+level: 
+bestOf: 
+surface: 
+indoor: 
+speed: 
+round: 
+result: 
+opponent: 
+tournamentId: 
+tournamentEventId: 
+outcome: 
+score: 
+countryId: 
+bigWin: false
+_: 1609678509654
 '''
 
 '''
