@@ -119,5 +119,6 @@ def get_matches_info(limit=5):
 
 if __name__ == '__main__':
 	matches = get_matches_info(limit=10)
-	with open('matches.json','w') as f:
-		f.write(str(matches))
+	print(matches)
+	# with open('matches.json','w') as f:
+	# 	f.write(str(matches))
