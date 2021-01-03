@@ -78,14 +78,16 @@ async def main():
                     logger.debug('Data %s updated for %s', data, player)
                     stats[player].update(data)
 
-            with open('data.txt', 'w') as f:
-                f.write(str(players) + '\n')
-                f.write(str(stats) + '\n')
-                f.write(str(match_info) + '\n')
-                f.write(str(h2h) + '\n')
+            # with open('data.txt', 'w') as f:
+            #     f.write(str(players) + '\n')
+            #     f.write(str(stats) + '\n')
+            #     f.write(str(match_info) + '\n')
+            #     f.write(str(h2h) + '\n')
 
             outcome, points = get_outcome(players, stats, match_info, h2h)
             logger.debug('Outcome:%s\nPoints:%s', outcome, points)
+            with open('oucome.txt','a') as f:
+                f.write(str(outcome) + '\n' + str(points) + '\n\n')
             # conclusion = get_conclusion(stat)
 
             # writer.write(data)
