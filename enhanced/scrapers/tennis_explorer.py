@@ -44,7 +44,7 @@ def parse_html(html, limit):
 	table = soup.find(class_='result')
 
 	matches_data = []
-	players = table.find_all(attrs={'onmouseover':'md_over(this);'})[:limit*2]
+	players = table.find_all(attrs={'onmouseover':'md_over(this);'})
 	for i, player in enumerate(players):
 		# print(i, player)
 		if i % 2 == 0:
@@ -68,7 +68,6 @@ def parse_html(html, limit):
 				data['p1'] = None
 			try:
 				data['p1_h2h'] = int(player.find(class_=re.compile(r'h2h')).text.strip())
-				print(data['p1_h2h'])
 			except:
 				data['p1_h2h'] = None
 
@@ -86,11 +85,15 @@ def parse_html(html, limit):
 				data['p2'] = player.find(class_='t-name').find('a').text.strip()
 			except:
 				data['p2'] = None
+			try:
+				data['p2_h2h'] = int(player.find(class_=re.compile(r'h2h')).text.strip())
+			except:
+				data['p2_h2h'] = None
 			matches_data.append(data)
 
 		
 
-	shuffle(matches_data)
+	# shuffle(matches_data)
 	return matches_data[:limit]
 
 
@@ -98,18 +101,23 @@ def get_matches_info(limit=5):
 	if not (isinstance(limit, int) and limit > 0 and limit < 11):
 		raise ValueError('Specify the correct value for limit between 1 and 10 (including both)')
 
-	headers.update({{'user-agent': ua.random}})
+	headers['user-agent'] = ua.random
 
 	today = datetime.today()
-	r = requests.get(ATP_SINGLES.format(today.year(), today.month(), today.day()), headers=headers)
+	link = ATP_SINGLES.format(today.year, today.month, today.day)
+
+	print(link)
+
+	r = requests.get(link, headers=headers)
 
 	if not r.ok:
-		raise AttributeError(f'Bad response from tennisexplorer: {r}. Fix the issue')
+		raise AttributeError(f'Bad response from TennisExplorer: {r}. Fix the issue')
 
-	data = parse_html(html, limit)
+	matches = parse_html(r.text, limit)
+	return matches
 
 
 if __name__ == '__main__':
-	with open('test.html','r', encoding='utf-8') as f:
-		html = f.read()
-	print(parse_html(html, 5))
+	matches = get_matches_info(limit=10)
+	with open('matches.json','w') as f:
+		f.write(str(matches))
