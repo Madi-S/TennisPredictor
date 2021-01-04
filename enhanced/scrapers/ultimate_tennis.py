@@ -55,7 +55,6 @@ def parse_html(html, players, surface):
 
         for o in order:
             data[p][o] = locate(o).text.strip().replace('\n','')
-            print(p,o,data[p][o])
 
     stats = soup.select('.tab-content')[1]
     order = ['Ace %', 'Double Fault %', '1st Serve %','1st Serve Won %', '2nd Serve Won %', 
@@ -72,20 +71,18 @@ def parse_html(html, players, surface):
         
         for o in order:
             data[p][o] = find(o).text.strip()
-            print(p,o,data[p][o])
 
     return data
 
 
     
-def compare_players(p1, p2, tournament=None, surface=None):
+def get_players_data(p1, p2, surface=None):
     id1 = get_player_id(p1)
     id2 = get_player_id(p2)
 
     if not (id1 and id2):
+        print(f'No IDs found for {p1} and {p2}')
         return None
-
-    print(id1, id2)
 
     url = 'https://www.ultimatetennisstatistics.com/headToHead?playerId1={}&playerId2={}'
 
@@ -101,15 +98,10 @@ def compare_players(p1, p2, tournament=None, surface=None):
     show_b.click() 
 
     sleep(4)
-
     html = driver.page_source
 
     driver.close()
     driver.quit()
-
-    with open('hau.html','w') as f:
-        f.write(html)
-        print('written')
 
     stats = parse_html(html, [p1, p2], surface)
     stats[p1]['past_matches'] = get_past_matches(id1, p1) 
@@ -125,11 +117,9 @@ def get_past_matches(id_, player):
     if not r.ok:
         raise AttributeError(f'Bad response from UltimateTennis: {r}. Fix the issue') 
 
-    results = [{'won': player in res['winner']['name'], 'score': res['score'], 'winner': res['winner']['name'], 'loser': res['loser']['name']} for res in r.json()['rows'][:10]]
-    print(type(results))
-
-    return results
+    return [{'won': player in res['winner']['name'], 'score': res['score'], 'winner': res['winner']['name'], 'loser': res['loser']['name']} for res in r.json()['rows'][:10]]
 
 if __name__ == '__main__':
-    #compare_players('Paire', 'Goffin', surface='Grass')
-    print(get_past_matches(5324, 'Paire'))
+    data = get_players_data('Paire', 'Goffin', surface='Grass')
+    with open('players_data.txt','w') as f:
+        f.write(str(data))

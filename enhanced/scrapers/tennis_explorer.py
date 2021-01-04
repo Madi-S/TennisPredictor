@@ -110,15 +110,11 @@ def parse_html(html, limit):
                 data['p2_h2h'] = None
             matches_data.append(data)
 
-    # shuffle(matches_data)
+    shuffle(matches_data)
     return matches_data[:limit]
 
 
-def get_matches_info(limit=5):
-    if not (isinstance(limit, int) and limit > 0 and limit < 11):
-        raise ValueError(
-            'Specify the correct value for limit between 1 and 10 (including both)')
-
+def get_matches_info(limit: int = 5):
     headers['user-agent'] = ua.random
 
     today = datetime.today()
@@ -137,7 +133,7 @@ def get_matches_info(limit=5):
 
 
 if __name__ == '__main__':
-    matches = get_matches_info(limit=10)
+    matches = get_matches_info(limit=1000)
     print(matches)
-    # with open('matches.json','w') as f:
-    # 	f.write(str(matches))
+    with open('matches.txt','w') as f:
+    	f.write(str(matches))
