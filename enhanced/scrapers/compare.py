@@ -14,8 +14,10 @@ def compare_players(match_data: dict, players_data: dict):
     odds1 = int(match_data.get('p1_odds'))
     odds2 = int(match_data.get('p2_odds'))
 
-    surface = match_data.get('tournament_info', {'foo':'bar'}).get('')
-
+    tournament = match_data.get('tournament_info')
+    if tournament:
+        surface = tournament.get('surface')
+        location = tournament.get('location')
 
     pts_1 = 0
     pts_2 = 0
@@ -115,8 +117,8 @@ def compare_players(match_data: dict, players_data: dict):
     #         pts_2 += 1
     #     stats += 1
 
-    s1 = p1_stats.get('Winrate')
-    s2 = p2_stats.get('Winrate')
+    s1 = p1_stats.get('Overall')
+    s2 = p2_stats.get('Overall')
     if s1 and s2:
         # If winrate is approximately the same:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
@@ -210,8 +212,6 @@ def compare_players(match_data: dict, players_data: dict):
         else:
             pts_2 += 1
         stats += 1
-
-    odds = other_stats['Odds']
 
     winner = max([pts_1, pts_2])
 

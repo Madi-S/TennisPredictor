@@ -1,10 +1,9 @@
 from bs4 import BeautifulSoup
-
-html = open('test.html', encoding='utf-8').read()
+import re
+html = open('stats.html').read()
 soup = BeautifulSoup(html, 'lxml')
 
-table = soup.find(class_='result')
-players = table.find_all(attrs={'onmouseover': 'md_over(this);'})
-print(len(players))
-t = players[-10].find_previous_sibling(class_='flags').find('a').get('href')
-print(t)
+stats = soup.select_one('.table.table-condensed.text-nowrap')
+a =  stats.find(text=re.compile(fr'Overall'), class_='text-center').next_sibling.next_sibling.text
+print(a)
+
