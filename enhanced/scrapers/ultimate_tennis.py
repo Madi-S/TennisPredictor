@@ -34,7 +34,7 @@ def parse_html(html, players, surface):
     soup = BeautifulSoup(html, 'lxml')
     data = {}
 
-    profile = soup.select_one('.table.table-condensed.text-nowrap')
+    stats = soup.select_one('.table.table-condensed.text-nowrap')
     order = [
         'H2H','Adjusted H2H', 'Age', 'Country', 'Seasons', 'Prize Money',
         'Titles', 'Current Rank', 'Best Rank', 'GOAT Rank', 'Best Season',
@@ -43,7 +43,7 @@ def parse_html(html, players, surface):
     if surface:
         order.append(surface)
 
-    base = lambda o: profile.find(text=re.compile(fr'{o}'), class_='text-center').parent
+    base = lambda o: stats.find(text=re.compile(fr'{o}'), class_='text-center').parent
     for i in range(2):
         p = players[i]
         data[p] = {}
@@ -54,7 +54,7 @@ def parse_html(html, players, surface):
             locate = lambda o: base(o).find(class_='text-left')
 
         for o in order:
-            data[p][o] = locate(o).text.strip()
+            data[p][o] = locate(o).text.strip().replace('\n','')
             print(p,o,data[p][o])
 
     stats = soup.select('.tab-content')[1]
@@ -64,15 +64,15 @@ def parse_html(html, players, surface):
 
     for i in range(0, 2):
         p = players[i]
-        base = lambda o: stats.find(text=re.compile(fr'{o}'))
-        
+
         if i == 0:
             find = lambda o: base(o).find(class_='text-right')
         else:
             find = lambda o: base(o).find(class_='text-left')
         
         for o in order:
-            data[p][OSError] = find(o).text.strip()
+            data[p][o] = find(o).text.strip()
+            print(p,o,data[p][o])
 
     return data
 
