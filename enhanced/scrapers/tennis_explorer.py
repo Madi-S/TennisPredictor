@@ -8,7 +8,7 @@ from random import sample, shuffle
 
 
 URL = 'https://www.tennisexplorer.com/matches/'
-ATP_SINGLES = 'https://www.tennisexplorer.com/matches/?type=atp-single&year={}&month={}&day={}'
+MATCHES = 'https://www.tennisexplorer.com/matches/?type={}&year={}&month={}&day={}'
 
 ua = UserAgent()
 headers = {
@@ -20,6 +20,7 @@ headers = {
 
 def get_tournament_info(tournament_link):
     link = 'https://www.tennisexplorer.com' + tournament_link
+    print('here toruney', link)
     r = requests.get(link)
     soup = BeautifulSoup(r.text, 'lxml')
 
@@ -58,12 +59,10 @@ def parse_html(html, limit):
     matches_data = []
     players = table.find_all(attrs={'onmouseover': 'md_over(this);'})
     for i, player in enumerate(players):
-        # print(i, player)
         if i % 2 == 0:
             data = {}
             try:
-                link = player.find_previous_sibling(
-                    class_='flags').find('a').get('href')
+                link = player.find_previous_sibling(class_='flags').find('a')['href']
                 data['tournament_info'] = get_tournament_info(link)
             except:
                 data['tournament_info'] = None
@@ -118,11 +117,14 @@ def get_matches_info(limit: int = 5):
     headers['user-agent'] = ua.random
 
     today = datetime.today()
-    link = ATP_SINGLES.format(today.year, today.month, today.day)
+    link = MATCHES.format('all',today.year, today.month, today.day)
 
     print(link)
 
     r = requests.get(link, headers=headers)
+
+    with open('test.html','w',encoding='utf-8') as f:
+        f.write(r.text)
 
     if not r.ok:
         raise AttributeError(f'Bad response from TennisExplorer: {r}. Fix the issue')
@@ -133,6 +135,5 @@ def get_matches_info(limit: int = 5):
 
 if __name__ == '__main__':
     matches = get_matches_info(limit=1000)
-    print(matches)
     with open('matches.txt','w') as f:
     	f.write(str(matches))

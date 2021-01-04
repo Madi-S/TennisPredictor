@@ -38,7 +38,7 @@ def parse_html(html, players, surface):
     order = [
         'H2H','Adjusted H2H', 'Age', 'Country', 'Seasons', 'Prize Money',
         'Titles', 'Current Rank', 'Best Rank', 'GOAT Rank', 'Best Season',
-        'Last Appearance'
+        'Last Appearance', 'Overall'
     ]
     if surface:
         order.append(surface)
@@ -54,7 +54,7 @@ def parse_html(html, players, surface):
             locate = lambda o: base(o).find(class_='text-left')
 
         for o in order:
-            data[p][o] = locate(o).text.strip().replace('\n','')
+            data[p][o] = locate(o).text.strip().replace('\n',' ')
 
     stats = soup.select('.tab-content')[1]
     order = ['Ace %', 'Double Fault %', '1st Serve %','1st Serve Won %', '2nd Serve Won %', 
