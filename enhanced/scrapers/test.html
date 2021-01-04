@@ -1,0 +1,761 @@
+<html><head>
+	
+	
+	
+	
+	
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ultimate Tennis Statistics - Benoit Paire vs David Goffin</title>
+	<link href="/webjars/bootstrap/3.4.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/webjars/jquery-ui-themes/1.12.1/smoothness/jquery-ui.css" rel="stylesheet" media="screen">
+	<link href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" media="screen">
+	<link href="/webjars/jquery-bootgrid/1.3.1/dist/jquery.bootgrid.min.css" rel="stylesheet" media="screen">
+	<link href="/css/tennis-stats-a53d331c96d4a820864fb91e8c49f7ff.css" rel="stylesheet" media="screen">
+	<link href="/feed.atom" rel="alternate" type="application/atom+xml" title="Ultimate Tennis Statistics">
+	<script src="https://www.googletagservices.com/activeview/js/current/osd.js?cb=%2Fr20100101"></script><script src="https://partner.googleadservices.com/gampad/cookie.js?domain=www.ultimatetennisstatistics.com&amp;callback=_gfp_s_&amp;client=ca-pub-1900145493503169"></script><script src="https://pagead2.googlesyndication.com/pagead/js/r20201203/r20190131/show_ads_impl_fy2019.js" id="google_shimpl"></script><script async="" src="https://www.google-analytics.com/analytics.js"></script><script src="/webjars/jquery/2.2.4/jquery.min.js"></script>
+	<script src="/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+	<script src="/webjars/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<script src="/webjars/jquery-bootgrid/1.3.1/dist/jquery.bootgrid.min.js"></script>
+	<script async="" src="/js/download.min-c9adb43560ce2d495e34168d3180c9b0.js"></script>
+	<script src="/js/tennis-stats-2a54c8e349acc08bf84f2a0aabe7c5d1.js"></script>
+	
+	<meta name="description" content="Benoit Paire vs David Goffin at Ultimate Tennis Statistics">
+	<script type="text/javascript">
+		var currentTab = "profiles";
+		$(function() {
+			$("#player1,#player2").autocomplete({
+				source: "/autocompletePlayer",
+				minLength: 2,
+				select: function (event, ui) {
+					if (ui.item) {
+						$(this).attr("data-playerId", ui.item.id);
+						var playerId1 = $("#player1").attr("data-playerId");
+						var playerId2 = $("#player2").attr("data-playerId");
+						if (playerId1 || playerId2) {
+							var url = "/headToHead?tab=" + currentTab;
+							if (playerId1)
+								url += "&playerId1=" + playerId1;
+							if (playerId2)
+								url += "&playerId2=" + playerId2;
+							window.location.href = url;
+						}
+					}
+				}
+			});
+			$("#h2hPills").find("a").click(tabClick).on('shown.bs.tab', function(event) {
+				currentTab = $(event.target).attr("href").substring(1);
+			});
+			
+			 $("#profilesPill").click(); 
+			var $player1 = $("#player1");
+			if (!$player1.val())
+				$player1.focus();
+			else {
+				var $player2 = $("#player2");
+				if (!$player2.val())
+					$player2.focus();
+			}
+		});
+		 function swapPlayers() {
+			var tab = $("#h2hPills li.active a").attr("href");
+			if (tab == "#")
+				tab = $("#h2hPills li.active li.active a").attr("href");
+			window.location.href = "/headToHead?playerId1=5663&playerId2=5324&tab=" + tab.substr(1);
+		} 
+	</script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	
+	
+	<script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({google_ad_client: "ca-pub-1900145493503169", enable_page_level_ads: true});
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', "UA-102974953-1", 'auto');
+		ga('send', 'pageview');
+	</script>
+<link rel="preload" href="https://adservice.google.kz/adsid/integrator.js?domain=www.ultimatetennisstatistics.com" as="script"><script type="text/javascript" src="https://adservice.google.kz/adsid/integrator.js?domain=www.ultimatetennisstatistics.com"></script><link rel="preload" href="https://adservice.google.com/adsid/integrator.js?domain=www.ultimatetennisstatistics.com" as="script"><script type="text/javascript" src="https://adservice.google.com/adsid/integrator.js?domain=www.ultimatetennisstatistics.com"></script></head>
+<body class="container">
+	<header>
+	
+	
+	<script type="text/javascript">
+		$(function() {
+			$("#settingsPriceFormat").val(getCookie("priceFormat"));
+		});
+		autocompletePlayer("player");
+		function saveUserSettings() {
+			setCookie("priceFormat", $("#settingsPriceFormat").val(), 365);
+			var url = window.location.href;
+			if (url.indexOf("tab=") < 0) {
+				var tabContentRef = $(".tab-param li.active a").attr("href");
+				if (tabContentRef)
+					url += (url.indexOf("?") ? "&" : "?") + "tab=" + tabContentRef.substr(1);
+			}
+			window.location.href = url;
+		}
+		function dominanceTimeline() {
+			var url = "/dominanceTimeline";
+			var width = $(window).width();
+			if (width < 1700)
+				url += "?fromSeason=" + Math.min(1969 + Math.round((1700 - width) / 27), 2008);
+			window.location.href = url;
+		}
+	</script>
+	<nav id="navbar" class="navbar navbar-default component">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<div class="navbar-brand text-nowrap pull-left">
+					<a href="/" style="font-size: larger" title="Home"><span style="color: indianred">Ultimate</span> <span style="color: darkcyan">Tennis</span> <span style="color: royalblue">Statistics</span></a>
+				</div>
+				<div class="navbar-text pull-left text-nowrap text-muted">
+					<small class="hidden-xs">Updated: </small><small title="Last data update">28-12-2020</small>
+				</div>
+				<div class="navbar-text pull-left text-nowrap" style="margin-top: 5px">
+					<a href="https://www.facebook.com/UltimateTennisStatistics" target="_blank" rel="noopener noreferrer" title="Ultimate Tennis Statistics on Facebook"><img src="/images/glyphicons-social-facebook.png" width="24" height="24"></a>
+					<a href="https://twitter.com/UltmTennisStats" target="_blank" rel="noopener noreferrer" title="Ultimate Tennis Statistics on Twitter"><img src="/images/glyphicons-social-twitter.png" width="24" height="24"></a>
+					<a href="https://github.com/mcekovic/tennis-crystal-ball" target="_blank" rel="noopener noreferrer" title="Ultimate Tennis Statistics on GitHub"><img src="/images/glyphicons-social-github.png" width="24" height="24"></a>
+					<a href="/feed.atom" target="_blank" rel="noopener noreferrer" title="Ultimate Tennis Statistics Atom Feed"><img src="/images/glyphicons-social-rss.png" width="24" height="24"></a>
+				</div>
+			</div>
+			<div class="navbar-header navbar-right">
+				<button type="button" class="navbar-toggle" style="margin: 0" data-toggle="collapse" data-target="#menuNavbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<div class="input-group">
+					<label for="player" class="input-group-addon" style="width: auto"><i class="fa fa-user"></i> Player:</label>
+					<input id="player" type="text" class="ui-widget search-field form-control ui-autocomplete-input" size="28" placeholder="Search Player" autocomplete="off">
+				</div>
+			</div>
+			<div id="menuNavbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav" style="width: 100%">
+					<li><a href="/" title="Home"><i class="fa fa-home fa-b"></i><span class="visible-xs-inline"> Home</span></a></li>
+					<li><a href="/goatList" title="Open Era GOAT List"><i class="fa fa-flag"></i> GOAT List</a></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Timelines<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="javascript:dominanceTimeline()"><i class="fa fa-history"></i> Dominance Timeline<sup class="cool-feature"></sup></a></li>
+							<li><a href="/tournamentLevelTimeline?level=G"><i class="fa fa-history text-danger"></i> Grand Slam Timeline</a></li>
+							<li><a href="/tournamentLevelGroupTimeline?level=FL"><i class="fa fa-history text-warning"></i> Tour Finals Timeline</a></li>
+							<li><a href="/tournamentLevelTimeline?level=M"><i class="fa fa-history text-info"></i> Masters Timeline</a></li>
+							<li><a href="/tournamentLevelTimeline?level=O"><i class="fa fa-history text-success"></i> Olympics Timeline</a></li>
+							<li><a href="/teamTournamentLevelTimeline?level=D"><i class="fa fa-history"></i> Davis Cup Timeline</a></li>
+							<li><a href="/teamTournamentLevelTimeline?level=T"><i class="fa fa-history"></i> Team Cups Timeline</a></li>
+							<li><a href="/topRankingsTimeline"><i class="fa fa-list-ol"></i> Top Rankings Timeline</a></li>
+							<li><a href="/surfaceTimeline"><i class="fa fa-paw"></i> Surface Timeline</a></li>
+							<li><a href="/statsTimeline"><i class="fa fa-align-left"></i> Statistics Timeline</a></li>
+						</ul>
+					</li>
+					<li class="active dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Rivalries<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li class="active"><a href="/headToHead"><i class="fa fa-user"></i><i class="fa fa-user" style="margin-left: -3px"></i> Head-to-Head</a></li>
+							<li><a href="/headsToHeads"><i class="fa fa-users fa-fw"></i> Heads-to-Heads</a></li>
+							<li><a href="/greatestRivalries"><i class="fa fa-handshake-o fa-fw"></i> Greatest Rivalries</a></li>
+							<li><a href="/greatestMatches"><i class="fa fa-signing fa-fw"></i> Greatest Matches</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Rankings<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/rankingsTable"><i class="fa fa-list-ol fa-fw"></i> Rankings Table</a></li>
+							<li><a href="/eloRatings"><i class="fa fa-sort-amount-desc fa-fw"></i> Elo Ratings</a></li>
+							<li><a href="/rankingsChart"><i class="fa fa-area-chart fa-fw"></i> Rankings Chart</a></li>
+							<li><a href="/peakEloRatings"><i class="fa fa-tachometer fa-fw"></i> Peak Elo Ratings<sup class="cool-feature"></sup></a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Performance<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/titlesAndResults"><i class="fa fa-trophy fa-fw"></i> Titles and Results<sup class="new-feature"></sup></a></li>
+							<li><a href="/resultsChart"><i class="fa fa-area-chart fa-fw"></i> Titles and Results Chart<sup class="new-feature"></sup></a></li>
+							<li><a href="/topPerformers"><i class="fa fa-tasks fa-fw"></i> Top Performers</a></li>
+							<li><a href="/performanceChart"><i class="fa fa-bar-chart fa-fw"></i> Performance Chart</a></li>
+							<li><a href="/mentalToughness"><i class="fa fa-heartbeat fa-fw"></i> Mental Toughness<sup class="new-feature"></sup></a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Statistics<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/statsLeaders"><span class="glyphicon glyphicon-stats fa-fw"></span> Statistics Leaders</a></li>
+							<li><a href="/topMatchStats"><span class="fa fa-thermometer fa-fw"></span> Top Match Stats<sup class="new-feature"></sup></a></li>
+							<li><a href="/statsChart"><i class="fa fa-bar-chart fa-fw"></i> Statistics Chart</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Seasons<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/seasons"><i class="fa fa-clone fa-fw"></i> Seasons</a></li>
+							<li><a href="/bestSeasons"><i class="fa fa-check-square-o fa-fw"></i> Best Seasons</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Tournaments<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/tournaments"><i class="fa fa-calendar-o fa-fw"></i> Tournaments</a></li>
+							<li><a href="/tournamentEvents"><i class="fa fa-calendar fa-fw"></i> Tournament Events</a></li>
+							<li><a href="/inProgressEventsForecasts"><i class="fa fa-eye fa-fw"></i> Tournament Forecasts<sup class="cool-feature"></sup></a></li>
+						</ul>
+					</li>
+					<li><a href="/records"><i class="fa fa-book"></i> Records</a></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Live<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/liveScores"><img src="/images/active.png" title="Live" style="vertical-align: 0" width="12" height="12"> Live Scores</a></li>
+							<li><a href="http://live-tennis.eu" target="_blank" rel="noopener noreferrer"><i class="fa fa-sort-numeric-asc"></i> Live Rankings</a></li>
+						</ul>
+					</li>
+					<li class="dropdown navbar-left">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">More<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="/about"><i class="fa fa-question-circle fa-fw"></i> About</a></li>
+							<li><a href="/glossary"><i class="fa fa-book fa-fw"></i> Glossary</a></li>
+							<li><a href="/blog"><i class="fa fa-pencil-square fa-fw"></i> Blog</a></li>
+							<li><a href="/tips"><i class="fa fa-bullhorn fa-fw"></i> Tips</a></li>
+							<li><a href="/contact"><i class="fa fa-vcard fa-fw"></i> Contact</a></li>
+						</ul>
+					</li>
+					<li class="dropdown navbar-right">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="User settings"><i class="fa fa-cog fa-b"></i><span class="visible-xs-inline"> Settings</span></a>
+						<div class="dropdown-menu" style="width: 200px; padding: 8px" onclick="event.stopPropagation()">
+							<div class="input-group">
+								<label for="settingsPriceFormat" class="input-group-addon" title="Choose odds format">Odds:</label>
+								<select id="settingsPriceFormat" class="form-control" onchange="saveUserSettings()">
+									<option value="">None</option>
+									<option value="DECIMAL">Decimal</option>
+									<option value="FRACTIONAL">Fractional</option>
+									<option value="AMERICAN">American</option>
+									<option value="HONG_KONG">Hong Kong</option>
+									<option value="INDONESIAN">Indonesian</option>
+									<option value="MALAY">Malay</option>
+								</select>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</header>
+	
+<ins class="adsbygoogle" style="display: block; height: 280px;" data-ad-client="ca-pub-1900145493503169" data-ad-slot="6720182176" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:1140px;background-color:transparent;" tabindex="0" title="Advertisement" aria-label="Advertisement"><ins id="aswift_1_anchor" style="display: block; border: medium none; height: 280px; margin: 0px; padding: 0px; position: relative; visibility: visible; width: 1140px; background-color: transparent; overflow: visible;"><iframe id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;border:0;width:1140px;height:280px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" src="https://googleads.g.doubleclick.net/pagead/ads?guci=2.2.0.0.2.2.0.0&amp;client=ca-pub-1900145493503169&amp;output=html&amp;h=280&amp;slotname=6720182176&amp;adk=2084603193&amp;adf=3025194257&amp;pi=t.ma~as.6720182176&amp;w=1140&amp;fwrn=4&amp;fwrnh=100&amp;lmt=1609682183&amp;rafmt=1&amp;psa=0&amp;format=1140x280&amp;url=https%3A%2F%2Fwww.ultimatetennisstatistics.com%2FheadToHead%3FplayerId1%3D5324%26playerId2%3D5663&amp;flash=0&amp;fwr=0&amp;fwrattr=true&amp;rpe=1&amp;resp_fmts=3&amp;wgl=1&amp;adsid=NT&amp;tt_state=W3siaXNzdWVyT3JpZ2luIjoiaHR0cHM6Ly9hZHNlcnZpY2UuZ29vZ2xlLmNvbSIsInN0YXRlIjowfSx7Imlzc3Vlck9yaWdpbiI6Imh0dHBzOi8vYXR0ZXN0YXRpb24uYW5kcm9pZC5jb20iLCJzdGF0ZSI6MH1d&amp;dt=1609682182661&amp;bpp=5&amp;bdt=1341&amp;idt=459&amp;shv=r20201203&amp;cbv=r20190131&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3D1dd0c83ee7881e04-2204f79e7cb900c8%3AT%3D1609682183%3ART%3D1609682183%3AS%3DALNI_MbAx-nsfOWkr3-rLL5IzCwaUSVmtQ&amp;prev_fmts=0x0&amp;nras=1&amp;correlator=7788803281351&amp;frm=20&amp;pv=1&amp;ga_vid=719883390.1609682183&amp;ga_sid=1609682184&amp;ga_hid=453469920&amp;ga_fc=0&amp;u_tz=360&amp;u_his=1&amp;u_java=0&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1040&amp;u_aw=1920&amp;u_cd=24&amp;u_nplug=0&amp;u_nmime=0&amp;adx=64&amp;ady=92&amp;biw=1267&amp;bih=895&amp;scr_x=0&amp;scr_y=0&amp;eid=42530671%2C21068083&amp;oid=3&amp;pvsid=1515271607601492&amp;pem=650&amp;rx=0&amp;eae=0&amp;fc=1920&amp;brdim=4%2C4%2C4%2C4%2C1920%2C0%2C1296%2C975%2C1284%2C895&amp;vis=1&amp;rsz=%7Co%7CeE%7C&amp;abl=NS&amp;pfx=0&amp;fu=8320&amp;bc=31&amp;ifi=1&amp;uci=a!1&amp;fsb=1&amp;xpc=qt3PHIVyjh&amp;p=https%3A//www.ultimatetennisstatistics.com&amp;dtd=1327" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" data-google-container-id="a!1" data-google-query-id="CMSDzbb1_-0CFdqimgodnLcM7w" data-load-complete="true" width="1140" height="280" frameborder="0"></iframe></ins></ins></ins>
+
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+	<div class="row margin-top">
+		<div class="col-md-6">
+			<div class="input-group">
+				<label for="player1" class="input-group-addon"><i class="fa fa-user"></i> Player 1:</label>
+				<input id="player1" type="text" class="ui-widget search-field form-control ui-autocomplete-input" size="30" value="Benoit Paire" data-playerid="5324" placeholder="Search Player 1" autocomplete="off">
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="input-group">
+				<label for="player2" class="input-group-addon"><i class="fa fa-user"></i> Player 2:</label>
+				<input id="player2" type="text" class="ui-widget search-field form-control ui-autocomplete-input" size="30" value="David Goffin" data-playerid="5663" placeholder="Search Player 2" autocomplete="off">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-5 text-left">
+			<h3>
+				<img src="/images/flags/fr.png" style="margin-top: -3px" title="FRA" width="24" height="20">
+				<a href="/playerProfile?playerId=5324">Benoit Paire</a>
+			</h3>
+		</div>
+		<div class="col-xs-2 text-center text-nowrap">
+			<h3>
+				<a href="javascript:swapPlayers()" title="Swap players"><h4 style="margin: 0" class="glyphicon glyphicon-transfer"></h4></a>
+				vs
+				<a href="/headToHead?name1=Benoit%20Paire&amp;name2=David%20Goffin" title="Permalink to Benoit Paire vs David Goffin Rivalry"><h4 style="margin: 0" class="glyphicon glyphicon-link"></h4></a>
+			</h3>
+		</div>
+		<div class="col-xs-5 text-right">
+			<h3>
+				<img src="/images/flags/be.png" style="margin-top: -3px" title="BEL" width="24" height="20">
+				<a href="/playerProfile?playerId=5663">David Goffin</a>
+			</h3>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	<ul id="h2hPills" class="nav nav-pills tab-param">
+		<li class="active"><a id="profilesPill" data-toggle="pill" href="#profiles" data-url="/h2hProfiles?playerId1=5324&amp;playerId2=5663" class="loaded">Profiles</a></li>
+		<li><a id="seasonPill" data-toggle="pill" href="#season" data-url="/h2hSeason?playerId1=5324&amp;playerId2=5663">Season</a></li>
+		<li><a id="matchesPill" data-toggle="pill" href="#matches" data-url="/h2hMatches?playerId1=5324&amp;playerId2=5663">Matches</a></li>
+		<li><a id="rankingPill" data-toggle="pill" href="#ranking" data-url="/h2hRankings?playerId=5324&amp;playerId=5663">Ranking</a></li>
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Performance<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				<li><a id="performancePill" data-toggle="pill" href="#performance" data-url="/h2hPerformance?playerId1=5324&amp;playerId2=5663">Performance</a></li>
+				<li><a id="performanceChartPill" data-toggle="pill" href="#performanceChart" data-url="/h2hPerformanceChart?playerId=5324&amp;playerId=5663">Performance Chart</a></li>
+			</ul>
+		</li>
+		<li class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Statistics<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				<li><a id="statisticsPill" data-toggle="pill" href="#statistics" data-url="/h2hStats?playerId1=5324&amp;playerId2=5663">Statistics</a></li>
+				<li><a id="statisticsChartPill" data-toggle="pill" href="#statisticsChart" data-url="/h2hStatsChart?playerId=5324&amp;playerId=5663">Statistics Chart</a></li>
+			</ul>
+		</li>
+		<li><a id="goatPointsPill" data-toggle="pill" href="#goatPoints" data-url="/h2hGOATPoints?playerId1=5324&amp;playerId2=5663" title="GOAT Points Breakdown">GOAT Points</a></li>
+		<li><a id="hypotheticalMatchupPill" data-toggle="pill" href="#hypotheticalMatchup" data-url="/h2hHypotheticalMatchup?playerId1=5324&amp;playerId2=5663">Hypothetical Matchup<sup class="cool-feature"></sup></a></li>
+	</ul>
+	<div class="tab-content">
+		<div id="profiles" class="tab-pane fade active in">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+	$(function() {
+		decorateSurface("#favoriteSurface1, #favoriteSurface2, #lastEventSurface1, #lastEventSurface2");
+	});
+</script>
+<br>
+<table class="table table-condensed text-nowrap">
+	<style scoped="scoped">
+		.label-overall {
+			background-color: #555;
+		}
+		.progress-profile {
+			width: 200px;
+			background-color: #dddddd;
+			margin-bottom: 0;
+		}
+		.progress-bar > a {
+			color: white;
+		}
+		.player-title {
+			vertical-align: text-top;
+		}
+		th.performance-bar {
+			width: 10%;
+		}
+	</style>
+	
+	<tbody><tr>
+		<th class="text-right" colspan="2" width="40%"><a href="/playerProfile?playerId=5324">Benoit Paire</a></th>
+		<th class="text-center" width="20%">vs</th>
+		<th class="text-left" colspan="2" width="40%"><a href="/playerProfile?playerId=5663">David Goffin</a></th>
+	</tr>
+	
+	<tr>
+		<th class="text-right" colspan="2">
+			<div class="progress progress-profile pull-right">
+				<div class="progress-bar progress-bar-perf" role="progressbar" style="width: 50.0%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50.0">
+					<a href="/headToHead?playerId1=5324&amp;playerId2=5663&amp;tab=matches&amp;outcome=played" title="Show H2H matches">3 (50.0%)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-center">H2H</th>
+		<th class="text-left" colspan="2">
+			<div class="progress progress-profile pull-left">
+				<div class="progress-bar progress-bar-perf" role="progressbar" style="width: 50.0%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50.0">
+					<a href="/headToHead?playerId1=5324&amp;playerId2=5663&amp;tab=matches&amp;outcome=played" title="Show H2H matches">3 (50.0%)</a>
+				</div>
+			</div>
+		</th>
+	</tr>
+	
+	
+	<tr>
+		<th class="text-right" colspan="2">
+			<div class="progress progress-profile pull-right">
+				<div class="progress-bar progress-bar-perf-w" role="progressbar" style="width: 52.2%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="52.207839748365984">
+					<a href="/headToHead?playerId1=5324&amp;playerId2=5663&amp;tab=matches&amp;outcome=played" title="Show H2H matches">3.1 (52.2%)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-center" title="Adjusted H2H takes into account surface and importance skew in H2H matches and normalizes it (average of Surface Adjusted H2H and Importance Adjusted H2H)">Adjusted H2H</th>
+		<th class="text-left" colspan="2">
+			<div class="progress progress-profile pull-left">
+				<div class="progress-bar progress-bar-perf-l" role="progressbar" style="width: 47.8%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="47.792160251634016">
+					<a href="/headToHead?playerId1=5324&amp;playerId2=5663&amp;tab=matches&amp;outcome=played" title="Show H2H matches">2.9 (47.8%)</a>
+				</div>
+			</div>
+		</th>
+	</tr>
+	<tr>
+		<th class="text-right" colspan="2">
+			<div class="progress progress-profile pull-right">
+				<div class="progress-bar progress-bar-perf-w" role="progressbar" style="width: 54.4%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="54.41567949673196">
+					<a href="/headToHead?playerId1=5324&amp;playerId2=5663&amp;tab=matches&amp;outcome=played" title="Show H2H matches">3.3 (54.4%)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-center" title="Surface adjusted H2H takes into account how much two players have played against each other on different surfaces and then weights their surface H2Hs with how much each of them played on the particular surface">Surface Adj. H2H</th>
+		<th class="text-left" colspan="2">
+			<div class="progress progress-profile pull-left">
+				<div class="progress-bar progress-bar-perf-l" role="progressbar" style="width: 45.6%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="45.58432050326803">
+					<a href="/headToHead?playerId1=5324&amp;playerId2=5663&amp;tab=matches&amp;outcome=played" title="Show H2H matches">2.7 (45.6%)</a>
+				</div>
+			</div>
+		</th>
+	</tr>
+	<tr>
+		<th class="text-right" colspan="2">
+			<div class="progress progress-profile pull-right">
+				<div class="progress-bar progress-bar-perf" role="progressbar" style="width: 50.0%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50.0">
+					<a href="/headToHead?playerId1=5324&amp;playerId2=5663&amp;tab=matches&amp;outcome=played" title="Show H2H matches">3.0 (50.0%)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-center" title="Importance adjusted H2H weights H2H matches by match importance by tournament level and round as in Big Wins and then normalizes H2H to the actual number of H2H matches played">Import. Adj. H2H</th>
+		<th class="text-left" colspan="2">
+			<div class="progress progress-profile pull-left">
+				<div class="progress-bar progress-bar-perf" role="progressbar" style="width: 50.0%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50.0">
+					<a href="/headToHead?playerId1=5324&amp;playerId2=5663&amp;tab=matches&amp;outcome=played" title="Show H2H matches">3.0 (50.0%)</a>
+				</div>
+			</div>
+		</th>
+	</tr>
+	<tr><td colspan="5">&nbsp;</td></tr>
+	
+	<tr>
+		<td class="text-right" colspan="2">31 (08-05-1989)</td>
+		<th class="text-center">Age</th>
+		<td class="text-left" colspan="2">30 (07-12-1990)</td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2"><img src="/images/flags/fr.png" title="FRA" width="24" height="20"> <span>France</span></td>
+		<th class="text-center">Country</th>
+		<td class="text-left" colspan="2"><img src="/images/flags/be.png" title="BEL" width="24" height="20"> <span>Belgium</span></td>
+	</tr>
+	
+	
+	<tr>
+		<td class="text-right" colspan="2">196 cm</td>
+		<th class="text-center">Height</th>
+		<td class="text-left" colspan="2">163 cm</td>
+	</tr>
+	
+	
+	<tr>
+		<td class="text-right" colspan="2">Right-handed</td>
+		<th class="text-center">Plays</th>
+		<td class="text-left" colspan="2">Right-handed</td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2">Two-handed</td>
+		<th class="text-center">Backhand</th>
+		<td class="text-left" colspan="2">Two-handed</td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2"><span id="favoriteSurface1" class="label label-CG" data-surface="CG"><span title="Clay + Grass">Soft (Cl, G)</span> <span title="Surface specialization rating">10%</span></span></td>
+		<th class="text-center">Favorite Surface</th>
+		<td class="text-left" colspan="2"><span id="favoriteSurface2" class="label label-HC" data-surface="HC"><span title="Hard + Clay">Slow (H, Cl)</span> <span title="Surface specialization rating">10%</span></span></td>
+	</tr>
+	
+	<tr>
+		<td class="text-right" colspan="2">2007</td>
+		<th class="text-center">Turned Pro</th>
+		<td class="text-left" colspan="2">2009</td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2"><a href="/playerProfile?playerId=5324&amp;tab=timeline" title="Show timeline">11</a></td>
+		<th class="text-center">Seasons</th>
+		<td class="text-left" colspan="2"><a href="/playerProfile?playerId=5663&amp;tab=timeline" title="Show timeline">10</a></td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2">Yes <img src="/images/active.png" title="Active" style="vertical-align: 0" width="12" height="12"></td>
+		<th class="text-center">Active</th>
+		<td class="text-left" colspan="2">Yes <img src="/images/active.png" title="Active" style="vertical-align: 0" width="12" height="12"></td>
+	</tr>
+	
+	<tr>
+		<td class="text-right" colspan="2">$7,774,890</td>
+		<th class="text-center">Prize Money</th>
+		<td class="text-left" colspan="2">US$13,578,010</td>
+	</tr>
+	
+	<tr>
+		<td class="text-right" colspan="2"><img src="/images/glyphicons-social-wikipedia-small.png" width="16" height="16"> <a href="https://en.wikipedia.org/wiki/Benoit_Paire" target="_blank" rel="noopener noreferrer" class="external">Wikipedia</a></td>
+		<th class="text-center">Wikipedia</th>
+		<td class="text-left" colspan="2"><img src="/images/glyphicons-social-wikipedia-small.png" width="16" height="16"> <a href="https://en.wikipedia.org/wiki/David_Goffin" target="_blank" rel="noopener noreferrer" class="external">Wikipedia</a></td>
+	</tr>
+	
+	
+	
+	
+	<tr><td colspan="5">&nbsp;</td></tr>
+	
+	<tr>
+		<td class="text-right" colspan="2">
+			<div>
+				<i class="fa fa-trophy fa-b"></i> <a class="label label-default player-title" href="/playerProfile?playerId=5324&amp;tab=events&amp;result=W" title="Show titles">3</a>
+			</div>
+		</td>
+		<th class="text-center">Titles</th>
+		<td class="text-left" colspan="2">
+			<div>
+				<a class="label label-default player-title" href="/playerProfile?playerId=5663&amp;tab=events&amp;result=W" title="Show titles">4</a> <i class="fa fa-trophy fa-b"></i>
+			</div>
+		</td>
+	</tr>
+	
+	
+	
+	
+	
+	
+	
+	<tr><td colspan="5">&nbsp;</td></tr>
+	
+	<tr>
+		<td class="text-right" colspan="2">28 (1738)</td>
+		<th class="text-center">Current Rank</th>
+		<td class="text-left" colspan="2">15 (2555)</td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2">18 (<a href="/rankingsTable?rankType=RANK&amp;date=11-01-2016">11-01-2016</a>)</td>
+		<th class="text-center">Best Rank</th>
+		<td class="text-left" colspan="2">7 (<a href="/rankingsTable?rankType=RANK&amp;date=20-11-2017">20-11-2017</a>)</td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2">71 (1869)</td>
+		<th class="text-center">Current Elo Rank</th>
+		<td class="text-left" colspan="2">24 (2012)</td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2">25 (<a href="/rankingsTable?rankType=ELO_RANK&amp;date=11-01-2016">11-01-2016</a>)</td>
+		<th class="text-center">Best Elo Rank</th>
+		<td class="text-left" colspan="2">8 (<a href="/rankingsTable?rankType=ELO_RANK&amp;date=21-05-2018">21-05-2018</a>)</td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2">2003 (<a href="/rankingsTable?rankType=ELO_RANK&amp;date=11-01-2016">11-01-2016</a>)</td>
+		<th class="text-center">Peak Elo Rating</th>
+		<td class="text-left" colspan="2">2165 (<a href="/rankingsTable?rankType=ELO_RANK&amp;date=05-12-2017">05-12-2017</a>)</td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2">294 (<a href="/playerProfile?playerId=5324&amp;tab=goatPoints" title="Show GOAT points distribution">5</a>)</td>
+		<th class="text-center">GOAT Rank</th>
+		<td class="text-left" colspan="2">120 (<a href="/playerProfile?playerId=5663&amp;tab=goatPoints" title="Show GOAT points distribution">25</a>)</td>
+	</tr>
+	
+	<tr><td colspan="5">&nbsp;</td></tr>
+	<tr>
+		<td class="text-right" colspan="2"><a href="/playerProfile?playerId=5324&amp;tab=season&amp;season=2019" title="Show season highlights">2019</a></td>
+		<th class="text-center"><a href="/headToHead?playerId1=5324&amp;playerId2=5663&amp;tab=season&amp;season1=2019&amp;season2=2017" title="Compare">Best Season</a></th>
+		<td class="text-left" colspan="2"><a href="/playerProfile?playerId=5663&amp;tab=season&amp;season=2017" title="Show season highlights">2017</a></td>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2">
+			
+			<span style="vertical-align: middle">26-10-2020</span>
+			<a href="/tournamentEvent?tournamentEventId=4211" class="label label-B" title="ATP 250">Nur-Sultan</a>
+			<span id="lastEventSurface1" class="label label-primary" data-surface="H">Hard<span title="Indoor"> (i)</span></span>
+			<a href="/playerProfile?playerId=5324&amp;tab=matches&amp;tournamentEventId=4211" class="label black bg-result-R16" title="Show tournament matches">R16</a>
+			
+		</td>
+		<th class="text-center">Last Appearance</th>
+		<td class="text-left" colspan="2">
+			
+			<span style="vertical-align: middle">02-11-2020</span>
+			<a href="/tournamentEvent?tournamentEventId=4216" class="label label-M" title="Masters">Paris Masters</a>
+			<span id="lastEventSurface1" class="label label-primary" data-surface="H">Hard<span title="Indoor"> (i)</span></span>
+			<a href="/playerProfile?playerId=5663&amp;tab=matches&amp;tournamentEventId=4216" class="label black bg-result-R32" title="Show tournament matches">R32</a>
+			
+		</td>
+	</tr>
+	<!-- Performance -->
+	
+	<tr><td colspan="5">&nbsp;</td></tr>
+	<tr>
+		<th class="text-right">&nbsp;</th>
+		<th class="text-right performance-bar">
+			<div class="progress progress-profile pull-right">
+				<div class="progress-bar progress-bar-perf-l" role="progressbar" style="width: 48.4%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="48.38012958963283">
+					<a href="/playerProfile?playerId=5324&amp;tab=matches&amp;outcome=played" title="Show matches">48.4% (224-239)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-center"><span class="label label-overall">Overall</span></th>
+		<th class="text-left performance-bar">
+			<div class="progress progress-profile pull-left">
+				<div class="progress-bar progress-bar-perf-w" role="progressbar" style="width: 60.3%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60.348583877995644">
+					<a href="/playerProfile?playerId=5663&amp;tab=matches&amp;outcome=played" title="Show matches">60.3% (277-182)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-right">&nbsp;</th>
+	</tr>
+	<tr>
+		<th class="text-right">
+			
+		</th>
+		<th class="text-right">
+			<div class="progress progress-profile pull-right">
+				<div class="progress-bar progress-bar-perf-l" role="progressbar" style="width: 46.2%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="46.18320610687023">
+					<a href="/playerProfile?playerId=5324&amp;tab=matches&amp;surface=H&amp;outcome=played" title="Show hard matches">46.2% (121-141)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-center"><span class="label label-primary">Hard</span></th>
+		<th class="text-left">
+			<div class="progress progress-profile pull-left">
+				<div class="progress-bar progress-bar-perf-w" role="progressbar" style="width: 60.9%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60.94276094276094">
+					<a href="/playerProfile?playerId=5663&amp;tab=matches&amp;surface=H&amp;outcome=played" title="Show hard matches">60.9% (181-116)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-left">
+			<div>
+				<a class="label label-primary player-title" href="/playerProfile?playerId=5663&amp;tab=events&amp;surface=H&amp;result=W" title="Show hard titles">3</a> <i class="fa fa-trophy fa-b text-primary"></i>
+			</div>
+		</th>
+	</tr>
+	<tr>
+		<th class="text-right">
+			<div>
+				<i class="fa fa-trophy fa-b text-danger"></i> <a class="label label-danger player-title" href="/playerProfile?playerId=5324&amp;tab=events&amp;surface=C&amp;result=W" title="Show clay titles">3</a>
+			</div>
+		</th>
+		<th class="text-right">
+			<div class="progress progress-profile pull-right">
+				<div class="progress-bar progress-bar-perf-l" role="progressbar" style="width: 51.6%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="51.61290322580645">
+					<a href="/playerProfile?playerId=5324&amp;tab=matches&amp;surface=C&amp;outcome=played" title="Show clay matches">51.6% (80-75)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-center"><span class="label label-danger">Clay</span></th>
+		<th class="text-left">
+			<div class="progress progress-profile pull-left">
+				<div class="progress-bar progress-bar-perf-w" role="progressbar" style="width: 60.7%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60.68376068376068">
+					<a href="/playerProfile?playerId=5663&amp;tab=matches&amp;surface=C&amp;outcome=played" title="Show clay matches">60.7% (71-46)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-left">
+			<div>
+				<a class="label label-danger player-title" href="/playerProfile?playerId=5663&amp;tab=events&amp;surface=C&amp;result=W" title="Show clay titles">1</a> <i class="fa fa-trophy fa-b text-danger"></i>
+			</div>
+		</th>
+	</tr>
+	<tr>
+		<th class="text-right">
+			
+		</th>
+		<th class="text-right">
+			<div class="progress progress-profile pull-right">
+				<div class="progress-bar progress-bar-perf-l" role="progressbar" style="width: 50.0%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50.0">
+					<a href="/playerProfile?playerId=5324&amp;tab=matches&amp;surface=G&amp;outcome=played" title="Show grass matches">50.0% (23-23)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-center"><span class="label label-success">Grass</span></th>
+		<th class="text-left">
+			<div class="progress progress-profile pull-left">
+				<div class="progress-bar progress-bar-perf-w" role="progressbar" style="width: 55.8%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55.81395348837209">
+					<a href="/playerProfile?playerId=5663&amp;tab=matches&amp;surface=G&amp;outcome=played" title="Show grass matches">55.8% (24-19)</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-left">
+			
+		</th>
+	</tr>
+	
+	
+	
+	
+	<tr><td colspan="5">&nbsp;</td></tr>
+	<tr>
+		<th class="text-right" colspan="2">
+			<div class="progress progress-profile pull-right" style="width: 250px">
+				<div class="progress-bar progress-bar-profile progress-bar-success" role="progressbar" style="width: 42.1%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="42.1">
+					<a href="/playerProfile?playerId=5324&amp;tab=rivalries&amp;h2h=1&amp;matches=3" title="Show positive H2H rivalries">24</a>
+				</div>
+				<div class="progress-bar progress-bar-profile progress-bar-warning" role="progressbar" style="width: 10.5%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="10.5">
+					<a href="/playerProfile?playerId=5324&amp;tab=rivalries&amp;h2h=0&amp;matches=3" title="Show draw H2H rivalries">6</a>
+				</div>
+				<div class="progress-bar progress-bar-profile progress-bar-danger" role="progressbar" style="width: 47.4%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="47.4">
+					<a href="/playerProfile?playerId=5324&amp;tab=rivalries&amp;h2h=-1&amp;matches=3" title="Show negative H2H rivalries">27</a>
+				</div>
+			</div>
+		</th>
+		<th class="text-center" title="Minimum 3 matches in H2H series, minimum 10 H2H series">H2H</th>
+		<th class="text-left" colspan="2">
+			<div class="progress progress-profile pull-left" style="width: 250px">
+				<div class="progress-bar progress-bar-profile progress-bar-success" role="progressbar" style="width: 61.2%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="61.2">
+					<a href="/playerProfile?playerId=5663&amp;tab=rivalries&amp;h2h=1&amp;matches=3" title="Show positive H2H rivalries">41</a>
+				</div>
+				<div class="progress-bar progress-bar-profile progress-bar-warning" role="progressbar" style="width: 9.0%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="9.0">
+					<a href="/playerProfile?playerId=5663&amp;tab=rivalries&amp;h2h=0&amp;matches=3" title="Show draw H2H rivalries">6</a>
+				</div>
+				<div class="progress-bar progress-bar-profile progress-bar-danger" role="progressbar" style="width: 29.8%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="29.799999999999997">
+					<a href="/playerProfile?playerId=5663&amp;tab=rivalries&amp;h2h=-1&amp;matches=3" title="Show negative H2H rivalries">20</a>
+				</div>
+			</div>
+		</th>
+	</tr>
+	<tr>
+		<td class="text-right" colspan="2"><span>47.4%</span></td>
+		<th class="text-center" title="Minimum 3 matches in H2H series, minimum 10 H2H series">H2H %</th>
+		<td class="text-left" colspan="2"><span>65.7%</span></td>
+	</tr>
+	
+</tbody></table>
+</div>
+		<div id="season" class="tab-pane fade"><div class="loading"></div></div>
+		<div id="matches" class="tab-pane fade"><div class="loading"></div></div>
+		<div id="ranking" class="tab-pane fade"><div class="loading"></div></div>
+		<div id="performance" class="tab-pane fade"><div class="loading"></div></div>
+		<div id="performanceChart" class="tab-pane fade"><div class="loading"></div></div>
+		<div id="statistics" class="tab-pane fade"><div class="loading"></div></div>
+		<div id="statisticsChart" class="tab-pane fade"><div class="loading"></div></div>
+		<div id="goatPoints" class="tab-pane fade"><div class="loading"></div></div>
+		<div id="hypotheticalMatchup" class="tab-pane fade"><div class="loading"></div></div>
+	</div>
+	
+	
+	<div class="device-check visible-xs" data-device="xs"></div>
+	<div class="device-check visible-sm" data-device="sm"></div>
+	<div class="device-check visible-md" data-device="md"></div>
+	<div class="device-check visible-lg" data-device="lg"></div>
+	<div class="device-check visible-xl" data-device="xl"></div>
+
+	<footer>
+	<script type="text/javascript">
+		$(function() { initCookiesNotification(); });
+	</script>
+	<br>
+	<div style="white-space: nowrap">
+		<div style="float: left; margin-right: 15px">
+			<div style="font-size: small; white-space: normal">© 2015-2021 Strange Forest Software, feedback at <a href="mailto:mcekovic@gmail.com" target="_blank" rel="noopener noreferrer">mcekovic@gmail.com</a>, issues at <a href="https://github.com/mcekovic/tennis-crystal-ball/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a></div>
+			<div style="font-size: x-small; font-style: italic; white-space: normal">Powered by open-source software: Linux, PostgreSQL, Java, Spring Boot, available at <a href="https://github.com/mcekovic/tennis-crystal-ball" target="_blank" rel="noopener noreferrer">GitHub</a></div>
+		</div>
+		<a href="/actuator/visitors" class="label label-info label-btn" title="People visiting this site"><i class="fa fa-globe fa-lg"></i></a>
+	</div>
+	<br>
+	<div id="cookiesNotification" style="position: fixed; left: 0px; bottom: 0px; width: 100%; z-index: 100; text-align: center; background-color: indigo; color: wheat; opacity: 0.9; padding: 10px;">
+		To help personalize content, <span style="color: indianred">Ultimate</span> <span style="color: darkcyan">Tennis</span> <span style="color: royalblue">Statistics</span> uses cookies. By navigating this website, you agree to use cookies. <br class="visible-xs"><button type="button" class="btn btn-warning margin-left" onclick="agreeToUseCookies()">OK, I agree</button>
+	</div>
+</footer>
+
+<ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><ul id="ui-id-2" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><ul id="ui-id-3" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><ins class="adsbygoogle adsbygoogle-noablate" style="display: none !important;" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;" tabindex="0" title="Advertisement" aria-label="Advertisement"><ins id="aswift_0_anchor" style="display:block;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;"><iframe id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0;width:undefinedpx;height:undefinedpx;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" src="https://googleads.g.doubleclick.net/pagead/ads?guci=2.2.0.0.2.2.0.0&amp;client=ca-pub-1900145493503169&amp;output=html&amp;adk=1812271804&amp;adf=1573534164&amp;lmt=1609682183&amp;plat=1%3A17858568%2C2%3A1081352%2C9%3A32776%2C10%3A32%2C11%3A32%2C16%3A8388608%2C17%3A32%2C24%3A32%2C25%3A32%2C30%3A1048576%2C32%3A32%2C40%3A32&amp;format=0x0&amp;url=https%3A%2F%2Fwww.ultimatetennisstatistics.com%2FheadToHead%3FplayerId1%3D5324%26playerId2%3D5663&amp;ea=0&amp;flash=0&amp;pra=5&amp;wgl=1&amp;adsid=NT&amp;tt_state=W3siaXNzdWVyT3JpZ2luIjoiaHR0cHM6Ly9hZHNlcnZpY2UuZ29vZ2xlLmNvbSIsInN0YXRlIjowfSx7Imlzc3Vlck9yaWdpbiI6Imh0dHBzOi8vYXR0ZXN0YXRpb24uYW5kcm9pZC5jb20iLCJzdGF0ZSI6MH1d&amp;dt=1609682182661&amp;bpp=4&amp;bdt=1341&amp;idt=436&amp;shv=r20201203&amp;cbv=r20190131&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3D1dd0c83ee7881e04-2204f79e7cb900c8%3AT%3D1609682183%3ART%3D1609682183%3AS%3DALNI_MbAx-nsfOWkr3-rLL5IzCwaUSVmtQ&amp;nras=1&amp;correlator=7788803281351&amp;frm=20&amp;pv=2&amp;ga_vid=719883390.1609682183&amp;ga_sid=1609682184&amp;ga_hid=453469920&amp;ga_fc=0&amp;u_tz=360&amp;u_his=1&amp;u_java=0&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1040&amp;u_aw=1920&amp;u_cd=24&amp;u_nplug=0&amp;u_nmime=0&amp;adx=-12245933&amp;ady=-12245933&amp;biw=1267&amp;bih=895&amp;scr_x=0&amp;scr_y=0&amp;eid=42530671%2C21068083&amp;oid=3&amp;pvsid=1515271607601492&amp;pem=650&amp;rx=0&amp;eae=2&amp;fc=1920&amp;brdim=4%2C4%2C4%2C4%2C1920%2C0%2C1296%2C975%2C1284%2C895&amp;vis=1&amp;rsz=%7C%7Cs%7C&amp;abl=NS&amp;fu=8192&amp;bc=31&amp;ifi=0&amp;uci=a!0&amp;fsb=1&amp;dtd=1319" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" data-google-container-id="a!0" data-load-complete="true" frameborder="0"></iframe></ins></ins></ins><iframe id="google_osd_static_frame_1872390915527" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;"></iframe></body><iframe id="google_esf" name="google_esf" src="https://googleads.g.doubleclick.net/pagead/html/r20201203/r20190131/zrt_lookup.html#" style="display: none;" data-ad-client="ca-pub-1900145493503169"></iframe></html>

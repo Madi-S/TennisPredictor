@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from bs4 import BeautifulSoup
 from selenium import webdriver
-
+from time import sleep
 
 URL = 'https://www.ultimatetennisstatistics.com'
 
@@ -28,62 +28,45 @@ def get_player_id(name):
 
 def parse_html(html, players, surface):
     soup = BeautifulSoup(html, 'lxml')
-    table = soup.select_one('.table.table-condensed.text-nowrap')
-
     data = {}
+
+    profile = soup.select_one('.table.table-condensed.text-nowrap')
     order = [
-        'H2H','Adjusted H2H', 'Age', 'Country', 'Seasons', 'Prize Money'
+        'H2H','Adjusted H2H', 'Age', 'Country', 'Seasons', 'Prize Money',
         'Titles', 'Current Rank', 'Best Rank', 'GOAT Rank', 'Best Season',
         'Last Appearance'
     ]
     if surface:
         order.append(surface)
 
+    base = lambda o: profile.find(text=re.compile(fr'{o}'), class_='text-center').parent
     for i in range(2):
         p = players[i]
         data[p] = {}
-        if i == 1:
-            base = lambda o: table.find(text=re.compile(fr'{o}')).parent
-            find_h2h = lambda o : base(o).next_sibling.next_sibling.a
-            find_surface = lambda o: table.find(text=re.compile(fr'{o}'), class_='text-center').next_sibling.next_sibling
-            find_some = lambda o : base(o).parent.next_sibling.next_sibling
-            find_any = lambda o: base(o).next_sibling.next_sibling
-        else:
-            base = lambda o: table.find(text=re.compile(fr'{o}')).parent
-            find_h2h = lambda o : base(o).previous_sibling.previous_sibling.a
-            find_surface = lambda o: table.find(text=re.compile(fr'{o}'), class_='text-center').previous_sibling.previous_sibling
-            find_some = lambda o : base(o).parent.previous_sibling.previous_sibling
-            find_any = lambda o: base(o).previous_sibling.previous_sibling
-            
-        for o in order:
-            print(o)
-            try:
-                if 'H2H' in o:
-                    info = find_h2h(o) 
-                elif o == 'Best Season' or o == 'Overall':
-                    info = find_some(o)
-                elif o in ['Hard','Grass','Clay']:
-                    info = find_surface(o)
-                else:
-                    info = find_any(o)
-                data[p][o] = info.text.strip()
-            except:
-                data[p][o] = None
 
+        if i == o:
+            locate = lambda o: base(o).find(class_='text-right')
+        else:
+            locate = lambda o: lambda o: base(o).find(class_='text-left')
+
+        for o in order:
+            data[p][o] = locate(o).text.strip()
+
+    stats = soup.select('.tab-content')[1]
     order = ['Ace %', 'Double Fault %', '1st Serve %','1st Serve Won %', '2nd Serve Won %', 
     'Break Points Saved %', 'Service Points Won %',
     'Points Dominance', 'Games Dominance', 'Return Points Won %']
 
     for i in range(0, 2):
-        base = lambda d: soup.find(text=re.compile(fr'{d}'), class_='text-center')
-        if i == 1:
-            print('Player 2:')
-            find = lambda d: base(d).parent.select_one('.text-left')
+        p = players[i]
+        base = lambda o: stats.find(text=re.compile(fr'{o}'))
+        if i == 0:
+            find = lambda o: base(o).find(class_='text-right')
         else:
-            print('Player 1:')
-            find = lambda d: base(d).parent.select_one('.text-right')
-        for d in data:
-            data[p][o] = find(d).text.strip()
+            find = lambda o: base(o).find(class_='text-left')
+        
+        for o in order:
+            data[p][OSError] = find(o).text.strip()
 
     return data
 
@@ -96,22 +79,42 @@ def compare_players(p1, p2, tournament=None, surface=None):
     if not (id1 and id2):
         return None
 
-    url = 'https://www.ultimatetennisstatistics.com/headToHead?playerId1={}&playerId2={}'
-    driver = webdriver.Firefox()
+    print(id1, id2)
 
-    with open('hau.html','w') as f:
+    url = 'https://www.ultimatetennisstatistics.com/headToHead?playerId1={}&playerId2={}'
+
+    driver = webdriver.Firefox(service_log_path='NUL')
+    driver.get(url.format(id1, id2))
+    sleep(4)
+
+    with open('test.html','w') as f:
         f.write(driver.page_source)
         print('written')
-    
 
-    if not r.ok:
-        raise AttributeError(f'Bad response from UltimateTennis: {r}. Fix the issue')
+    # click on statistics
+    stats_b = driver.find_elements_by_class_name('dropdown-toggle')[-1]
+    stats_b.click()
 
-    profiles = parse_html(r.text, [p1, p2], surface)
+    show_b = driver.find_element_by_id('statisticsPill')
+    show_b.click() 
+
+    sleep(4)
+
+    html = driver.page_source
+
+    driver.close()
+    driver.quit()
+
+    with open('hau.html','w') as f:
+        f.write(html)
+        print('written')
+
+    profiles = parse_html(html, [p1, p2], surface)
     with open('profiles.txt','w') as f:
         f.write(str(profiles))
     # stats[p1]['past_matches'] = get_past_matches(id1) 
     # stats[p2]['past_matches'] = get_past_matches(id2) 
+
 
 
 def get_past_matches(id_):
