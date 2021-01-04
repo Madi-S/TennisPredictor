@@ -11,6 +11,8 @@ URL = 'https://www.ultimatetennisstatistics.com'
 headers = {'Accept-Language': 'en-US', 'Referer': 'https://www.ultimatetennisstatistics.com/playerProfile?playerId=5663',
                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'}
 
+
+
 def get_player_id(name):
     url = 'https://www.ultimatetennisstatistics.com/autocompletePlayer?term={}'
     r = requests.get(url.format(name.replace(' ', '+')), headers=headers)
@@ -25,6 +27,8 @@ def get_player_id(name):
         return 
 
     return found[0]['id']
+
+
 
 def parse_html(html, players, surface):
     soup = BeautifulSoup(html, 'lxml')
@@ -44,13 +48,14 @@ def parse_html(html, players, surface):
         p = players[i]
         data[p] = {}
 
-        if i == o:
+        if i == 0:
             locate = lambda o: base(o).find(class_='text-right')
         else:
-            locate = lambda o: lambda o: base(o).find(class_='text-left')
+            locate = lambda o: base(o).find(class_='text-left')
 
         for o in order:
             data[p][o] = locate(o).text.strip()
+            print(p,o,data[p][o])
 
     stats = soup.select('.tab-content')[1]
     order = ['Ace %', 'Double Fault %', '1st Serve %','1st Serve Won %', '2nd Serve Won %', 
@@ -60,6 +65,7 @@ def parse_html(html, players, surface):
     for i in range(0, 2):
         p = players[i]
         base = lambda o: stats.find(text=re.compile(fr'{o}'))
+        
         if i == 0:
             find = lambda o: base(o).find(class_='text-right')
         else:
@@ -87,10 +93,6 @@ def compare_players(p1, p2, tournament=None, surface=None):
     driver.get(url.format(id1, id2))
     sleep(4)
 
-    with open('test.html','w') as f:
-        f.write(driver.page_source)
-        print('written')
-
     # click on statistics
     stats_b = driver.find_elements_by_class_name('dropdown-toggle')[-1]
     stats_b.click()
@@ -114,6 +116,7 @@ def compare_players(p1, p2, tournament=None, surface=None):
         f.write(str(profiles))
     # stats[p1]['past_matches'] = get_past_matches(id1) 
     # stats[p2]['past_matches'] = get_past_matches(id2) 
+
 
 
 
