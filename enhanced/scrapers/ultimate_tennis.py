@@ -7,7 +7,7 @@ from selenium import webdriver
 from time import sleep
 
 URL = 'https://www.ultimatetennisstatistics.com'
-
+MATCHES = 'https://www.ultimatetennisstatistics.com/matchesTable?playerId={}&current=1&rowCount=15&sort%5Bdate%5D=desc&searchPhrase=&season=&fromDate=&toDate=&level=&bestOf=&surface=&indoor=&speed=&round=&result=&opponent=&tournamentId=&tournamentEventId=&outcome=&score=&countryId=&bigWin=false&_=1609742224223'
 headers = {'Accept-Language': 'en-US', 'Referer': 'https://www.ultimatetennisstatistics.com/playerProfile?playerId=5663',
                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'}
 
@@ -112,68 +112,24 @@ def compare_players(p1, p2, tournament=None, surface=None):
         print('written')
 
     stats = parse_html(html, [p1, p2], surface)
-    stats[p1]['past_matches'] = get_past_matches(id1) 
-    stats[p2]['past_matches'] = get_past_matches(id2) 
+    stats[p1]['past_matches'] = get_past_matches(id1, p1) 
+    stats[p2]['past_matches'] = get_past_matches(id2, p2) 
 
     return stats
 
 
 
-def get_past_matches(id_):
-    return 1
+def get_past_matches(id_, player):
+    r = requests.get(MATCHES.format(id_))
 
+    if not r.ok:
+        raise AttributeError(f'Bad response from UltimateTennis: {r}. Fix the issue') 
 
-'''
---GENERAL---
-Request URL:
-https://www.ultimatetennisstatistics.com/
-matchesTable?playerId=5663&current=1&rowCount=15&sort%5Bdate%5D=desc&searchPhrase=&season=&
-fromDate=&toDate=&level=&bestOf=&surface=&indoor=&speed=&round=&result=&opponent=&tournamentId=&
-tournamentEventId=&outcome=&score=&countryId=&bigWin=false&_=1609742224223
+    results = [{'won': player in res['winner']['name'], 'score': res['score'], 'winner': res['winner']['name'], 'loser': res['loser']['name']} for res in r.json()['rows'][:10]]
+    print(type(results))
 
-Request Method: GET
-Status Code: 200 
-Remote Address: 46.101.166.59:443
-Referrer Policy: strict-origin-when-cross-origin
-'''
-'''
----HEADERS---
-Accept: */*
-Accept-Encoding: gzip, deflate, br
-Accept-Language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7
-Connection: keep-alive
-Cookie: _ga=GA1.2.659216525.1609145839; _gid=GA1.2.1340506244.1609145839; __gads=ID=a110e92986bf849e-225e69d973b9003b:T=1609145842:RT=1609145842:S=ALNI_Ma4Yl3UW1qQ2GVAeX1FXzaLBttlhg; _gat=1
-Host: www.ultimatetennisstatistics.com
-Referer: https://www.ultimatetennisstatistics.com/playerProfile?playerId=5663
-Sec-Fetch-Dest: empty
-Sec-Fetch-Mode: cors
-Sec-Fetch-Site: same-origin
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36
-X-Requested-With: XMLHttpRequest
-playerId: 5663
-current: 1
-rowCount: 15
-sort[date]: desc
-searchPhrase: 
-season: 
-fromDate: 
-toDate: 
-level: 
-bestOf: 
-surface: 
-indoor: 
-speed: 
-round: 
-result: 
-opponent: 
-tournamentId: 
-tournamentEventId: 
-outcome: 
-score: 
-countryId: 
-bigWin: false
-_: 1609742224223
-'''
+    return results
 
 if __name__ == '__main__':
-    compare_players('Paire', 'Goffin', surface='Grass')
+    #compare_players('Paire', 'Goffin', surface='Grass')
+    print(get_past_matches(5324, 'Paire'))

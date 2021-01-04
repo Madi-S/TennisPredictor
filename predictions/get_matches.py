@@ -75,7 +75,7 @@ class VprognozeHTML(Webdriver):
 
 
 async def main():
-    e = VprognozeHTML()
+    e = VprognozeHTML(limit=5)
     await e.init_browser()
     await e.get_matches()
     await e.shut_browser()
