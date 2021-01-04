@@ -125,8 +125,7 @@ def get_matches_info(limit: int = 5):
     r = requests.get(link, headers=headers)
 
     if not r.ok:
-        raise AttributeError(
-            f'Bad response from TennisExplorer: {r}. Fix the issue')
+        raise AttributeError(f'Bad response from TennisExplorer: {r}. Fix the issue')
 
     matches = parse_html(r.text, limit)
     return matches

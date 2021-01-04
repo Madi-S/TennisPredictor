@@ -33,12 +33,12 @@ def compare_players(p1: str, p2: str, p1_stats: dict, p2_stats: dict, other_stat
                 wins_1 -= 1 / (i + 1)
 
         wins_2 = 0
-        for i, res in enumerate()
+        for i, res in enumerate(s2):
             if res:
                 wins_2 += 1 / (i + 1)
             else:
                 wins_2 -= 1 / (i + 1)
-                
+
         if wins_1 > wins_2:
             pts_1 += 1
         elif wins_1 < wins_2:
