@@ -30,6 +30,10 @@ def get_tournament_info(tournament_link):
     except:
         info = None
     try:
+        male = not 'women' in ''.join(info).lower()
+    except:
+        male = None
+    try:
         prize = float(info[0].replace(
             '(', '').replace(' ', '').replace(',', ''))
     except:
@@ -48,7 +52,7 @@ def get_tournament_info(tournament_link):
         print('Indoor transformed to Hard')
         surface = 'hard'
 
-    return {'prize_pool': prize, 'surface': surface, 'location': location, 'link': link}
+    return {'prize_pool': prize, 'male': male, 'surface': surface, 'location': location, 'link': link}
 
 
 def parse_html(html, limit):
@@ -123,6 +127,7 @@ def get_matches_info(limit: int = 10000):
         raise AttributeError(f'Bad response from TennisExplorer: {r}. Fix the issue')
 
     matches = parse_html(r.text, limit)
+    print(f'{len(matches)} Matches found for today')
     return matches
 
 
