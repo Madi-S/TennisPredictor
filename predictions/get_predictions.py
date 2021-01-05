@@ -41,8 +41,14 @@ def get_predictions(html):
         except:
             w1_odds, w2_odds = None, None
 
+    try:
+        tournament = soup.find(class_='title_news').text
+    except:
+        tournament = None
+
     predictions = {
         'Players': players,
+        'Tournament': tournament,
         'Odds': {players[0]: float(w1_odds), players[1]: float(w2_odds)},
         'BetsTendency': {players[0]: float(w1), players[1]: float(w2), 'TotalOver': float(to), 'TotalUnder': float(tu)},
         'PastResults': {},

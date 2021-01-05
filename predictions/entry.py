@@ -9,7 +9,6 @@ import os
 import argparse
 import asyncio
 
-from compare import compare_players
 from get_conclusion import get_conclusion, get_outcome
 from get_predictions import get_predictions
 from get_h2h_time import get_h2h_time
@@ -58,11 +57,10 @@ async def main():
         if full_names:
             logger.debug('Full names are: %s', full_names)
 
-            h2h, time = get_h2h_time(players,  [name.split(
-                ' ')[-1] for name in full_names.values()])
+            h2h, time = get_h2h_time(players,  [name.split(' ')[-1] for name in full_names.values()])
 
             logger.debug('Head-to-head matches: %s', h2h)
-            logger.debug('Matchin will start at %s', time)
+            logger.debug('Match will start at %s', time)
 
             for player in players:
                 full_name = full_names[player]
@@ -86,7 +84,7 @@ async def main():
 
             outcome, points = get_outcome(players, stats, match_info, h2h)
             logger.debug('Outcome:%s\nPoints:%s', outcome, points)
-            with open('oucome.txt','a') as f:
+            with open('outcome.txt','a') as f:
                 f.write(str(outcome) + '\n' + str(points) + '\n\n')
             # conclusion = get_conclusion(stat)
 

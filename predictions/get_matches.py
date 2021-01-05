@@ -18,8 +18,6 @@ class VprognozeHTML(Webdriver):
         :param limit: Get at maximum given `int` number of HTML of matches' pages from vprognoze/topforecasts
         :return: returns nothing
         '''
-        if not (limit > 0 and limit < 11 and isinstance(limit, int)):
-            raise TypeError('`Limit` value must be an integer between 1 and 10')
         self._limit = limit
 
     async def get_matches(self):
@@ -50,7 +48,6 @@ class VprognozeHTML(Webdriver):
             self._page.waitForNavigation(),
             self._page.click('.button_default'),
         )
-        print('Final button clicked\n')
 
         return await self._get_htmls()
 
@@ -58,7 +55,7 @@ class VprognozeHTML(Webdriver):
         html = await self._page.content()
         soup = BeautifulSoup(html, 'lxml')
 
-        matches = soup.find_all(class_='top-forecast__match-name')[:self._limit]
+        matches = soup.find_all(class_='top-forecast__match-name')
         urls = [match.find('a').get('href') for match in matches]
 
         print(f'{len(urls)} Extracted URLs: {urls}\n')
@@ -67,11 +64,15 @@ class VprognozeHTML(Webdriver):
         for url in urls:
             await self._goto_retry(url, selector='.event__info_player__name')
             sleep(3)
+            soup = BeautifulSoup(await self._page.content(), 'lxml')
+            header = soup.find('h1')
+            if not 'WTA' in header.text:
+                htmls.append(await self._page.content())
+                print(f'HTML was appended: {url}\n')
+            else:
+                print(f'WTA Match found -> ignoring: {url}\n')
 
-            htmls.append(await self._page.content())
-            print(f'HTML was appended: {url}\n')
-
-        return htmls
+        return htmls[:self._limit]
 
 
 async def main():

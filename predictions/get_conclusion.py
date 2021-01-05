@@ -57,10 +57,13 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
     points = dict()
     outcome = str()
 
+    p1, p2 = players
+    status = True if players_stats[p1]['Ace %'] and players_stats[p2]['Ace %'] else False
+    print(f'Status to compare detailed stats: {status}\n')
+
     for player, stats in players_stats.items():
         pts = int()
 
-        odds = betting_stats['Odds'][player]
         n_times_picked = betting_stats['BetsTendency'][player]
         past_matches = betting_stats['PastResults'][player]
 
@@ -134,64 +137,65 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
                 winrate += random.randint(*MID_WINRATE)
             print(f'{pts-before} for winrate% {winrate} for {player}\n')
 
-        ace = stats.get('Ace %')
-        if ace:
-            before = pts
-            pts += ace * ACE
-            print(f'{pts-before} for ace % {ace} for {player}\n')
+        if status:
+            ace = stats.get('Ace %')
+            if ace:
+                before = pts
+                pts += ace * ACE
+                print(f'{pts-before} for ace % {ace} for {player}\n')
 
-        fault = stats.get('Fault %')
-        if fault:
-            before = pts
-            pts += fault * FAULT
-            print(f'{pts-before} for double faults % {fault} for {player}\n')
+            fault = stats.get('Fault %')
+            if fault:
+                before = pts
+                pts += fault * FAULT
+                print(f'{pts-before} for double faults % {fault} for {player}\n')
 
-        first_serve = stats.get('1st Serve %')
-        if first_serve:
-            before = pts
-            if first_serve >= 63:
-                ratio = HIGH_FIRST_SERVE
-            elif first_serve <= 43:
-                ratio = LOW_FIRST_SERVE
-            else:
-                ratio = random.randint(*MID_FIRST_SERVE)
+            first_serve = stats.get('1st Serve %')
+            if first_serve:
+                before = pts
+                if first_serve >= 63:
+                    ratio = HIGH_FIRST_SERVE
+                elif first_serve <= 43:
+                    ratio = LOW_FIRST_SERVE
+                else:
+                    ratio = random.randint(*MID_FIRST_SERVE)
 
-            pts += ratio * first_serve / 100
-            print(f'{pts-before} for first_serve % {first_serve} for {player}\n')
+                pts += ratio * first_serve / 100
+                print(f'{pts-before} for first_serve % {first_serve} for {player}\n')
 
-        first_serve_won = stats.get('1nd Serve Won %')
-        if first_serve_won:
-            before = pts
-            if first_serve_won >= 63:
-                pts += FIRST_SERVE_WON * first_serve_won / 100
-            elif first_serve_won <= 50:
-                pts += -FIRST_SERVE_WON
-            else:
-                pass
-            print(f'{pts-before} for 1nd Serve Won % {first_serve_won} for {player}\n')
+            first_serve_won = stats.get('1nd Serve Won %')
+            if first_serve_won:
+                before = pts
+                if first_serve_won >= 63:
+                    pts += FIRST_SERVE_WON * first_serve_won / 100
+                elif first_serve_won <= 50:
+                    pts += -FIRST_SERVE_WON
+                else:
+                    pass
+                print(f'{pts-before} for 1nd Serve Won % {first_serve_won} for {player}\n')
 
-        second_serve_won = stats.get('2nd Serve Won %')
-        if second_serve_won:
-            before = pts
-            if second_serve_won >= 50:
-                pts += SECOND_SERVE_WON * second_serve_won / 100
-            elif second_serve_won <= 40:
-                pts -= SECOND_SERVE_WON * second_serve_won / 100
-            else:
-                pass
-            print(f'{pts-before} for 2nd Serve Won % {second_serve_won} for {player}\n')
+            second_serve_won = stats.get('2nd Serve Won %')
+            if second_serve_won:
+                before = pts
+                if second_serve_won >= 50:
+                    pts += SECOND_SERVE_WON * second_serve_won / 100
+                elif second_serve_won <= 40:
+                    pts -= SECOND_SERVE_WON * second_serve_won / 100
+                else:
+                    pass
+                print(f'{pts-before} for 2nd Serve Won % {second_serve_won} for {player}\n')
 
-        titles = stats.get('Titles')
-        if titles:
-            before = pts
-            pts += titles * TITLES
-            print(f'{pts-before} for Titles {titles} for {player}\n')
+            titles = stats.get('Titles')
+            if titles:
+                before = pts
+                pts += titles * TITLES
+                print(f'{pts-before} for Titles {titles} for {player}\n')
 
-        goat = stats.get('GOAT Rank')
-        if goat:
-            before = pts
-            pts += 1 / goat * GOAT
-            print(f'{pts-before} for GOAT rank {goat} for {player}\n')
+            goat = stats.get('GOAT Rank')
+            if goat:
+                before = pts
+                pts += 1 / goat * GOAT
+                print(f'{pts-before} for GOAT rank {goat} for {player}\n')
 
         # if odds:
         #     before = pts
@@ -199,8 +203,6 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
         #     print(f'{pts-before} for odds {odds} for {player}\n')
 
         points[player] = pts
-
-    p1, p2 = players
 
     if h2h:
         before1 = points[p1]

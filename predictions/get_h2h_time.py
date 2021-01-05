@@ -11,8 +11,7 @@ UA = UserAgent()
 
 def get_h2h_time(players: list, surnames: list):
     today = datetime.today()
-    r = requests.get(URL.format(today.year, today.month, today.day), headers={
-                     'user-agent': UA.random, 'accept-language': 'en-gb'})
+    r = requests.get(URL.format(today.year, today.month, today.day), headers={'user-agent': UA.random, 'accept-language': 'en-gb'})
 
     soup = BeautifulSoup(r.text, 'html.parser')
     h2h = {}
@@ -26,7 +25,7 @@ def get_h2h_time(players: list, surnames: list):
 
         if not time:
             try:
-                time = match.parent.select_one('.first.time').text.strip()
+                time = match.select_one('.first.time').find(text=re.compile(r':'))
             except:
                 pass
 
@@ -48,5 +47,5 @@ def get_h2h_time(players: list, surnames: list):
 
 
 if __name__ == '__main__':
-    players = players = ['Pric', 'Ganz']
-    print(get_h2h_time(players))
+    players = ['Klein', 'Andre']
+    print(get_h2h_time(players, players))
