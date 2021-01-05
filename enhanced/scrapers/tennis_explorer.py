@@ -54,11 +54,12 @@ def get_tournament_info(tournament_link):
 def parse_html(html, limit):
     soup = BeautifulSoup(html, 'lxml')
 
-    table = soup.find(class_='result')
+    table = soup.find(class_='tab-menu')
 
     matches_data = []
     players = table.find_all(attrs={'onmouseover': 'md_over(this);'})
     for i, player in enumerate(players):
+        print(i)
         if i % 2 == 0:
             data = {}
             try:
@@ -72,18 +73,15 @@ def parse_html(html, limit):
                 data['time_gmt'] = None
             try:
                 data['match_link'] = 'https://www.tennisexplorer.com' + \
-                    player.find(
-                        attrs={'title': 'Click for match detail'}).get('href')
+                    player.find(attrs={'title': 'Click for match detail'}).get('href')
             except:
                 data['match_link'] = None
             try:
-                data['p1'] = player.find(
-                    class_='t-name').find('a').text.strip()
+                data['p1'] = player.find(class_='t-name').find('a').text.strip()
             except:
                 data['p1'] = None
             try:
-                data['p1_h2h'] = int(player.find(
-                    class_=re.compile(r'h2h')).text.strip())
+                data['p1_h2h'] = int(player.find(class_=re.compile(r'h2h')).text.strip())
             except:
                 data['p1_h2h'] = None
 
@@ -98,22 +96,20 @@ def parse_html(html, limit):
                 data['p2_odds'] = None
         else:
             try:
-                data['p2'] = player.find(
-                    class_='t-name').find('a').text.strip()
+                data['p2'] = player.find(class_='t-name').find('a').text.strip()
             except:
                 data['p2'] = None
             try:
-                data['p2_h2h'] = int(player.find(
-                    class_=re.compile(r'h2h')).text.strip())
+                data['p2_h2h'] = int(player.find(class_=re.compile(r'h2h')).text.strip())
             except:
                 data['p2_h2h'] = None
             matches_data.append(data)
 
-    shuffle(matches_data)
+    # shuffle(matches_data)
     return matches_data[:limit]
 
 
-def get_matches_info(limit: int = 5):
+def get_matches_info(limit: int = 10000):
     headers['user-agent'] = ua.random
 
     today = datetime.today()
@@ -123,9 +119,6 @@ def get_matches_info(limit: int = 5):
 
     r = requests.get(link, headers=headers)
 
-    with open('test.html','w',encoding='utf-8') as f:
-        f.write(r.text)
-
     if not r.ok:
         raise AttributeError(f'Bad response from TennisExplorer: {r}. Fix the issue')
 
@@ -134,6 +127,6 @@ def get_matches_info(limit: int = 5):
 
 
 if __name__ == '__main__':
-    matches = get_matches_info(limit=1000)
-    with open('matches.txt','w') as f:
+    matches = get_matches_info()
+    with open('matches.txt','w', encoding='utf-8') as f:
     	f.write(str(matches))

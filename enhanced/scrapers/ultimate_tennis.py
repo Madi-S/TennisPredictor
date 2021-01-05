@@ -59,7 +59,6 @@ def parse_html(html, players, surface):
 
         for o in order:
             if o in winrates:
-                print('here', o)
                 data[p][o] = winrate(o).text.strip()
             else:
                 data[p][o] = locate(o).text.strip().replace('\n',' ')
