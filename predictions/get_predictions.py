@@ -42,7 +42,7 @@ def get_predictions(html):
             w1_odds, w2_odds = None, None
 
     try:
-        tournament = soup.find(class_='title_news').text
+        tournament = formatter.translate(soup.find(class_='title_news').text)
     except:
         tournament = None
 
