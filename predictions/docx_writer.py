@@ -2,7 +2,7 @@ from docx import Document
 from docx.shared import Inches
 
 
-bio = ['Name', 'Age', 'Ranking', 'RankingPeak',
+bio = ['Name', 'Age', 'Country', 'Ranking', 'RankingPeak',
        'Points', 'PrizeMoney', 'TotalMatches', 'Winrate%']
 order = ['Outcome', 'Odds',  'Explanation']
 
@@ -17,6 +17,7 @@ class DOCXWriter:
         :return: returns nothing
         '''
         self._filename = filename + '.docx'
+        self._d = Document()
 
     def write(self, betting_tips: dict, stats: dict, data: dict):
         '''
@@ -30,38 +31,40 @@ class DOCXWriter:
         players = betting_tips['Players']
         p1, p2 = players
 
-        d = Document()
-        d.add_heading(f'{p1} {betting_tips["Odds"][p1]} vs {p2} {betting_tips["Odds"][p2]}', 0)
-        d.add_heading(f'{betting_tips["Tournament"]}', 0)
-        d.add_heading(f'{data["Time"]}\n', 0)
+        self._d.add_heading(f'{p1} ({betting_tips["Odds"][p1]}) vs {p2} ({betting_tips["Odds"][p2]})', 0)
+        self._d.add_heading(f'{betting_tips["Tournament"].replace(".",". ")}', 0)
+        self._d.add_heading(f'{data["Time"]}\n', 0)
 
         for p in players:
-            d.add_paragraph(f'{o}: {stats[p][o]}\n' for o in bio)
-            d.add_paragraph(
-                f'Number of bets on winner - {p}: {betting_tips["BetsTendency"][p]}\n')
-        d.add_paragraph(
-            f'Number of total over bets: {betting_tips["BetsTendency"]["TotalOver"]}')
-        d.add_paragraph(
-            f'Number of total under bets: {betting_tips["BetsTendency"]["TotalUnder"]}')
+            for o in bio:
+                self._d.add_paragraph(f'{o}: {stats[p][o]}')
+            self._d.add_paragraph(f'Bets tendency on winner - {p}: {betting_tips["BetsTendency"][p]}\n')
+        
+        self._d.add_paragraph(f'Bets tendency on total over: {betting_tips["BetsTendency"]["TotalOver"]}')
+        self._d.add_paragraph(f'Bets tendency on total under: {betting_tips["BetsTendency"]["TotalUnder"]}')
 
-        p = d.add_paragraph('\n')
+        self._d.add_paragraph(f'Head to heads: {data["H2H"]}')
+
+        p = self._d.add_paragraph('\n')
         p.add_run('Top Betting tips:').bold = True
 
         for b in betting_tips['Predictions']:
-            d.add_paragraph(f'{b[o]}' for o in order)
+            for o in order:
+                self._d.add_paragraph(f'{o}: {b[o]}')
+            self._d.add_paragraph('\n')
 
-        p = d.add_paragraph('\n')
-        p.add_run(f'Conclusion: {p1} scored {data[p1]} and {p2} scored {data[p2]}\n{data["Conclusion"]}').bold = True
+        p = self._d.add_paragraph('\n')
+        p.add_run(f'Conclusion: {p1} scored {data["Points"][p1]} and {p2} scored {data["Points"][p2]}\n{data["Conclusion"]}').bold = True
 
-        d.save(self._filename)
+        self._d.save(self._filename)
 
 
 def main():
     d = DOCXWriter('TennisPredictions')
     betting_tips = {'Players': ['Djokovic N', 'Nadal R'], 'Tournament': 'Теннис. ATP. Анталья. Квалификация',
-                    'Odds': {'Djokovic N': 1.63, 'Nadal R': 2.3}, 'BetsTendency':
-                    {'Djokovic N': 0.0, 'Nadal R': 231.0,
-                     'TotalOver': 0.0, 'TotalUnder': 0.0},
+                    'Odds': {'Djokovic N': 1.68, 'Nadal R': 2.3}, 'BetsTendency':
+                    {'Djokovic N': 234.7, 'Nadal R': 231.9,
+                     'TotalOver': 81.2, 'TotalUnder': 43.5},
                     'PastResults': {'Djokovic N': ['-', '+', '-', '+', '-', '+'], 'Nadal R': ['-', '+', '+', '+', '+', '+']},
                     'Predictions': [{'Outcome': 'Handicap2 by games (4.5)', 'Odds': 1.64, 
                     'Explanation': 'Behincher will play against Orlov.There were no faces.Behincher is more experienced and cunning player onclay today in Antalya will play on hard in cool weather. Here the German can smash Orel with -6.5 handicap.The bet is risky.Orlov I liked the game several times I saw him in action and the ball flies into the cornerand feeds are even and bold access to the net.In general, kkk for me, then Bechinger should win reliably,but a few views of Orlov give doubts one hundred Bnchinger', 
@@ -72,7 +75,7 @@ def main():
     
     stats = {'Djokovic N': {'Name': 'Novak Djokovic', 'Age': 33, 'Ranking': 1, 'RankingPeak': 1, 'Points': 12000, 'PrizeMoney': 12400003, 'TotalMatches': 1108, 'Winrate%': 81},
     'Nadal R': {'Name': 'Rafael Nadal', 'Age': 34, 'Ranking': 2, 'RankingPeak': 1, 'Points': 11000, 'PrizeMoney': 10400003, 'TotalMatches': 1143, 'Winrate%': 84}}
-    data = {'Time': '11:15', 'Djokovic N': 2391.333336, 'Nadal R': 1998.432, 'Conclusion': 'Considering various in-games statistics, past results and h2h, Djokovic should win', 'Probability': '74%'}
+    data = {'Time': '11:15', 'Points': {'Djokovic N': 2391.333336, 'Nadal R': 1998.432}, 'Conclusion': 'Considering various in-games statistics, past results and h2h, Djokovic should win', 'Probability': '74%', 'H2H': None}
     d.write(betting_tips, stats, data)
 
 

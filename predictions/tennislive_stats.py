@@ -48,6 +48,11 @@ class TennisLiveStats(Webdriver):
                 age = None
 
             try:
+                country = stats.find(text=re.compile(r'Country')).next_sibling.text.strip()
+            except:
+                country = None
+
+            try:
                 rank = int(stats.find(text=re.compile(r'ATP')).next_element.next_element.text.strip())
             except:
                 rank = None
@@ -79,6 +84,7 @@ class TennisLiveStats(Webdriver):
 
             return {
                 'Name': name,
+                'Country': country,
                 'Age': age,
                 'Ranking': rank,
                 'RankingPeak': rank_peak,

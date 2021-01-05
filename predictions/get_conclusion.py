@@ -58,7 +58,7 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
     outcome = str()
 
     p1, p2 = players
-    status = True if players_stats[p1]['Ace %'] and players_stats[p2]['Ace %'] else False
+    status = True if players_stats[p1].get('Ace %') and players_stats[p2].get('Ace %') else False
     print(f'Status to compare detailed stats: {status}\n')
 
     for player, stats in players_stats.items():

@@ -20,7 +20,7 @@ class VprognozeHTML(Webdriver):
         '''
         self._limit = limit
 
-    async def get_matches(self):
+    async def get_matches(self, date=None):
         '''
         Collects HTMLs of all betting tips for tennis (if present) pages from vprognoze
 
@@ -43,6 +43,11 @@ class VprognozeHTML(Webdriver):
             self.get_matches()
 
         await self._page.select('#sport', TENNIS_VALUE)
+        if date:
+            await self._page.click('#int_time', options={'clickCount':3})
+            sleep(1.5)
+            await self._page.keyboard.type(date)
+            sleep(1.5)
 
         await asyncio.gather(
             self._page.waitForNavigation(),

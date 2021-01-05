@@ -33,22 +33,23 @@ args = args_parser.parse_args()
 async def main():
     logger.debug('Got args: %s', args)
 
-
     writer = DOCXWriter(args.filename)
 
     p = Parser(limit=args.limit)
     await p.init_browser()
 
-    matches_html = await p.get_matches()
+    matches_html = await p.get_matches(date='2021-01-06')
     matches = []
 
     for html in matches_html:
         matches.append(get_predictions(html))
 
     for match_info in matches:
-        logger.debug(match_info)
+        logger.debug(match_info['Odds'], match_info['BetsTendency'])
         
         stats = {}
+        to_write_stats = {}
+        to_write_data = {}
 
         players = match_info['Players']
 
@@ -58,6 +59,8 @@ async def main():
             logger.debug('Full names are: %s', full_names)
 
             h2h, time = get_h2h_time(players,  [name.split(' ')[-1] for name in full_names.values()])
+            to_write_data['H2H'] = h2h
+            to_write_data['Time'] = time
 
             logger.debug('Head-to-head matches: %s', h2h)
             logger.debug('Match will start at %s', time)
@@ -70,6 +73,7 @@ async def main():
                 if data:
                     logger.debug('Data %s updated for %s',data, player)
                     stats[player].update(data)
+                    to_write_stats[player] = data
 
                 data = await p.get_detailed_stats(full_name)
                 if data:
@@ -83,14 +87,15 @@ async def main():
             #     f.write(str(h2h) + '\n')
 
             outcome, points = get_outcome(players, stats, match_info, h2h)
-            logger.debug('Outcome:%s\nPoints:%s', outcome, points)
-            with open('outcome.txt','a') as f:
-                f.write(str(outcome) + '\n' + str(points) + '\n\n')
-            # conclusion = get_conclusion(stat)
+            to_write_data['Points'] = points
+            to_write_data['Conclusion'] = outcome
 
-            # writer.write(data)
+            logger.debug('Outcome:%s\nPoints:%s', outcome, points)           
+
+            writer.write(match_info, to_write_stats, to_write_data)
+
         else:
-            logger.debug('No stats and full names found for %s', players)
+            logger.debug('No stats and full names found for %s. Hence, ignoring this match', players)
 
     await p.shut_browser()
 
