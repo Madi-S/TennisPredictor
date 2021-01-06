@@ -8,7 +8,7 @@ import os
 import argparse
 import asyncio
 
-from get_conclusion import get_conclusion, get_outcome
+from get_conclusion import get_outcome
 from get_predictions import get_predictions
 from get_h2h_time import get_h2h_time
 from logger_config import get_logger

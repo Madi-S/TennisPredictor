@@ -16,16 +16,9 @@
 # 13)
 
 
-import math
 import random
-import matplotlib
-import numpy as np
 
 
-def get_conclusion(players: list, points: dict):
-    # Based on points
-    conclusion = None
-    return conclusion
 
 
 # Constant raitos:
@@ -220,6 +213,8 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
         print(f'{p1} got {points[p1]-before1} and {p2} got {points[p2]-before2} for h2h {h2h}\n')
 
     diff = points[p1] - points[p2]
+    points[p1] = round(points[p1], 5)
+    points[p2] = round(points[p2], 5)
     if diff > 30:
         outcome = f'{p1} has a strong lead in points and shows a good overall form. Taking this into consideration, {p1} is favourite here'
 
