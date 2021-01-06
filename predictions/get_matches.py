@@ -40,7 +40,7 @@ class VprognozeHTML(Webdriver):
                 self._page.click('.button_default'),
             )
         except:
-            self.get_matches()
+            await self.get_matches()
 
         await self._page.select('#sport', TENNIS_VALUE)
         if date:

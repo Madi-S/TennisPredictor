@@ -119,7 +119,17 @@ class TennisLiveStats(Webdriver):
             await self._do_retry(player.click, STATS_XPATH)
         except:
             print(f'No info for player {player_name}\n')
-            return None
+            return {
+                'Name': None,
+                'Country': None,
+                'Age': None,
+                'Ranking': None,
+                'RankingPeak': None,
+                'Points': None,
+                'PrizeMoney': None,
+                'TotalMatches': None,
+                'Winrate%': None,
+            }
 
         sleep(4)
 

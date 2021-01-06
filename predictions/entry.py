@@ -2,8 +2,7 @@
 # Collect all expert's predictions for collected matches from vrpognoze for today   !!! DONE
 # Collect all stats from ultimate_stats and tennislive_stats                        !!! DONE
 # Produce outcome and points                                                        !!! DONE
-# Format all given text
-# Export everything to .docx
+# Export everything to .docx                                                        !!! DONE
 
 import os
 import argparse
@@ -38,13 +37,15 @@ async def main():
     p = Parser(limit=args.limit)
     await p.init_browser()
 
-    matches_html = await p.get_matches(date='2021-01-06')
+    matches_html = await p.get_matches()
     matches = []
 
     for html in matches_html:
         matches.append(get_predictions(html))
 
     for match_info in matches:
+        writable = True
+
         logger.debug(match_info['Odds'], match_info['BetsTendency'])
         
         stats = {}
@@ -74,26 +75,24 @@ async def main():
                     logger.debug('Data %s updated for %s',data, player)
                     stats[player].update(data)
                     to_write_stats[player] = data
+                else:
+                    writable = False
 
                 data = await p.get_detailed_stats(full_name)
                 if data:
                     logger.debug('Data %s updated for %s', data, player)
                     stats[player].update(data)
 
-            # with open('data.txt', 'w') as f:
-            #     f.write(str(players) + '\n')
-            #     f.write(str(stats) + '\n')
-            #     f.write(str(match_info) + '\n')
-            #     f.write(str(h2h) + '\n')
+            if writable:
+                outcome, points = get_outcome(players, stats, match_info, h2h)
+                to_write_data['Points'] = points
+                to_write_data['Conclusion'] = outcome
 
-            outcome, points = get_outcome(players, stats, match_info, h2h)
-            to_write_data['Points'] = points
-            to_write_data['Conclusion'] = outcome
+                logger.debug('Outcome:%s\nPoints:%s', outcome, points)           
 
-            logger.debug('Outcome:%s\nPoints:%s', outcome, points)           
-
-            writer.write(match_info, to_write_stats, to_write_data)
-
+                writer.write(match_info, to_write_stats, to_write_data)
+            else:
+                logger.debug('Info for %s is not writable', full_names)
         else:
             logger.debug('No stats and full names found for %s. Hence, ignoring this match', players)
 

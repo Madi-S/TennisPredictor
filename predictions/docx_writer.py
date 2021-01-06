@@ -1,5 +1,4 @@
 from docx import Document
-from docx.shared import Inches
 
 
 bio = ['Name', 'Age', 'Country', 'Ranking', 'RankingPeak',
