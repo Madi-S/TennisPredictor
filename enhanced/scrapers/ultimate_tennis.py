@@ -44,24 +44,27 @@ def parse_html(html, players, surface):
     if surface:
         order.append(surface)
 
-    base = lambda o: stats.find(text=re.compile(fr'{o}'), class_='text-center').parent
+    base = lambda o: stats.find(text=re.compile(fr'{o}'), class_='text-center')
     wr = lambda o: stats.find(text=re.compile(fr'{o}', flags=re.I), class_='text-center')
     for i in range(2):
         p = players[i]
         data[p] = {}
 
         if i == 0:
-            locate = lambda o: base(o).find(class_='text-right')
+            locate = lambda o: base(o).parent.find(class_='text-right')
             winrate = lambda o: wr(o).previous_sibling.previous_sibling
         else:
-            locate = lambda o: base(o).find(class_='text-left')
+            locate = lambda o: base(o).parent.find(class_='text-left')
             winrate = lambda o: wr(o).next_sibling.next_sibling
 
         for o in order:
-            if o in winrates:
-                data[p][o] = winrate(o).text.strip()
-            else:
-                data[p][o] = locate(o).text.strip().replace('\n',' ')
+            try:
+                if o in winrates:
+                    data[p][o] = winrate(o).text.strip()
+                else:
+                    data[p][o] = locate(o).text.strip().replace('\n',' ')
+            except:
+                data[p][o] = None
 
     stats = soup.select('.tab-content')[1]
     order = ['Ace %', 'Double Fault %', '1st Serve %','1st Serve Won %', '2nd Serve Won %', 
@@ -71,13 +74,17 @@ def parse_html(html, players, surface):
     for i in range(0, 2):
         p = players[i]
 
+
         if i == 0:
-            find = lambda o: base(o).find(class_='text-right')
+            find = lambda o: base(o).parent.find(class_='text-right')
         else:
-            find = lambda o: base(o).find(class_='text-left')
+            find = lambda o: base(o).parent.find(class_='text-left')
         
         for o in order:
-            data[p][o] = find(o).text.strip()
+            try:
+                data[p][o] = find(o).text.strip()
+            except:
+                data[p][o] = None
 
     return data
 
@@ -127,6 +134,6 @@ def get_past_matches(id_, player):
     return [{'won': player in res['winner']['name'], 'score': res['score'], 'winner': res['winner']['name'], 'loser': res['loser']['name']} for res in r.json()['rows'][:10]]
 
 if __name__ == '__main__':
-    data = get_players_data('Paire', 'Goffin', surface='grass')
+    data = get_players_data('Djokovic', 'Nadal', surface='hard')
     with open('players_data.txt','w') as f:
         f.write(str(data))

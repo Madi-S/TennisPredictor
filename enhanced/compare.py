@@ -11,8 +11,12 @@ def compare_players(match_data: dict, players_data: dict):
     p1_stats = players_data.get(p1)
     p2_stats = players_data.get(p2)
 
-    odds1 = int(match_data.get('p1_odds'))
-    odds2 = int(match_data.get('p2_odds'))
+    try:
+        odds1 = float(match_data.get('p1_odds'))
+        odds2 = float(match_data.get('p2_odds'))
+    except:
+        odds1 = 1
+        odds2 = 1
 
     tournament = match_data.get('tournament_info')
     surface = 'foo'
@@ -43,8 +47,10 @@ def compare_players(match_data: dict, players_data: dict):
                 wins_2 -= 1 / (i + 1)
 
         if wins_1 > wins_2:
+            print(f'{p1} won past_matches')
             pts_1 += 1
         elif wins_1 < wins_2:
+            print(f'{p2} won past_matches')
             pts_2 += 1
         else:
             stats -= 1
@@ -55,6 +61,7 @@ def compare_players(match_data: dict, players_data: dict):
     s2 = p2_stats.get('Country')
     if s1 and s2:
         if s1.lower() == location.lower():
+            print(f'{p1} won past_matches')
             pts_1 += 1
         if s2.lower() == location.lower():
             pts_2 += 1
@@ -410,3 +417,14 @@ def compare_players(match_data: dict, players_data: dict):
     calculated_probability = winner / stats * 100
 
     return winner, calculated_probability
+
+
+if __name__ == '__main__':
+    from os import chdir
+    from scrapers.ultimate_tennis import get_players_data
+    
+    chdir('scrapers')
+    data = get_players_data('Paire', 'Goffin', surface='hard')
+    match_data = {'p1': 'Paire', 'p2': 'Goffin', 'p1_odds': 1.98, 'p2_odds': 1.98}
+
+    winner, prob = compare_players(match_data,data)

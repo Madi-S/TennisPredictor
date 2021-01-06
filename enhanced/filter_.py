@@ -20,6 +20,7 @@ def filter_matches(matches):
                             prize = match['tournament_info']['prize_pool']
                             if prize:
                                 if prize > 100000:
+                                    print(f'!!!Decent match found {match["p1"]} vs {match["p2"]}')
                                     filtered.append(match)  
                                 else:
                                     secondary.append(match)

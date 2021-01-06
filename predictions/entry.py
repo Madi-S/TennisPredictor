@@ -35,13 +35,15 @@ async def main():
     writer = DOCXWriter(args.filename)
 
     p = Parser(limit=args.limit)
-    await p.init_browser()
+    await p.init_browser(hidden=False)
 
     matches_html = await p.get_matches()
     matches = []
 
-    for html in matches_html:
+    for i in range(len(matches_html)):
+        html = matches_html.pop(0)
         matches.append(get_predictions(html))
+        logger.debug('Parsing HTML #%s ', i + 1)
 
     for match_info in matches:
         writable = True

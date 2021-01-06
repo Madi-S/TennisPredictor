@@ -23,7 +23,7 @@ class Webdriver:
             {'dumpio': True,'ignoreHTTPSErrors': True, 'headless': hidden, 'args': ['--start-maximized']},
         )
         self._page = (await self.browser.pages())[0]
-
+    
         await self._page.setViewport(self._viewport)
         await self._page.reload()
 
