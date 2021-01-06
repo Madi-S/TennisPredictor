@@ -3,7 +3,7 @@ from docx import Document
 
 bio = ['Name', 'Age', 'Country', 'Ranking', 'RankingPeak',
        'Points', 'PrizeMoney', 'TotalMatches', 'Winrate%']
-order = ['Outcome', 'Odds',  'Explanation']
+order = ['Outcome', 'Odds', 'ExpertProfit%', 'Explanation']
 
 
 class DOCXWriter:
@@ -41,19 +41,20 @@ class DOCXWriter:
         
         self._d.add_paragraph(f'Bets tendency on total over: {betting_tips["BetsTendency"]["TotalOver"]}')
         self._d.add_paragraph(f'Bets tendency on total under: {betting_tips["BetsTendency"]["TotalUnder"]}')
+        h2h = f'{p1} - {data["H2H"][p1]} : {data["H2H"][p2]} - {p2}'
+        self._d.add_paragraph(f'Head to head results:\t{h2h}')
 
-        self._d.add_paragraph(f'Head to heads: {data["H2H"]}')
-
-        p = self._d.add_paragraph('\n')
-        p.add_run('Top Betting tips:').bold = True
+        p = self._d.add_paragraph('')
+        p.add_run('Top Betting Tips:').bold = True
 
         for b in betting_tips['Predictions']:
             for o in order:
-                self._d.add_paragraph(f'{o}: {b[o]}')
+                self._d.add_paragraph(f'{o}: "{b[o]}"')
             self._d.add_paragraph('\n')
 
         p = self._d.add_paragraph('\n')
         p.add_run(f'Conclusion: {p1} scored {data["Points"][p1]} and {p2} scored {data["Points"][p2]}\n{data["Conclusion"]}').bold = True
+        self._d.add_paragraph('\n\n\n')
 
         self._d.save(self._filename)
 

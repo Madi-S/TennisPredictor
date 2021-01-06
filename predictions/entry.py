@@ -22,7 +22,7 @@ args_parser = argparse.ArgumentParser(prog='Tennis Predictor by Madi S',
                                      usage='Specify the `limit` value for maximum amount of tennis predictions for today (5 by default).Specify the `filename` for the .docx file with predictions (TennisPredictions.docx by default)',
                                      description='Tennis Predictor based on tennis players\'s stats and form. Produces a .docx file with detailed and formatted predictions')
 
-args_parser.add_argument('-l','--limit', choices=[i for i in range(1, 11)], help='Maximum number of tennis predictions to produce, choose between [1; 10]', default=5)
+args_parser.add_argument('-l','--limit', choices=[i for i in range(1, 11)], help='Maximum number of tennis predictions to produce, choose between [1; 10]', default=10)
 args_parser.add_argument('-f','--filename', type=str, help='Filename for the .docx file with predictions (specify without file format)', default='TennisPredictions')
 
 args = args_parser.parse_args()

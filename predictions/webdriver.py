@@ -78,13 +78,12 @@ class Webdriver:
         while retries <= 10:
             try:
                 await self._page.goto(url)
-                if not xpath:
-                    if selector:
-                        await self._page.waitForSelector(selector)
-                    else:
-                        await self._page.waitForNavigation()
-                else:
+                if xpath:
                     await self._page.waitForXPath(xpath)
+                elif selector:
+                    await self._page.waitForSelector(selector)
+                else:
+                    await self._page.waitForNavigation()
                 print('Breaked from while loop -> positive response\n')
                 return True
             except:

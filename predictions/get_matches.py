@@ -40,6 +40,7 @@ class VprognozeHTML(Webdriver):
                 self._page.click('.button_default'),
             )
         except:
+            print('Caught exception here\n')
             await self.get_matches()
 
         await self._page.select('#sport', TENNIS_VALUE)
@@ -57,6 +58,7 @@ class VprognozeHTML(Webdriver):
         return await self._get_htmls()
 
     async def _get_htmls(self):
+        print('Get_htmls was called\n')
         html = await self._page.content()
         soup = BeautifulSoup(html, 'lxml')
 
@@ -77,6 +79,7 @@ class VprognozeHTML(Webdriver):
             else:
                 print(f'WTA Match found -> ignoring: {url}\n')
 
+        print(f'Returning {len(htmls)}\n')
         return htmls[:self._limit]
 
 

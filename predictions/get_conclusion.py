@@ -221,10 +221,10 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
 
     diff = points[p1] - points[p2]
     if diff > 30:
-        outcome = f'{p1} should win without any hindrances'
+        outcome = f'{p1} has a strong lead in points and shows a good overall form. Taking this into consideration, {p1} is favourite here'
 
     elif diff < -30:
-        outcome = f'{p2} should win readily'
+        outcome = f'{p2} is dominating over {p1}. His recent statistics and past results are showing that {p1} is in a good shape. Hence, {p1} has more chances to win here'
 
     else:
         if diff > 0:
