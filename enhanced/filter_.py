@@ -16,7 +16,7 @@ def filter_matches(matches):
             if match['time_gmt']:
                 if match['p1_odds'] and match['p2_odds']:
                     if match['tournament_info']:
-                        if match['male']:
+                        if match['tournament_info']['male']:
                             prize = match['tournament_info']['prize_pool']
                             if prize:
                                 if prize > 100000:
