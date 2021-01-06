@@ -20,11 +20,7 @@ class Webdriver:
         :return: returns nothing
         '''
         self.browser = await launch(
-            ignoreHTTPSErrors=True,
-            headless=hidden,
-            viewport=None,
-            autoclose=True,
-            args=['--start-maximized'],
+            {'dumpio': True,'ignoreHTTPSErrors': True, 'headless': hidden, 'args': ['--start-maximized']},
         )
         self._page = (await self.browser.pages())[0]
 
@@ -52,7 +48,8 @@ class Webdriver:
         :return: returns nothing
         '''
         if retries >= 10:
-            raise SystemError('Max 10 retries exceeded when clicking the place')
+            raise SystemError(
+                'Max 10 retries exceeded when clicking the place')
         try:
             if dest:
                 await operation(dest)
@@ -65,7 +62,7 @@ class Webdriver:
         except:
             pass
 
-    async def _goto_retry(self, url: str, selector: str = None, xpath: str=None, retries: int=0):
+    async def _goto_retry(self, url: str, selector: str = None, xpath: str = None, retries: int = 0):
         '''
         Keep going to `url` until `selector` can be located
 
