@@ -1,2 +1,12 @@
-Paire 5 1.98 vs Goffin 18 1.98: Winner: ('Goffin', 18), probability: 81.8
+Bellucci T. (10) [3.11] vs Monteiro T. (6) [1.36]: Winner: ('Bellucci T.', 10), probability: 62.5
+
+Paul T. (-1) [1.14] vs Nam J. (0) [5.68]: Winner: ('Nam J.', 0), probability: 0.0
+
+Basilashvili N. (12) [1.54] vs Arnaboldi A. (2) [2.48]: Winner: ('Basilashvili N.', 12), probability: 85.7
+
+Celikbilek A. (6) [2.56] vs Zuk K. (6) [1.5]: Winner: ('Celikbilek A.', 6), probability: 54.5
+
+Caruso S. (5) [2.18] vs Bublik A. (11) [1.68]: Winner: ('Bublik A.', 11), probability: 68.8
+
+Kecmanovic M. (14) [1.47] vs Travaglia S. (3) [2.68]: Winner: ('Kecmanovic M.', 14), probability: 82.4
 

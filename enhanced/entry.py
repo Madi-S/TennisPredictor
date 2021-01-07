@@ -22,9 +22,12 @@ def main():
         surface = match['tournament_info']['surface']
 
         stats = get_players_data(p1, p2, surface)
+        with open('data.txt','w') as f:
+            f.write(f'{p1} ({odds1}) vs {p2} ({odds2})' + str(stats) + '\n\n')
+
         if stats:
-            outcome = compare_players(match, stats)
-            print(outcome)
+            winner, prob = compare_players(match, stats)
+            print(winner, prob)
 
 
 

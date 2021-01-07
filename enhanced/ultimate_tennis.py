@@ -117,12 +117,14 @@ def get_players_data(p1, p2, surface=None):
     driver.close()
     driver.quit()
 
-    stats = parse_html(html, [p1, p2], surface)
-    stats[p1]['past_matches'] = get_past_matches(id1, p1) 
-    stats[p2]['past_matches'] = get_past_matches(id2, p2) 
+    try:
+        stats = parse_html(html, [p1, p2], surface)
+        stats[p1]['past_matches'] = get_past_matches(id1, p1) 
+        stats[p2]['past_matches'] = get_past_matches(id2, p2) 
 
-    return stats
-
+        return stats
+    except:
+        return None
 
 
 def get_past_matches(id_, player):
@@ -134,6 +136,6 @@ def get_past_matches(id_, player):
     return [{'won': player in res['winner']['name'], 'score': res['score'], 'winner': res['winner']['name'], 'loser': res['loser']['name']} for res in r.json()['rows'][:10]]
 
 if __name__ == '__main__':
-    data = get_players_data('Djokovic', 'Nadal', surface='hard')
+    data = get_players_data('Ruusuvuori E.', 'Vesely J.', surface='hard')
     with open('players_data.txt','w') as f:
         f.write(str(data))

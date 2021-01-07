@@ -511,10 +511,12 @@ def compare_players(match_data: dict, players_data: dict):
         i = random.randint(0,1)
         winner = ([p1,p2][i], [pts_1, pts_2][i])
 
-
-    calculated_probability = round(winner[1] / stats * 100, 1)
+    try:
+        calculated_probability = round(winner[1] / stats * 100, 1)
+    except ZeroDivisionError:
+        return None, None
     with open('predictions.txt','a') as f:
-        f.write(f'{p1} {pts_1} {odds_1} vs {p2} {pts_2} {odds_2}: Winner: {winner}, probability: {calculated_probability}\n\n')
+        f.write(f'{p1} ({pts_1}) [{odds_1}] vs {p2} ({pts_2}) [{odds_2}]: Winner: {winner}, probability: {calculated_probability}\n\n')
 
     return winner, calculated_probability
 

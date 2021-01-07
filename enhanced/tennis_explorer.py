@@ -7,7 +7,7 @@ from datetime import datetime
 from random import sample, shuffle
 
 
-URL = 'https://www.tennisexplorer.com/matches/'
+
 MATCHES = 'https://www.tennisexplorer.com/matches/?type={}&year={}&month={}&day={}'
 
 ua = UserAgent()
@@ -20,12 +20,10 @@ headers = {
 
 def get_tournament_info(tournament_link):
     link = 'https://www.tennisexplorer.com' + tournament_link
-    print('here toruney', link)
     r = requests.get(link)
     soup = BeautifulSoup(r.text, 'lxml')
 
-    '(361,800 €, hard, men)'
-    '(418,195 $, hard, men)'
+
     try:
         info = soup.select_one('#center .box.boxBasic.lGray').text.strip()
         if '$' in info:
@@ -59,6 +57,13 @@ def get_tournament_info(tournament_link):
     return {'prize_pool': prize, 'male': male, 'surface': surface, 'location': location, 'link': link}
 
 
+def get_player_name(url):
+    r = requests.get('https://www.tennisexplorer.com' + url)
+    soup = BeautifulSoup(r.text, 'lxml')
+    name = soup.find('h3').text.strip()
+    return name
+
+
 def parse_html(html, limit):
     soup = BeautifulSoup(html, 'lxml')
 
@@ -67,7 +72,6 @@ def parse_html(html, limit):
     matches_data = []
     players = table.find_all(attrs={'onmouseover': 'md_over(this);'})
     for i, player in enumerate(players):
-        print(i)
         if i % 2 == 0:
             data = {}
             try:
@@ -85,7 +89,8 @@ def parse_html(html, limit):
             except:
                 data['match_link'] = None
             try:
-                data['p1'] = player.find(class_='t-name').find('a').text.strip()
+                player_url = player.find(class_='t-name').find('a').get('href')
+                data['p1'] = get_player_name(player_url)
             except:
                 data['p1'] = None
             try:
@@ -104,13 +109,15 @@ def parse_html(html, limit):
                 data['p2_odds'] = None
         else:
             try:
-                data['p2'] = player.find(class_='t-name').find('a').text.strip()
+                player_url = player.find(class_='t-name').find('a').get('href')
+                data['p2'] = get_player_name(player_url)
             except:
                 data['p2'] = None
             try:
                 data['p2_h2h'] = int(player.find(class_=re.compile(r'h2h')).text.strip())
             except:
                 data['p2_h2h'] = None
+            print(i, data['p1'],data['p2'])
             matches_data.append(data)
 
     # shuffle(matches_data)
