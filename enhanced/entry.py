@@ -2,8 +2,8 @@ import argparse
 
 from os import chdir
 
-from scrapers.tennis_explorer import get_matches_info
-from scrapers.ultimate_tennis import get_players_data
+from tennis_explorer import get_matches_info
+from ultimate_tennis import get_players_data
 from compare import compare_players
 from filter_ import filter_matches
 
