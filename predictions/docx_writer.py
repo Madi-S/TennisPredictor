@@ -41,8 +41,9 @@ class DOCXWriter:
         
         self._d.add_paragraph(f'Bets tendency on total over: {betting_tips["BetsTendency"]["TotalOver"]}')
         self._d.add_paragraph(f'Bets tendency on total under: {betting_tips["BetsTendency"]["TotalUnder"]}')
-        h2h = f'{p1} - {data["H2H"][p1]} : {data["H2H"][p2]} - {p2}'
-        self._d.add_paragraph(f'Head to head results:\t{h2h}')
+        if data['H2H'].get(p1) and data['H2H'].get(p2):
+            h2h = f'{p1} - {data["H2H"][p1]} : {data["H2H"][p2]} - {p2}'
+            self._d.add_paragraph(f'Head to head results:\t{h2h}')
 
         p = self._d.add_paragraph('')
         p.add_run('Top Betting Tips:').bold = True

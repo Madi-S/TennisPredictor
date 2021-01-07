@@ -24,9 +24,15 @@ def get_tournament_info(tournament_link):
     r = requests.get(link)
     soup = BeautifulSoup(r.text, 'lxml')
 
+    '(361,800 €, hard, men)'
+    '(418,195 $, hard, men)'
     try:
-        info = soup.select_one(
-            '#center .box.boxBasic.lGray').text.strip().split('$')
+        info = soup.select_one('#center .box.boxBasic.lGray').text.strip()
+        if '$' in info:
+            info = info.split('$')
+        elif '€':
+            print('!!! euro found')
+            info = info.split('€')
     except:
         info = None
     try:
@@ -34,8 +40,7 @@ def get_tournament_info(tournament_link):
     except:
         male = None
     try:
-        prize = float(info[0].replace(
-            '(', '').replace(' ', '').replace(',', ''))
+        prize = float(info[0].replace('(', '').replace(' ', '').replace(',', ''))
     except:
         prize = None
     try:
@@ -59,7 +64,7 @@ def parse_html(html, limit):
     soup = BeautifulSoup(html, 'lxml')
 
     table = soup.find(class_='tab-menu')
-
+    
     matches_data = []
     players = table.find_all(attrs={'onmouseover': 'md_over(this);'})
     for i, player in enumerate(players):
@@ -117,7 +122,7 @@ def get_matches_info(limit: int = 10000):
     headers['user-agent'] = ua.random
 
     today = datetime.today()
-    link = MATCHES.format('all',today.year, today.month, today.day)
+    link = MATCHES.format('atp-single',today.year, today.month, today.day)
 
     print(link)
 

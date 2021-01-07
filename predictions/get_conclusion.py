@@ -26,7 +26,7 @@ PREVIOUS_MATCH = 26
 N_TIMES_PICKED = 0.2
 OLD = -30
 YOUNG = -15
-PEAK_AGE = 20
+PEAK_AGE = 15
 RANK = 1000
 RANK_PEAK = 500
 RANK_PTS = 0.01
@@ -79,11 +79,11 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
         age = stats.get('Age')
         if age:
             before = pts
-            if age >= 33:
+            if age >= 34:
                 pts += OLD
             elif age <= 19:
                 pts += YOUNG
-            elif age <= 26 and age >= 22:
+            elif age <= 26 and age >= 21:
                 pts += PEAK_AGE
             else:
                 pass
@@ -197,7 +197,7 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
 
         points[player] = pts
 
-    if h2h:
+    if h2h.get(p1) and h2h.get(p2):
         before1 = points[p1]
         before2 = points[p2]
 
@@ -219,7 +219,7 @@ def get_outcome(players: list, players_stats: dict, betting_stats: dict, h2h: di
         outcome = f'{p1} has a strong lead in points and shows a good overall form. Taking this into consideration, {p1} is favourite here'
 
     elif diff < -30:
-        outcome = f'{p2} is dominating over {p1}. His recent statistics and past results are showing that {p1} is in a good shape. Hence, {p1} has more chances to win here'
+        outcome = f'{p2} is dominating over {p1}. His recent statistics and past results are showing that {p2} is in a good shape. Hence, {p2} has more chances to win here'
 
     else:
         if diff > 0:

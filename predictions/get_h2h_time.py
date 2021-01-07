@@ -43,7 +43,7 @@ def get_h2h_time(players: list, surnames: list):
     if time:
         return h2h, time
 
-    return {p: 0 for p in players}, None
+    return {players[0]: 0, players[1]: 0}, time
 
 
 if __name__ == '__main__':

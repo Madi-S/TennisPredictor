@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 def compare_players(match_data: dict, players_data: dict):
-    calculated_probability = None  # match winner pts/overall stats
+    calculated_probability = None  # match winner pts/number of comparisons 
 
     p1 = match_data.get('p1')
     p2 = match_data.get('p2')
@@ -17,6 +17,7 @@ def compare_players(match_data: dict, players_data: dict):
     except:
         odds1 = 1
         odds2 = 1
+    print(f'{odds1} vs {odds2}')
 
     tournament = match_data.get('tournament_info')
     surface = 'foo'
@@ -61,28 +62,34 @@ def compare_players(match_data: dict, players_data: dict):
     s2 = p2_stats.get('Country')
     if s1 and s2:
         if s1.lower() == location.lower():
-            print(f'{p1} won past_matches')
+            print(f'{p1} won country')
             pts_1 += 1
         if s2.lower() == location.lower():
             pts_2 += 1
-
+            print(f'{p2} won country')
+        else:
+            print('??? location country')
 
 
     s1 = p1_stats.get('Age')
     s2 = p2_stats.get('Age')
     if s1 and s2:
-        s1 = int(s1)
-        s2 = int(s2)
+        s1 = int(s1.split(' ')[0])
+        s2 = int(s2.split(' ')[0])
 
-        if s1 >= 33:
+        if s1 >= 34:
+            print(f'{p1} too old')
             pts_1 -= 1
-        elif s1 <= 19:
+        elif s1 <= 18:
+            print(f'{p1} too yound')
             pts_1 -= 1
 
-        if s2 >= 33:
+        if s2 >= 34:
+            print(f'{p2} too old')
             pts_2 -= 1
-        elif s2 <= 19:
+        elif s2 <= 18:
             pts_2 -= 1
+            print(f'{p2} too yound')
 
     s1 = p1_stats.get('Current Rank')
     s2 = p2_stats.get('Current Rank')
@@ -91,20 +98,25 @@ def compare_players(match_data: dict, players_data: dict):
         s2 = int(s2.split('(')[0].replace(' ',''))
 
         if s1 > s2:
+            print(f'{p1} won current_rank')
             pts_1 += 1
         else:
+            print(f'{p2} won current_rank')
             pts_2 += 1
         stats += 1
 
     s1 = p1_stats.get('RankingPeak')
-    s2 = p2_stats.get('RnakingPeak')
+    s2 = p2_stats.get('RankingPeak')
     if s1 and s2:
         s1 = int(s1.split('(')[0].replace(' ','')) 
         s2 = int(s2.split('(')[0].replace(' ','')) 
-
+        if s1 == s2:
+            print('??? ranking peak')
         if s1 > s2:
+            print(f'{p1} won rank_peak')
             pts_1 += 1
         else:
+            print(f'{p2} won rank_peak')
             pts_2 += 1
         stats += 1
 
@@ -118,10 +130,13 @@ def compare_players(match_data: dict, players_data: dict):
 
         # If prize money are give or take the same (do not consider this factor):
         if s1 - s2 <= 5000 and s1 - s2 >= -5000:
+            print('??? prize money')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won prize')
             pts_1 += 1
         else:
+            print(f'{p2} won prize')
             pts_2 += 1
         stats += 1
 
@@ -136,10 +151,13 @@ def compare_players(match_data: dict, players_data: dict):
         s2 = float(t2.split(' ')[0].replace('%',''))
         # If winrate is approximately the same:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
+            print('??? overall winrate')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won winrate')
             pts_1 += 1
         else:
+            print(f'{p2} won winrate')
             pts_2 += 1
         stats += 1
 
@@ -148,10 +166,13 @@ def compare_players(match_data: dict, players_data: dict):
         s2 = int(t2.split(' ')[1].split('-')[0].replace('(',''))
         # If both players have approximately the same matches amount:
         if s1 - s2 <= 10 and s1 - s2 >= -10:
+            print('??? total matches')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won total matches')
             pts_1 += 1
         else:
+            print(f'{p2} won total matches')
             pts_2 += 1
         stats += 1
 
@@ -163,10 +184,13 @@ def compare_players(match_data: dict, players_data: dict):
 
         # If Ace % is give or take the same:
         if s1 - s2 <= 0.5 and s1 - s2 >= -0.5:
+            print('??? seasons')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won seasons')
             pts_1 += 1
         else:
+            print(f'{p2} won seasons')
             pts_2 += 1
         stats += 1
 
@@ -174,10 +198,13 @@ def compare_players(match_data: dict, players_data: dict):
     s2 = p2_stats.get('Titles')
     if s1 and s2:
         if s1 == s2:
+            print('??? titles')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won titles')
             pts_1 += 1
         else:
+            print(f'{p2} won titles')
             pts_2 += 1
         stats += 1
 
@@ -188,10 +215,13 @@ def compare_players(match_data: dict, players_data: dict):
         s2 = float(s2.split('(')[-1].replace('%)',''))
 
         if s1 == s2:
+            print('??? h2h')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won h2h')
             pts_1 += 1
         else:
+            print(f'{p2} won h2h')
             pts_2 += 1
         stats += 1
 
@@ -202,10 +232,13 @@ def compare_players(match_data: dict, players_data: dict):
         s2 = float(s2.split(' ')[0])
 
         if s1 == s2:
+            print('??? adjusted h2h')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won adj h2h')
             pts_1 += 1
         else:
+            print(f'{p2} won adj h2h')
             pts_2 += 1
         stats += 1
          
@@ -213,15 +246,18 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Best Season')
     s2 = p2_stats.get('Best Season')
     if s1 and s2:
-        year = datetime.today.year
+        year = datetime.today().year
         s1 = year - int(s1)
         s2 = year - int(s2)
 
         if s1 == s2:
+            print('??? best season')
             stats -= 1
         elif s1 < s2:
+            print(f'{p1} won best season')
             pts_1 += 1
         else:
+            print(f'{p2} won best season')
             pts_2 += 1
         stats += 1 
 
@@ -236,10 +272,13 @@ def compare_players(match_data: dict, players_data: dict):
 
         # If winrate on given surface is approximately the same:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
+            print(f'??? surface winrate {surface}')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won surface winrate')
             pts_1 += 1
         else:
+            print(f'{p2} won surface winrate')
             pts_2 += 1
         stats += 1
 
@@ -251,24 +290,30 @@ def compare_players(match_data: dict, players_data: dict):
 
         # If both players are close in GOAT ranking
         if s1 - s2 <= 5 and s2 - s1 >= -5:
+            print('??? goat rank')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won GOAT Rank')
             pts_1 += 1
         else:
+            print(f'{p2} won GOAT Rank')
             pts_2 += 1
         stats += 1
 
     s1 = p1_stats.get('Ace %')
     s2 = p2_stats.get('Ace %')
     if s1 and s2:
-        s1 = float(s1.replace('%'))
-        s2 = float(s2.replace('%'))
+        s1 = float(s1.replace('%',''))
+        s2 = float(s2.replace('%',''))
 
         if s1 - s2 <= 0.4 and s1 - s2 >= -0.4:
+            print('??? ace %')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won Ace %')
             pts_1 += 1
         else:
+            print(f'{p2} won Ace %')
             pts_2 += 1
         stats += 1
 
@@ -276,61 +321,73 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Double Fault %')
     s2 = p2_stats.get('Double Fault %')
     if s1 and s2:
-        s1 = float(s1.replace('%'))
-        s2 = float(s2.replace('%'))
+        s1 = float(s1.replace('%',''))
+        s2 = float(s2.replace('%',''))
 
         # Lesser the double fault %, the better for the player:
         # If both players approximately concede the same number of double faults:
         if s1 - s2 <= 0.4 and s1 - s2 >= -0.4:
+            print('??? double fault %')
             stats -= 1
         elif s1 < s2:
-            p1_stats += 1
+            print(f'{p1} won Double Fault')
+            pts_1 += 1
         else:
-            p2_stats += 1
+            print(f'{p2} won Double Fault')
+            pts_2 += 1
         stats += 1
 
     s1 = p1_stats.get('1st Serve %')
     s2 = p2_stats.get('1st Serve %')
     if s1 and s2:
-        s1 = float(s1.replace('%'))
-        s2 = float(s2.replace('%'))
+        s1 = float(s1.replace('%',''))
+        s2 = float(s2.replace('%',''))
 
         # If 1st serve ration is the same:
         if s1 - s2 <= 1.5 and s2 - s1 >= -1.5:
+            print('??? 1st serve %')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won 1st serve %')
             pts_1 += 1
         else:
+            print(f'{p2} won 1st serve %')
             pts_2 += 1
         stats += 1
 
     s1 = p1_stats.get('1st Serve Won %')
-    s2 = p2_stats.get('2nd Serve Won %')
+    s2 = p2_stats.get('1nd Serve Won %')
     if s1 and s2:
-        s1 = float(s1.replace('%'))
-        s2 = float(s2.replace('%'))
+        s1 = float(s1.replace('%',''))
+        s2 = float(s2.replace('%',''))
 
         # If both players have the same 1st win %:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
+            print('??? 1st serve won')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won 1st serve won %')
             pts_1 += 1
         else:
+            print(f'{p2} won 1st serve won %')
             pts_2 += 1
         stats += 1
 
     s1 = p1_stats.get('2nd Serve Won %')
     s2 = p2_stats.get('2nd Serve Won %')
     if s1 and s2:
-        s1 = float(s1.replace('%'))
-        s2 = float(s2.replace('%'))
+        s1 = float(s1.replace('%',''))
+        s2 = float(s2.replace('%',''))
 
         # If both players have the same 2nd serve win %:
         if s1 - s2 <= 2 and s1 - s2 >= -2:
+            print('??? 2nd serve won %')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won 2st serve won %')
             pts_1 += 1
         else:
+            print(f'{p2} won 2st serve won %')
             pts_2 += 1
         stats += 1
 
@@ -338,45 +395,54 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Break Points Saved %')
     s2 = p2_stats.get('Break Points Saved %')
     if s1 and s2:
-        s1 = float(s1.replace('%'))
-        s2 = float(s2.replace('%'))
+        s1 = float(s1.replace('%',''))
+        s2 = float(s2.replace('%',''))
 
         # If both players have the same bp saved %:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
+            print('??? bp saved %')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won bp saved %')
             pts_1 += 1
         else:
+            print(f'{p2} won bp saved %')
             pts_2 += 1
         stats += 1
 
     s1 = p1_stats.get('Service Points Won %')
     s2 = p2_stats.get('Service Points Won %')
     if s1 and s2:
-        s1 = float(s1.replace('%'))
-        s2 = float(s2.replace('%'))
+        s1 = float(s1.replace('%',''))
+        s2 = float(s2.replace('%',''))
 
         # If both players have the same serivec points won %:
         if s1 - s2 <= 0.5 and s1 - s2 >= -0.5:
+            print('??? service points won')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won service points won %')
             pts_1 += 1
         else:
+            print(f'{p2} won service points won %')
             pts_2 += 1
         stats += 1
 
     s1 = p1_stats.get('Return Points Won %')
     s2 = p2_stats.get('Return Points Won %')
     if s1 and s2:
-        s1 = float(s1.replace('%'))
-        s2 = float(s2.replace('%'))
+        s1 = float(s1.replace('%',''))
+        s2 = float(s2.replace('%',''))
 
         # If both players have the same return points won %:
         if s1 - s2 <= 0.3 and s1 - s2 >= -0.3:
+            print('??? return points won %')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won return points won %')
             pts_1 += 1
         else:
+            print(f'{p2} won return points won %')
             pts_2 += 1
         stats += 1
 
@@ -388,10 +454,13 @@ def compare_players(match_data: dict, players_data: dict):
 
         # If both players have the same points dominance %:
         if s1 - s2 <= 0.01 and s1 - s2 >= -0.01:
+            print('??? points dominance')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won points dominance')
             pts_1 += 1
         else:
+            print(f'{p2} won points dominance')
             pts_2 += 1
         stats += 1
 
@@ -404,17 +473,28 @@ def compare_players(match_data: dict, players_data: dict):
 
         # If both players have the games dominance %:
         if s1 - s2 <= 0.02 and s1 - s2 >= -0.02:
+            print('??? Games dominance')
             stats -= 1
         elif s1 > s2:
+            print(f'{p1} won games dominance')
             pts_1 += 1
         else:
+            print(f'{p2} won games dominance')
             pts_2 += 1
         stats += 1
        
 
     winner = max([pts_1, pts_2])
+    if pts_1 > pts_2:
+        winner = (p1, pts_1)
+    elif pts_1 < pts_2:
+        winner = (p2, pts_2)
+    else:
+        i = random.randint(0,1)
+        winner = ([p1,p2][i], [pts_1, pts_2][i])
 
-    calculated_probability = winner / stats * 100
+
+    calculated_probability = winner[1] / stats * 100
 
     return winner, calculated_probability
 
@@ -425,6 +505,7 @@ if __name__ == '__main__':
     
     chdir('scrapers')
     data = get_players_data('Paire', 'Goffin', surface='hard')
-    match_data = {'p1': 'Paire', 'p2': 'Goffin', 'p1_odds': 1.98, 'p2_odds': 1.98}
+    match_data = {'p1': 'Paire', 'p2': 'Goffin', 'p1_odds': 1.98, 'p2_odds': 1.98, 'tournament_info':{'surface': 'hard','location':'Belgium'}}
 
     winner, prob = compare_players(match_data,data)
+    print(winner, prob)
