@@ -31,7 +31,6 @@ def get_tournament_info(tournament_link):
         if '$' in info:
             info = info.split('$')
         elif '€':
-            print('!!! euro found')
             info = info.split('€')
     except:
         info = None

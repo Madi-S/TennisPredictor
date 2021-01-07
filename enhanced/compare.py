@@ -106,20 +106,19 @@ def compare_players(match_data: dict, players_data: dict):
             pts_2 += 1
         stats += 1
 
-    s1 = p1_stats.get('RankingPeak')
-    s2 = p2_stats.get('RankingPeak')
+    s1 = p1_stats.get('Best Rank')
+    s2 = p2_stats.get('Best Rank')
     if s1 and s2:
         s1 = -int(s1.split(' ')[0])
         s2 = -int(s2.split(' ')[0])
-        print(s1, s2)
         if s1 - s2 <= 2 and s1 - s2 >= -2:
-            print('??? ranking peak')
+            print('??? best rank')
             stats -= 1
         if s1 > s2:
-            print(f'{p1} won rank_peak')
+            print(f'{p1} won best rank')
             pts_1 += 1
         else:
-            print(f'{p2} won rank_peak')
+            print(f'{p2} won best rank')
             pts_2 += 1
         stats += 1
 
@@ -306,7 +305,6 @@ def compare_players(match_data: dict, players_data: dict):
     if s1 and s2:
         s1 = -int(s1.split(' ')[0])
         s2 = -int(s2.split(' ')[0])
-        print(s1, s2, s1 - s2)
 
         # If both players are close in GOAT ranking
         if s1 - s2 <= 5 and s1 - s2 >= -5:
@@ -376,8 +374,7 @@ def compare_players(match_data: dict, players_data: dict):
         stats += 1
 
     s1 = p1_stats.get('1st Serve Won %')
-    s2 = p2_stats.get('1nd Serve Won %')
-    print(f'1st serve won %: {p1_stats["1st Serve Won %"]} and {p2_stats["1st Serve Won %"]}')
+    s2 = p2_stats.get('1st Serve Won %')
     if s1 and s2:
         s1 = float(s1.replace('%',''))
         s2 = float(s2.replace('%',''))
@@ -524,7 +521,7 @@ def compare_players(match_data: dict, players_data: dict):
 
 if __name__ == '__main__':
     from ultimate_tennis import get_players_data
-    
+
     data = get_players_data('Paire', 'Goffin', surface='hard')
     with open('data.txt','w') as f:
         f.write(str(data))
