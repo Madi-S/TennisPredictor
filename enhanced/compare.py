@@ -523,10 +523,8 @@ def compare_players(match_data: dict, players_data: dict):
 
 
 if __name__ == '__main__':
-    from os import chdir
     from ultimate_tennis import get_players_data
     
-    chdir('scrapers')
     data = get_players_data('Paire', 'Goffin', surface='hard')
     with open('data.txt','w') as f:
         f.write(str(data))

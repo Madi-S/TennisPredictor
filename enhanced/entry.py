@@ -1,7 +1,5 @@
 import argparse
 
-from os import chdir
-
 from tennis_explorer import get_matches_info
 from ultimate_tennis import get_players_data
 from compare import compare_players
@@ -22,8 +20,7 @@ def main():
         print(f'{p1} ({odds1}) vs {p2} ({odds2})')
 
         surface = match['tournament_info']['surface']
-        
-        chdir('scrapers')
+
         stats = get_players_data(p1, p2, surface)
         if stats:
             outcome = compare_players(match, stats)
