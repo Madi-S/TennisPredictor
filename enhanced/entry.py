@@ -7,7 +7,7 @@ from filter_ import filter_matches
 
 
 # parser = argparse.ArgumentParser()
-
+LIMIT = 7
 
 def main():
     raw_matches = get_matches_info()
@@ -22,7 +22,7 @@ def main():
         surface = match['tournament_info']['surface']
 
         stats = get_players_data(p1, p2, surface)
-        with open('data.txt','w') as f:
+        with open('data.txt','w', encoding='utf-8') as f:
             f.write(f'{p1} ({odds1}) vs {p2} ({odds2})' + str(stats) + '\n\n')
 
         if stats:
