@@ -4,8 +4,6 @@ import re
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from datetime import datetime
-from random import sample, shuffle
-
 
 
 MATCHES = 'https://www.tennisexplorer.com/matches/?type={}&year={}&month={}&day={}'
@@ -23,7 +21,6 @@ def get_tournament_info(tournament_link):
     r = requests.get(link)
     soup = BeautifulSoup(r.text, 'lxml')
 
-
     try:
         info = soup.select_one('#center .box.boxBasic.lGray').text.strip()
         if '$' in info:
@@ -37,7 +34,8 @@ def get_tournament_info(tournament_link):
     except:
         male = None
     try:
-        prize = float(info[0].replace('(', '').replace(' ', '').replace(',', ''))
+        prize = float(info[0].replace(
+            '(', '').replace(' ', '').replace(',', ''))
     except:
         prize = None
     try:
@@ -49,12 +47,16 @@ def get_tournament_info(tournament_link):
             '(')[-1].replace(')', '')
     except:
         location = None
+    try:
+        title = soup.find('h1').text.strip()
+    except:
+        title = None
 
     if surface == 'indoor':
         print('Indoor transformed to Hard')
         surface = 'hard'
 
-    return {'prize_pool': prize, 'male': male, 'surface': surface, 'location': location, 'link': link}
+    return {'title': title, 'prize_pool': prize, 'male': male, 'surface': surface, 'location': location, 'link': link}
 
 
 def get_player_name(url):
@@ -68,14 +70,25 @@ def parse_html(html, limit):
     soup = BeautifulSoup(html, 'lxml')
 
     table = soup.find(class_='tab-menu')
-    
+
     matches_data = []
     players = table.find_all(attrs={'onmouseover': 'md_over(this);'})
     for i, player in enumerate(players):
         if i % 2 == 0:
             data = {}
+
             try:
-                link = player.find_previous_sibling(class_='flags').find('a')['href']
+                player.find(class_='result').text
+                print('Match ended')
+                data['p1'] = None
+                data['p2'] = None
+                continue
+            except:
+                pass
+
+            try:
+                link = player.find_previous_sibling(
+                    class_='flags').find('a')['href']
                 data['tournament_info'] = get_tournament_info(link)
             except:
                 data['tournament_info'] = None
@@ -85,7 +98,8 @@ def parse_html(html, limit):
                 data['time_gmt'] = None
             try:
                 data['match_link'] = 'https://www.tennisexplorer.com' + \
-                    player.find(attrs={'title': 'Click for match detail'}).get('href')
+                    player.find(
+                        attrs={'title': 'Click for match detail'}).get('href')
             except:
                 data['match_link'] = None
             try:
@@ -94,7 +108,8 @@ def parse_html(html, limit):
             except:
                 data['p1'] = None
             try:
-                data['p1_h2h'] = int(player.find(class_=re.compile(r'h2h')).text.strip())
+                data['p1_h2h'] = int(player.find(
+                    class_=re.compile(r'h2h')).text.strip())
             except:
                 data['p1_h2h'] = None
 
@@ -114,35 +129,14 @@ def parse_html(html, limit):
             except:
                 data['p2'] = None
             try:
-                data['p2_h2h'] = int(player.find(class_=re.compile(r'h2h')).text.strip())
+                data['p2_h2h'] = int(player.find(
+                    class_=re.compile(r'h2h')).text.strip())
             except:
                 data['p2_h2h'] = None
-            print(i, data['p1'],data['p2'])
+            print(i, data['p1'], data['p2'])
             matches_data.append(data)
 
-    # shuffle(matches_data)
+
     return matches_data[:limit]
 
 
-def get_matches_info(limit: int = 10000):
-    headers['user-agent'] = ua.random
-
-    today = datetime.today()
-    link = MATCHES.format('atp-single',today.year, today.month, today.day)
-
-    print(link)
-
-    r = requests.get(link, headers=headers)
-
-    if not r.ok:
-        raise AttributeError(f'Bad response from TennisExplorer: {r}. Fix the issue')
-
-    matches = parse_html(r.text, limit)
-    print(f'{len(matches)} Matches found for today')
-    return matches
-
-
-if __name__ == '__main__':
-    matches = get_matches_info()
-    with open('matches.txt','w', encoding='utf-8') as f:
-    	f.write(str(matches))

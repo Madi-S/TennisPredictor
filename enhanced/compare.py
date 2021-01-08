@@ -213,19 +213,22 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('H2H')
     s2 = p2_stats.get('H2H')
     if s1 and s2:
-        s1 = float(s1.split('(')[-1].replace('%)',''))
-        s2 = float(s2.split('(')[-1].replace('%)',''))
+        try:
+            s1 = float(s1.split('(')[-1].replace('%)',''))
+            s2 = float(s2.split('(')[-1].replace('%)',''))
 
-        if s1 == s2:
-            print('??? h2h')
-            stats -= 1
-        elif s1 > s2:
-            print(f'{p1} won h2h')
-            pts_1 += 1
-        else:
-            print(f'{p2} won h2h')
-            pts_2 += 1
-        stats += 1
+            if s1 == s2:
+                print('??? h2h')
+                stats -= 1
+            elif s1 > s2:
+                print(f'{p1} won h2h')
+                pts_1 += 1
+            else:
+                print(f'{p2} won h2h')
+                pts_2 += 1
+            stats += 1
+        except:
+            pass
 
     s1 = p1_stats.get('Adjusted H2H')
     s2 = p2_stats.get('Adjusted H2H')
@@ -514,20 +517,7 @@ def compare_players(match_data: dict, players_data: dict):
     try:
         calculated_probability = round(winner[1] / stats * 100, 1)
     except ZeroDivisionError:
-        return None, None
-    with open('predictions.txt','a') as f:
-        f.write(f'{p1} ({pts_1}) [{odds_1}] vs {p2} ({pts_2}) [{odds_2}]: Winner: {winner}, probability: {calculated_probability}\n\n')
+        return None, None, None, None
 
-    return winner, calculated_probability
+    return winner, calculated_probability, pts_1, pts_2
 
-
-if __name__ == '__main__':
-    from ultimate_tennis import get_players_data
-
-    data = get_players_data('Paire', 'Goffin', surface='hard')
-    with open('data.txt','w') as f:
-        f.write(str(data))
-    match_data = {'p1': 'Paire', 'p2': 'Goffin', 'p1_odds': 1.98, 'p2_odds': 1.98, 'tournament_info':{'surface': 'hard','location':'Belgium'}}
-
-    winner, prob = compare_players(match_data,data)
-    print(winner, prob)

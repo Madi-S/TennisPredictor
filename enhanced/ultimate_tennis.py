@@ -134,8 +134,3 @@ def get_past_matches(id_, player):
         raise AttributeError(f'Bad response from UltimateTennis: {r}. Fix the issue') 
 
     return [{'won': player in res['winner']['name'], 'score': res['score'], 'winner': res['winner']['name'], 'loser': res['loser']['name']} for res in r.json()['rows'][:10]]
-
-if __name__ == '__main__':
-    data = get_players_data('Ruusuvuori E.', 'Vesely J.', surface='hard')
-    with open('players_data.txt','w') as f:
-        f.write(str(data))

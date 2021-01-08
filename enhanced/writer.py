@@ -22,7 +22,7 @@ class DOCXWriter:
         self._filename = filename + '.docx'
         self._d = Document()
 
-    def write(self, w: str, l: str, prob: int, time: str, tournament: str, easy: bool):
+    def write_(self, w: str, l: str, prob: int, time: str, tournament: str, easy: bool):
         self._d.add_heading(f'{w} vs {l}', 0)
         self._d.add_heading(tournament, 0)
         self._d.add_heading(time, 0)
@@ -35,7 +35,22 @@ class DOCXWriter:
         self._d.add_paragraph('\n\n')
         self._d.save(self._filename)
 
+    def write(self, p1, p2, p1_oddds, p2_odds, w, prob, time, tournament):
+        self._d.add_heading(f'{p1} vs {p2}', 0)
+        self._d.add_heading(f'Tournament: {tournament}', 0)
+        if not time:
+            self._d.add_heading(f'Time is not specified yet')
+        else:
+            self._d.add_heading(f'Time: {time}', 0)
+        self._d.add_paragraph(f'{p1} odds: {p1_oddds}')
+        self._d.add_paragraph(f'{p2} odds: {p2_odds}')
+        self._d.add_paragraph(f'Winner: {w}')
+        self._d.add_paragraph(f'Probability: {prob}%')
+        self._d.add_paragraph('\n\n\n')
+        self._d.save(self._filename)
+
 
 if __name__ == '__main__':
     d = DOCXWriter('test')
-    d.write('Djokovic', 'Nadal', 69, '14:30', 'Mallorca ITF', True)
+    for _ in range(5):
+        d.write('TEST_1', 'TEST_2', 'TEST_ODDS_2', 'TEST_ODDS_1', 'TEST_WINNER', 'TEST_PROBABILITY', 'TEST_TIME', 'TEST_TOURNAMENT')
