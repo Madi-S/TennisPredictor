@@ -140,3 +140,21 @@ def parse_html(html, limit):
     return matches_data[:limit]
 
 
+def get_matches_info(limit: int = 10000):
+    headers['user-agent'] = ua.random
+
+    today = datetime.today()
+    link = MATCHES.format('atp-single', today.year, today.month, today.day)
+
+    print(link)
+
+    r = requests.get(link, headers=headers)
+
+    if not r.ok:
+        raise AttributeError(f'Bad response from TennisExplorer: {r}. Fix the issue')
+
+    matches = parse_html(r.text, limit)
+    print(f'{len(matches)} Matches found for today')
+    return matches
+
+

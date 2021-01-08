@@ -30,11 +30,13 @@ def main():
             print(winner, prob)
             if winner:
                 if pts_1 > 3 or pts_2 > 3:
-                    outcomes.append((p1, p2, odds1, odds2, winner[0], prob, match['time_gmt'], match['tournament_info']['title']))
+                    outcomes.append(
+                        (p1, p2, odds1, odds2, winner[0], prob, match['time_gmt'], match['tournament_info']['title']))
 
     while outcomes:
         w.write(*outcomes.pop(0))
     print('Done\nUse Tennis_Predictions.docx file to view tennis predictions for today')
+
 
 if __name__ == '__main__':
     main()
