@@ -74,8 +74,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Age')
     s2 = p2_stats.get('Age')
     if s1 and s2:
-        s1 = int(s1.split(' ')[0])
-        s2 = int(s2.split(' ')[0])
+        try:
+            s1 = int(s1.split(' ')[0])
+            s2 = int(s2.split(' ')[0])
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         if s1 >= 34:
             print(f'{p1} too old')
@@ -96,8 +100,13 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Current Rank')
     s2 = p2_stats.get('Current Rank')
     if s1 and s2:
-        s1 = -int(s1.split(' ')[0])
-        s2 = -int(s2.split(' ')[0])
+        try:
+            s1 = -int(s1.split(' ')[0])
+            s2 = -int(s2.split(' ')[0])
+        except ValueError:
+            s1 = 0
+            s2 = 0
+
         if s1 > s2:
             print(f'{p1} won current_rank')
             pts_1 += 1
@@ -109,8 +118,13 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Best Rank')
     s2 = p2_stats.get('Best Rank')
     if s1 and s2:
-        s1 = -int(s1.split(' ')[0])
-        s2 = -int(s2.split(' ')[0])
+        try:
+            s1 = -int(s1.split(' ')[0])
+            s2 = -int(s2.split(' ')[0])
+        except ValueError:
+            s1 = 0
+            s2 = 0
+
         if s1 - s2 <= 2 and s1 - s2 >= -2:
             print('??? best rank')
             stats -= 1
@@ -127,8 +141,15 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Prize Money')
     s2 = p2_stats.get('Prize Money')
     if s1 and s2:
-        s1 = int(s1.split('$')[-1].replace(',',''))
-        s2 = int(s2.split('$')[-1].replace(',',''))
+        try:
+            s1 = int(s1.split('$')[-1].replace(',',''))
+            s2 = int(s2.split('$')[-1].replace(',',''))
+        except ValueError:
+            s1 = int(s1.split('  ')[0].split('$')[-1].replace(',',''))
+            s2 = int(s2.split('  ')[0].split('$')[-1].replace(',',''))
+        else:
+            s1 = 0
+            s2 = 0
 
         # If prize money are give or take the same (do not consider this factor):
         if s1 - s2 <= 5000 and s1 - s2 >= -5000:
@@ -147,11 +168,14 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Overall')
     s2 = p2_stats.get('Overall')
     if s1 and s2:
-        
         # For winrate:
         t1, t2 = s1, s2
-        s1 = float(t1.split(' ')[0].replace('%',''))
-        s2 = float(t2.split(' ')[0].replace('%',''))
+        try:
+            s1 = float(t1.split(' ')[0].replace('%',''))
+            s2 = float(t2.split(' ')[0].replace('%',''))
+        except ValueError:
+            s1 = 0
+            s2 = 0
         # If winrate is approximately the same:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
             print('??? overall winrate')
@@ -181,8 +205,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Seasons')
     s2 = p2_stats.get('Seasons')
     if s1 and s2:
-        s1 = int(s1)
-        s2 = int(s2)
+        try:
+            s1 = int(s1)
+            s2 = int(s2)
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If both players almost the same number of seasons:
         if s1 - s2 <= 1 and s1 - s2 >= -1:
@@ -233,8 +261,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Adjusted H2H')
     s2 = p2_stats.get('Adjusted H2H')
     if s1 and s2:
-        s1 = float(s1.split(' ')[0])
-        s2 = float(s2.split(' ')[0])
+        try:
+            s1 = float(s1.split(' ')[0])
+            s2 = float(s2.split(' ')[0])
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         if s1 == s2:
             print('??? adjusted h2h')
@@ -252,8 +284,12 @@ def compare_players(match_data: dict, players_data: dict):
     s2 = p2_stats.get('Best Season')
     if s1 and s2:
         year = datetime.today().year
-        s1 = year - int(s1)
-        s2 = year - int(s2)
+        try:
+            s1 = year - int(s1)
+            s2 = year - int(s2)
+        except:
+            s1 = 0
+            s2 = 0
 
         if s1 == s2:
             print('??? best season')
@@ -269,11 +305,15 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Last Appearance')
     s2 = p2_stats.get('Last Appearance')
     if s1 and s2:
-        s1 = s1.split(' ')[0].split('-')
-        s2 = s2.split(' ')[0].split('-')
-        
-        s1 = datetime(int(s1[2]), int(s1[1]), int(s1[0]), 0, 0, 0).timestamp()
-        s2 = datetime(int(s2[2]), int(s2[1]), int(s2[0]), 0, 0, 0).timestamp()
+        try:
+            s1 = s1.split(' ')[0].split('-')
+            s2 = s2.split(' ')[0].split('-')
+
+            s1 = datetime(int(s1[2]), int(s1[1]), int(s1[0]), 0, 0, 0).timestamp()
+            s2 = datetime(int(s2[2]), int(s2[1]), int(s2[0]), 0, 0, 0).timestamp()
+        except:
+            s1 = 0
+            s2 = 0
 
         # If both players played relatively equal time ago
         if s1 - s2 <= 87000 and s1 - s2 >= -87000:
@@ -288,8 +328,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get(surface)
     s2 = p2_stats.get(surface)
     if s1 and s2:
-        s1 = float(s1.split('%')[0])
-        s2 = float(s2.split('%')[0])
+        try:
+            s1 = float(s1.split('%')[0])
+            s2 = float(s2.split('%')[0])
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If winrate on given surface is approximately the same:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
@@ -306,8 +350,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('GOAT Rank')
     s2 = p2_stats.get('GOAT Rank')
     if s1 and s2:
-        s1 = -int(s1.split(' ')[0])
-        s2 = -int(s2.split(' ')[0])
+        try:
+            s1 = -int(s1.split(' ')[0])
+            s2 = -int(s2.split(' ')[0])
+        except:
+            s1 = 0
+            s2 = 0 
 
         # If both players are close in GOAT ranking
         if s1 - s2 <= 5 and s1 - s2 >= -5:
@@ -324,8 +372,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Ace %')
     s2 = p2_stats.get('Ace %')
     if s1 and s2:
-        s1 = float(s1.replace('%',''))
-        s2 = float(s2.replace('%',''))
+        try:
+            s1 = float(s1.replace('%',''))
+            s2 = float(s2.replace('%',''))
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         if s1 - s2 <= 0.4 and s1 - s2 >= -0.4:
             print('??? ace %')
@@ -342,8 +394,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Double Fault %')
     s2 = p2_stats.get('Double Fault %')
     if s1 and s2:
-        s1 = float(s1.replace('%',''))
-        s2 = float(s2.replace('%',''))
+        try:
+            s1 = float(s1.replace('%',''))
+            s2 = float(s2.replace('%',''))
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # Lesser the double fault %, the better for the player:
         # If both players approximately concede the same number of double faults:
@@ -361,8 +417,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('1st Serve %')
     s2 = p2_stats.get('1st Serve %')
     if s1 and s2:
-        s1 = float(s1.replace('%',''))
-        s2 = float(s2.replace('%',''))
+        try:
+            s1 = float(s1.replace('%',''))
+            s2 = float(s2.replace('%',''))
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If 1st serve ration is the same:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
@@ -379,8 +439,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('1st Serve Won %')
     s2 = p2_stats.get('1st Serve Won %')
     if s1 and s2:
-        s1 = float(s1.replace('%',''))
-        s2 = float(s2.replace('%',''))
+        try:
+            s1 = float(s1.replace('%',''))
+            s2 = float(s2.replace('%',''))
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If both players have the same 1st win %:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
@@ -397,8 +461,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('2nd Serve Won %')
     s2 = p2_stats.get('2nd Serve Won %')
     if s1 and s2:
-        s1 = float(s1.replace('%',''))
-        s2 = float(s2.replace('%',''))
+        try:
+            s1 = float(s1.replace('%',''))
+            s2 = float(s2.replace('%',''))
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If both players have the same 2nd serve win %:
         if s1 - s2 <= 2 and s1 - s2 >= -2:
@@ -416,8 +484,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Break Points Saved %')
     s2 = p2_stats.get('Break Points Saved %')
     if s1 and s2:
-        s1 = float(s1.replace('%',''))
-        s2 = float(s2.replace('%',''))
+        try:
+            s1 = float(s1.replace('%',''))
+            s2 = float(s2.replace('%',''))
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If both players have the same bp saved %:
         if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
@@ -434,8 +506,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Service Points Won %')
     s2 = p2_stats.get('Service Points Won %')
     if s1 and s2:
-        s1 = float(s1.replace('%',''))
-        s2 = float(s2.replace('%',''))
+        try:
+            s1 = float(s1.replace('%',''))
+            s2 = float(s2.replace('%',''))
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If both players have the same serivec points won %:
         if s1 - s2 <= 0.5 and s1 - s2 >= -0.5:
@@ -452,8 +528,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Return Points Won %')
     s2 = p2_stats.get('Return Points Won %')
     if s1 and s2:
-        s1 = float(s1.replace('%',''))
-        s2 = float(s2.replace('%',''))
+        try:
+            s1 = float(s1.replace('%',''))
+            s2 = float(s2.replace('%',''))
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If both players have the same return points won %:
         if s1 - s2 <= 0.3 and s1 - s2 >= -0.3:
@@ -470,8 +550,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Points Dominance')
     s2 = p2_stats.get('Points Dominance')
     if s1 and s2:
-        s1 = float(s1)
-        s2 = float(s2)
+        try:
+            s1 = float(s1)
+            s2 = float(s2)
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If both players have the same points dominance %:
         if s1 - s2 <= 0.02 and s1 - s2 >= -0.02:
@@ -489,8 +573,12 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Games Dominance')
     s2 = p2_stats.get('Games Dominance')
     if s1 and s2:
-        s1 = float(s1)
-        s2 = float(s2)
+        try:
+            s1 = float(s1)
+            s2 = float(s2)
+        except ValueError:
+            s1 = 0
+            s2 = 0
 
         # If both players have the games dominance %:
         if s1 - s2 <= 0.02 and s1 - s2 >= -0.02:

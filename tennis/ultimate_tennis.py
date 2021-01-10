@@ -65,6 +65,7 @@ def parse_html(html, players, surface):
                     data[p][o] = locate(o).text.strip().replace('\n',' ')
             except:
                 data[p][o] = None
+            print(p, o, data[p][o])
 
     stats = soup.select('.tab-content')[1]
     order = ['Ace %', 'Double Fault %', '1st Serve %','1st Serve Won %', '2nd Serve Won %', 
@@ -85,6 +86,7 @@ def parse_html(html, players, surface):
                 data[p][o] = find(o).text.strip()
             except:
                 data[p][o] = None
+            print(p, o, data[p][o])
 
     return data
 
