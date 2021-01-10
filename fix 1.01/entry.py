@@ -5,14 +5,14 @@ from compare import compare_players
 from writer import DOCXWriter
 
 
-LIMIT = 7
+LIMIT = 8
 
 
 def main():
     w = DOCXWriter('Tennis_Predictions')
 
     raw_matches = get_matches_info()
-    matches = filter_matches(raw_matches)
+    matches = filter_matches(raw_matches)[:LIMIT]
 
     print(f'Total matches: {len(raw_matches)}, filtered: {len(matches)}')
 
@@ -27,11 +27,10 @@ def main():
         stats = get_players_data(p1, p2, surface)
         if stats:
             winner, prob, pts_1, pts_2 = compare_players(match, stats)
-            print(winner, prob)
             if winner:
                 if pts_1 > 3 or pts_2 > 3:
-                    outcomes.append(
-                        (p1, p2, odds1, odds2, winner[0], prob, match['time_gmt'], match['tournament_info']['title']))
+                    outcomes.append((p1, p2, odds1, odds2, winner[0], prob, match['time_gmt'], match['tournament_info']['title']))
+                    print(f'Winner: {winner[0]} {prob}% {p1} ({odds1}) vs {p2} ({odds2}) at {match["time_gmt"]} on {match["tournament_info"]["title"]}')
 
     while outcomes:
         w.write(*outcomes.pop(0))

@@ -93,7 +93,10 @@ def parse_html(html, limit):
             except:
                 data['tournament_info'] = None
             try:
-                data['time_gmt'] = player.find(class_='time').text.strip()
+                data['time_gmt'] = player.find(class_='time').text.strip().lower()
+                if 'l' in data['time_gmt']:
+                    data['time_gmt'] = data['time_gmt'].split('l')[0]
+                    print(data['time_gmt'])
             except:
                 data['time_gmt'] = None
             try:
