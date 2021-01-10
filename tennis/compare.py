@@ -11,12 +11,12 @@ def compare_players(match_data: dict, players_data: dict):
     p1_stats = players_data.get(p1)
     p2_stats = players_data.get(p2)
 
-    try:
-        odds_1 = float(match_data.get('p1_odds'))
-        odds_2 = float(match_data.get('p2_odds'))
-    except:
-        odds_1 = 1
-        odds_2 = 1
+    # try:
+    #     odds_1 = float(match_data.get('p1_odds'))
+    #     odds_2 = float(match_data.get('p2_odds'))
+    # except:
+    #     odds_1 = 1
+    #     odds_2 = 1
 
     tournament = match_data.get('tournament_info')
     surface = 'foo'
