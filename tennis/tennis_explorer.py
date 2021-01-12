@@ -77,14 +77,14 @@ def parse_html(html, limit):
         if i % 2 == 0:
             data = {}
 
-            #try:
-            #    player.find(class_='result').text
-            #    print('Match ended')
-            #    data['p1'] = None
-            #    data['p2'] = None
-            #    continue
-            #except:
-            #    pass
+            try:
+                player.find(class_='result').text
+                print('Match ended')
+                data['p1'] = None
+                data['p2'] = None
+                continue
+            except:
+                pass
 
             try:
                 link = player.find_previous_sibling(
@@ -147,7 +147,7 @@ def get_matches_info(limit: int = 10000):
     headers['user-agent'] = ua.random
 
     today = datetime.today()
-    link = MATCHES.format('atp-single', today.year, today.month, today.day - 1)
+    link = MATCHES.format('atp-single', today.year, today.month, today.day)
 
     print(link)
 

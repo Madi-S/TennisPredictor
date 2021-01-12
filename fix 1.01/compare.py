@@ -51,6 +51,8 @@ def compare_players(match_data: dict, players_data: dict):
     s1 = p1_stats.get('Country')
     s2 = p2_stats.get('Country')
     if s1 and s2:
+        if location == 'USA':
+            location = 'united states'
         if s1.lower() == location.lower():
             pts_1 += 1
         if s2.lower() == location.lower():
@@ -406,7 +408,7 @@ def compare_players(match_data: dict, players_data: dict):
             s2 = 0
 
         # If both players have the same 2nd serve win %:
-        if s1 - s2 <= 2 and s1 - s2 >= -2:
+        if s1 - s2 <= 1.5 and s1 - s2 >= -1.5:
             stats -= 1
         elif s1 > s2:
             pts_1 += 1

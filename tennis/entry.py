@@ -5,7 +5,7 @@ from compare import compare_players
 from writer import DOCXWriter
 
 
-LIMIT = 100
+LIMIT = 10
 
 
 def main():
