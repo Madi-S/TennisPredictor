@@ -145,14 +145,15 @@ def compare_players(match_data: dict, players_data: dict):
     s2 = p2_stats.get('Prize Money')
     if s1 and s2:
         try:
-            s1 = int(s1.split('$')[-1].replace(',',''))
-            s2 = int(s2.split('$')[-1].replace(',',''))
+            s1 = int(s1.split('$')[-1].replace(',','').replace('.',''))
+            s2 = int(s2.split('$')[-1].replace(',','').replace('.',''))
         except ValueError:
-            s1 = int(s1.split('  ')[0].split('$')[-1].replace(',',''))
-            s2 = int(s2.split('  ')[0].split('$')[-1].replace(',',''))
-        else:
-            s1 = 0
-            s2 = 0
+            try:
+                s1 = int(s1.split('  ')[0].split('$')[-1].replace(',',''))
+                s2 = int(s2.split('  ')[0].split('$')[-1].replace(',',''))
+            except:
+                s1 = 0
+                s2 = 0
 
         # If prize money are give or take the same (do not consider this factor):
         if s1 - s2 <= 5000 and s1 - s2 >= -5000:
@@ -176,7 +177,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(t1.split(' ')[0].replace('%',''))
             s2 = float(t2.split(' ')[0].replace('%',''))
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
         # If winrate is approximately the same:
@@ -211,7 +212,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = int(s1)
             s2 = int(s2)
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -267,7 +268,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.split(' ')[0])
             s2 = float(s2.split(' ')[0])
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -334,7 +335,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.split('%')[0])
             s2 = float(s2.split('%')[0])
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -378,7 +379,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.replace('%',''))
             s2 = float(s2.replace('%',''))
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -400,7 +401,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.replace('%',''))
             s2 = float(s2.replace('%',''))
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -423,7 +424,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.replace('%',''))
             s2 = float(s2.replace('%',''))
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -445,7 +446,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.replace('%',''))
             s2 = float(s2.replace('%',''))
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -467,7 +468,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.replace('%',''))
             s2 = float(s2.replace('%',''))
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -490,7 +491,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.replace('%',''))
             s2 = float(s2.replace('%',''))
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -512,7 +513,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.replace('%',''))
             s2 = float(s2.replace('%',''))
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -534,7 +535,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1.replace('%',''))
             s2 = float(s2.replace('%',''))
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -556,7 +557,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1)
             s2 = float(s2)
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
@@ -579,7 +580,7 @@ def compare_players(match_data: dict, players_data: dict):
         try:
             s1 = float(s1)
             s2 = float(s2)
-        except ValueError:
+        except:
             s1 = 0
             s2 = 0
 
