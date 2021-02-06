@@ -9,8 +9,7 @@ from time import sleep
 URL = 'https://www.ultimatetennisstatistics.com'
 MATCHES = 'https://www.ultimatetennisstatistics.com/matchesTable?playerId={}&current=1&rowCount=15&sort%5Bdate%5D=desc&searchPhrase=&season=&fromDate=&toDate=&level=&bestOf=&surface=&indoor=&speed=&round=&result=&opponent=&tournamentId=&tournamentEventId=&outcome=&score=&countryId=&bigWin=false&_=1609742224223'
 headers = {'Accept-Language': 'en-US', 'Referer': 'https://www.ultimatetennisstatistics.com/playerProfile?playerId=5663',
-               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'}
-
+           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'}
 
 
 def get_player_id(name):
@@ -18,16 +17,16 @@ def get_player_id(name):
     r = requests.get(url.format(name.replace(' ', '+')), headers=headers)
 
     if not r.ok:
-        raise AttributeError(f'Bad response from UltimateTennis: {r}. Fix the issue')
+        raise AttributeError(
+            f'Bad response from UltimateTennis: {r}. Fix the issue')
 
     found = r.json()
 
     if not found:
         print(f'No player found for {name}')
-        return 
+        return
 
     return found[0]['id']
-
 
 
 def parse_html(html, players, surface):
@@ -36,51 +35,53 @@ def parse_html(html, players, surface):
 
     stats = soup.select_one('.table.table-condensed.text-nowrap')
     order = [
-        'H2H','Adjusted H2H', 'Age', 'Country', 'Seasons', 'Prize Money',
+        'H2H', 'Adjusted H2H', 'Age', 'Country', 'Seasons', 'Prize Money',
         'Titles', 'Current Rank', 'Best Rank', 'GOAT Rank', 'Best Season',
         'Last Appearance', 'Overall'
     ]
-    winrates = ['Overall','grass','clay','hard']
+    winrates = ['Overall', 'grass', 'clay', 'hard']
     if surface:
         order.append(surface)
 
-    base = lambda o: stats.find(text=re.compile(fr'{o}'), class_='text-center')
-    wr = lambda o: stats.find(text=re.compile(fr'{o}', flags=re.I), class_='text-center')
+    def base(o): return stats.find(
+        text=re.compile(fr'{o}'), class_='text-center')
+
+    def wr(o): return stats.find(text=re.compile(
+        fr'{o}', flags=re.I), class_='text-center')
     for i in range(2):
         p = players[i]
         data[p] = {}
 
         if i == 0:
-            locate = lambda o: base(o).parent.find(class_='text-right')
-            winrate = lambda o: wr(o).previous_sibling.previous_sibling
+            def locate(o): return base(o).parent.find(class_='text-right')
+            def winrate(o): return wr(o).previous_sibling.previous_sibling
         else:
-            locate = lambda o: base(o).parent.find(class_='text-left')
-            winrate = lambda o: wr(o).next_sibling.next_sibling
+            def locate(o): return base(o).parent.find(class_='text-left')
+            def winrate(o): return wr(o).next_sibling.next_sibling
 
         for o in order:
             try:
                 if o in winrates:
                     data[p][o] = winrate(o).text.strip()
                 else:
-                    data[p][o] = locate(o).text.strip().replace('\n',' ')
+                    data[p][o] = locate(o).text.strip().replace('\n', ' ')
             except:
                 data[p][o] = None
             print(p, o, data[p][o])
 
     stats = soup.select('.tab-content')[1]
-    order = ['Ace %', 'Double Fault %', '1st Serve %','1st Serve Won %', '2nd Serve Won %', 
-    'Break Points Saved %', 'Service Points Won %',
-    'Points Dominance', 'Games Dominance', 'Return Points Won %']
+    order = ['Ace %', 'Double Fault %', '1st Serve %', '1st Serve Won %', '2nd Serve Won %',
+             'Break Points Saved %', 'Service Points Won %',
+             'Points Dominance', 'Games Dominance', 'Return Points Won %']
 
     for i in range(0, 2):
         p = players[i]
 
-
         if i == 0:
-            find = lambda o: base(o).parent.find(class_='text-right')
+            def find(o): return base(o).parent.find(class_='text-right')
         else:
-            find = lambda o: base(o).parent.find(class_='text-left')
-        
+            def find(o): return base(o).parent.find(class_='text-left')
+
         for o in order:
             try:
                 data[p][o] = find(o).text.strip()
@@ -91,7 +92,6 @@ def parse_html(html, players, surface):
     return data
 
 
-    
 def get_players_data(p1, p2, surface=None):
     id1 = get_player_id(p1)
     id2 = get_player_id(p2)
@@ -102,7 +102,7 @@ def get_players_data(p1, p2, surface=None):
 
     url = 'https://www.ultimatetennisstatistics.com/headToHead?playerId1={}&playerId2={}'
 
-    driver = webdriver.Firefox(service_log_path='NUL')
+    driver = webdriver.Chrome(executable_path='chromedriver.exe')
     driver.get(url.format(id1, id2))
     sleep(4)
 
@@ -111,7 +111,7 @@ def get_players_data(p1, p2, surface=None):
     stats_b.click()
 
     show_b = driver.find_element_by_id('statisticsPill')
-    show_b.click() 
+    show_b.click()
 
     sleep(4)
     html = driver.page_source
@@ -121,8 +121,8 @@ def get_players_data(p1, p2, surface=None):
 
     try:
         stats = parse_html(html, [p1, p2], surface)
-        stats[p1]['past_matches'] = get_past_matches(id1, p1) 
-        stats[p2]['past_matches'] = get_past_matches(id2, p2) 
+        stats[p1]['past_matches'] = get_past_matches(id1, p1)
+        stats[p2]['past_matches'] = get_past_matches(id2, p2)
 
         return stats
     except:
@@ -133,6 +133,7 @@ def get_past_matches(id_, player):
     r = requests.get(MATCHES.format(id_))
 
     if not r.ok:
-        raise AttributeError(f'Bad response from UltimateTennis: {r}. Fix the issue') 
+        raise AttributeError(
+            f'Bad response from UltimateTennis: {r}. Fix the issue')
 
     return [{'won': player in res['winner']['name'], 'score': res['score'], 'winner': res['winner']['name'], 'loser': res['loser']['name']} for res in r.json()['rows'][:10]]
