@@ -6,4 +6,4 @@ cd tennis
 python entry.py
 ```
 
-This will generate .docx file with tennis outcome predictions for today
+This will generate .docx file with tennis information about tennis players and winner probabilities.
