@@ -34,26 +34,27 @@ class VprognozeHTML(Webdriver):
         # sleep(4)
         # await self._page.waitForSelector('.button_default')
 
-        try:
-            await asyncio.gather(
-                self._page.waitForNavigation(),
-                self._page.click('.button_default'),
-            )
-        except:
-            print('Caught exception here\n')
-            await self.get_matches()
-
+        sleep(5)
+        await self._page.waitForSelector('.button_default')
+        await self._page.click('.button_default')
+        sleep(5)
+        await self._page.waitForSelector('.button_default')
         await self._page.select('#sport', TENNIS_VALUE)
+        print('selected')
+        sleep(2)
+
         if date:
             await self._page.click('#int_time', options={'clickCount':3})
             sleep(1.5)
             await self._page.keyboard.type(date)
             sleep(1.5)
 
-        await asyncio.gather(
-            self._page.waitForNavigation(),
-            self._page.click('.button_default'),
-        )
+        try:
+            await self._page.click('.button_default')
+            await self._page.waitForNavigation()
+        except:
+            await self._page.click('.button_default')
+            sleep(5)           
 
         return await self._get_htmls()
 

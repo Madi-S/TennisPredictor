@@ -34,12 +34,15 @@ def get_predictions(html):
 
     try:
         w1_odds, w2_odds = soup.select_one('.modeltable.top-forecast__table.top-forecast__table_border.top-forecast__table_top tbody tr').text.strip().split('\n\n\n')
+        print(w1_odds, w2_odds, 'here')
     except:
         try:
             odds = soup.select('.top-forecast__model tbody tr td a')[:2]
+            print(odds)
             w1_odds, w2_odds = odds[0]['title'], odds[1]['title']
+            print(w1_odds, w2_odds)
         except:
-            w1_odds, w2_odds = None, None
+            w1_odds, w2_odds = 0, 0
 
     try:
         tournament = formatter.translate(soup.find(class_='title_news').text)
